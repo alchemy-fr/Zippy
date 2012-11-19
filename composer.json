@@ -1,0 +1,27 @@
+{
+    "name": "alchemy/zippy",
+    "type": "library",
+    "description": "Zippy, the archive manager companion",
+    "keywords": ["zip", "tar", "bzip", "compression"],
+    "license": "MIT",
+    "authors": [
+    {
+        "name": "Phraseanet Team",
+        "email": "info@alchemy.fr",
+        "homepage": "http://www.phraseanet.com/"
+    }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": {
+            "Alchemy": "src"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
