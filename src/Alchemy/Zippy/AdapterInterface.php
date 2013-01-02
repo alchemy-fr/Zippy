@@ -21,46 +21,46 @@ Interface AdapterInterface
     /**
      * Returns the adapter name
      *
-     * @return  String
+     * @return String
      */
     public function getName();
-    
+
     /**
      * Returns the adapter options
      *
-     * @return  Options
+     * @return Options
      */
     public function getOptions();
-    
+
     /**
      * Sets adapter options
-     * 
-     * @param   Options $option
-     * 
-     * @return  AdapterInterface
+     *
+     * @param Options $option
+     *
+     * @return AdapterInterface
      */
     public function setOptions(Options $option);
-    
+
     /**
      * Opens an archive
-     * 
-     * @param   String  $path   The path to the archive
-     * 
-     * @return  ArchiveInterface
-     * 
-     * @throws  InvalidArgumentException in case of the provided path is not valid
-     * @throws  RuntimeException in case of failure
+     *
+     * @param String $path The path to the archive
+     *
+     * @return ArchiveInterface
+     *
+     * @throws InvalidArgumentException In case the provided path is not valid
+     * @throws RuntimeException         In case of failure
      */
     public function open($path);
 
     /**
      * Creates a new archive
-     * 
-     * @param   String  $path   The path to the archive
-     * 
-     * @return  ArchiveInterface
-     * 
-     * @throws  RuntimeException in case of failure
+     *
+     * @param String $path The path to the archive
+     *
+     * @return ArchiveInterface
+     *
+     * @throws RuntimeException In case of failure
      */
     public function create($path);
 
@@ -70,5 +70,4 @@ Interface AdapterInterface
      * @return Boolean
      */
     public static function isSupported();
-
 }
