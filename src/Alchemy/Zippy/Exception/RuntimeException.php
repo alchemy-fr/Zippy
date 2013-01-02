@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Zippy\Exception;
+namespace Alchemy\Zippy\Exception;
 
 class RuntimeException extends \RuntimeException implements ExceptionInterface
 {
