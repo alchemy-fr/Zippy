@@ -14,16 +14,16 @@ class ExplodeParser implements ParserInterface
 {
     /**
      * The delimiter use to split a string
-     * 
-     * @var String 
+     *
+     * @var String
      */
     protected $delimiter;
-    
+
     public function __construct($delimiter = "\n")
     {
         $this->delimiter = $delimiter;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -31,10 +31,10 @@ class ExplodeParser implements ParserInterface
     {
         return array_values(array_filter(explode($this->delimiter, $output)));
     }
-    
+
     /**
      * Returns the delimiter
-     * 
+     *
      * @return String
      */
     public function getDelimiter()
@@ -43,8 +43,8 @@ class ExplodeParser implements ParserInterface
     }
 
     /**
-     * Setes the delimiter
-     * 
+     * Sets the delimiter
+     *
      * @param String $delimiter
      */
     public function setDelimiter($delimiter)

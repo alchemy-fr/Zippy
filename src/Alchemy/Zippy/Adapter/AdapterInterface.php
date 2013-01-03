@@ -44,7 +44,7 @@ Interface AdapterInterface
     /**
      * Opens an archive
      *
-     * @param String                        $path       The path to the archive
+     * @param String $path The path to the archive
      *
      * @return ArchiveInterface
      *
@@ -56,9 +56,9 @@ Interface AdapterInterface
     /**
      * Creates a new archive
      *
-     * @param String $path The path to the archive
-     * @param String|Array|\Traversable $files  A filename, an array of files, or a \Traversable instance
-     * 
+     * @param String                    $path  The path to the archive
+     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     *
      * @return ArchiveInterface
      *
      * @throws RuntimeException In case of failure
@@ -71,23 +71,23 @@ Interface AdapterInterface
      * @return Boolean
      */
     public function isSupported();
-    
+
     /**
      * Returns the list of all archive members
      *
-     * @param   String $path The path to the archive
-     * 
-     * @return  Array
+     * @param String $path The path to the archive
+     *
+     * @return Array
      */
     public function listMembers($path);
-    
+
     /**
      * Adds a file to the archive
      *
-     * @param   String $path The path to the archive
-     * @param String|Array|\Traversable     $files      A filename, an array of files, or a \Traversable instance
-     * 
-     * @return  Array
+     * @param String                    $path  The path to the archive
+     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     *
+     * @return Array
      */
     public function addFile($path, $files);
 }

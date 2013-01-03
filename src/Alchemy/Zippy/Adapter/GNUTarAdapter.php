@@ -28,7 +28,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
     {
         $this->setParser(new ExplodeParser());
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -37,18 +37,18 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
         $builder = $this->getProcessBuilder();
         $builder->add('-cf');
         $builder->add($path);
-        
+
         foreach ($this->getFilesIterator($files) as $file) {
             $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-            
+
             if (is_file($file)) {
                 $builder->add($file);
             }
         }
-        
+
         $process = $builder->getProcess();
         $process->run();
-        
+
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
                 'Unable to execute the following command %s {output: %s}',
@@ -56,7 +56,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
                 $process->getErrorOutput()
             ));
         }
-        
+
         return new Archive($path, $this);
     }
 
@@ -75,10 +75,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
     {
         $builder = $this->getProcessBuilder();
         $builder->add('-h');
-            
+
         $process = $builder->getProcess();
         $process->run();
-        
+
         return $process->isSuccessful();
     }
 
@@ -89,7 +89,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
     {
         return new Archive($path, $this);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -98,10 +98,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
         $builder = $this->getProcessBuilder();
         $builder->add('-tf');
         $builder->add($path);
-            
+
         $process = $builder->getProcess();
         $process->run();
-        
+
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
                 'Unable to execute the following command %s {output: %s}',
@@ -109,10 +109,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
                 $process->getErrorOutput()
             ));
         }
-        
+
         return $this->parser->parse($process->getOutput());
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -121,20 +121,20 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
         $builder = $this->getProcessBuilder();
         $builder->add('-rf');
         $builder->add($path);
-        
+
         $fileIterator = $this->getFilesIterator($files);
-        
+
         foreach ($fileIterator as $file) {
             $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-            
+
             if (is_file($file)) {
                 $builder->add($file);
             }
         }
-        
+
         $process = $builder->getProcess();
         $process->run();
-        
+
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
                 'Unable to execute the following command %s {output: %s}',
@@ -142,10 +142,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
                 $process->getErrorOutput()
             ));
         }
-        
+
         return $fileIterator;
     }
-    
+
     /**
      * @inheritdoc
      */

@@ -15,10 +15,10 @@ interface ParserInterface
 {
     /**
      * Parse a string
-     * 
-     * @param   String  $output The string to parse
-     * 
-     * @return  Array   The chunk of output
+     *
+     * @param String $output The string to parse
+     *
+     * @return Array The chunk of output
      */
     public function parse($output);
 }

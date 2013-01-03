@@ -30,8 +30,8 @@ class GNUTarAdapterTest extends AbstractTest
     {
         $this->adapter = new GNUTarAdapter();
         
-        if(!$this->adapter->isSupported()) {
-            $this->markTestSkipped(sprintf('`%s` is not supported', GNUTarAdapter::getDefaultBinaryName()));
+        if (!$this->adapter->isSupported()) {
+            $this->markTestSkipped(sprintf('`%s` is not supported', $this->adapter->getDefaultBinaryName()));
         }
     }
     

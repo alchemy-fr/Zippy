@@ -8,5 +8,4 @@ abstract class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         return __DIR__ . '/../../../resources';
     }
-    
 }
