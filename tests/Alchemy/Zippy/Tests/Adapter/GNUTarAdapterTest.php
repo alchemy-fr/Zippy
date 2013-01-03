@@ -3,6 +3,7 @@
 namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\GNUTarAdapter;
+use Alchemy\Zippy\Parser\GNUTarOutputParser;
 use Alchemy\Zippy\Tests\AbstractTest;
 
 class GNUTarAdapterTest extends AbstractTest
@@ -28,7 +29,7 @@ class GNUTarAdapterTest extends AbstractTest
     
     public function setUp()
     {
-        $this->adapter = new GNUTarAdapter();
+        $this->adapter = new GNUTarAdapter(new GNUTarOutputParser());
         
         if (!$this->adapter->isSupported()) {
             $this->markTestSkipped(sprintf('`%s` is not supported', $this->adapter->getDefaultBinaryName()));
@@ -84,9 +85,15 @@ class GNUTarAdapterTest extends AbstractTest
         $this->assertEquals(3, count($archive->members()));
     }
     
+    public function testgetVersion()
+    {
+        $version = $this->adapter->getVersion();
+        $this->assertTrue(is_string($version));
+    }
+    
     public function testGetName()
     {
-        $this->assertEquals('gnu_tar', $this->adapter->getName());
+        $this->assertEquals('gnu-tar', $this->adapter->getName());
     }
     
     public function testGetDefaultBinaryName()

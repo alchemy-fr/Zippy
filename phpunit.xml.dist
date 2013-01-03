@@ -11,11 +11,6 @@
          verbose="false"
          bootstrap="tests/bootstrap.php"
 >
-<!--    <logging>
-      <log type="coverage-html" target="tests/phpunit_report/report" charset="UTF-8"
-           yui="true" highlight="false"
-           lowUpperBound="35" highLowerBound="70"/>
-    </logging>-->
     <php>
       <ini name="display_errors" value="on"/>
     </php>

@@ -56,14 +56,15 @@ Interface AdapterInterface
     /**
      * Creates a new archive
      *
-     * @param String                    $path  The path to the archive
-     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     * @param String                            $path       The path to the archive
+     * @param String|Array|\Traversable|null    $files      A filename, an array of files, or a \Traversable instance
+     * @param Boolean                           $recursive  Recurse into directories
      *
      * @return ArchiveInterface
      *
      * @throws RuntimeException In case of failure
      */
-    public function create($path, $files);
+    public function create($path, $files = null, $recursive = true);
 
     /**
      * Tests adapter support for current environment

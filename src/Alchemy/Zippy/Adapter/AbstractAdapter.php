@@ -12,9 +12,10 @@
 
 namespace Alchemy\Zippy\Adapter;
 
+use Alchemy\Zippy\Archive;
 use Alchemy\Zippy\Options;
 
-abstract class AbstractAdapter
+abstract class AbstractAdapter implements AdapterInterface
 {
     /**
      * A set of options
@@ -24,10 +25,7 @@ abstract class AbstractAdapter
     protected $options;
 
     /**
-     * Sets options
-     *
-     * @param  Options         $options
-     * @return AbstractAdapter
+     * @inheritdoc
      */
     public function setOptions(Options $options)
     {
@@ -37,28 +35,18 @@ abstract class AbstractAdapter
     }
 
     /**
-     * Gets options
-     *
-     * @return Options
+     * @inheritdoc
      */
     public function getOptions()
     {
         return $this->options;
     }
-
+    
     /**
-     * Returns an Iterator for the current files selection
-     *
-     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
-     *
-     * @return \ArrayObject
+     * @inheritdoc
      */
-    protected function getFilesIterator($files)
+    public function open($path)
     {
-        if (!$files instanceof \Traversable) {
-            $files = new \ArrayObject((array) $files);
-        }
-
-        return $files;
+        return new Archive($path, $this);
     }
 }

@@ -11,41 +11,49 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Archive;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Parser\ExplodeParser;
+use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Parser\ParserInterface;
 
 /**
  * GNUTarAdapter allows you to creates and extracts files from archives using GNU tar
+ * @see http://www.gnu.org/software/tar/manual/tar.html
  */
-class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
+class GNUTarAdapter extends AbstractBinaryAdapter
 {
     /**
      * Constructor.
      */
-    public function __construct()
+    public function __construct(ParserInterface $parser)
     {
-        $this->setParser(new ExplodeParser());
+        $this->setParser($parser);
     }
-
+    
     /**
      * @inheritdoc
      */
-    public function create($path, $files)
+    public function create($path, $files = null, $recursive = true)
     {
+        if (null === $files) {
+            throw new NotSupportedException('Gnu tar does not allow to create empty archive');
+        }
+        
         $builder = $this->getProcessBuilder();
+        
+        if (!$recursive) {
+           $builder->add('--no-recursion');
+        }
+        
         $builder->add('-cf');
         $builder->add($path);
-
-        foreach ($this->getFilesIterator($files) as $file) {
-            $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-
-            if (is_file($file)) {
-                $builder->add($file);
-            }
-        }
-
+        
+        $this->addBuilderFileArgument(
+            (array) $files,
+            $builder,
+            self::FILES_AND_DIRECTORIES
+        );
+        
         $process = $builder->getProcess();
         $process->run();
 
@@ -65,7 +73,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
      */
     public function getName()
     {
-        return 'gnu_tar';
+        return 'gnu-tar';
     }
 
     /**
@@ -73,21 +81,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
      */
     public function isSupported()
     {
-        $builder = $this->getProcessBuilder();
-        $builder->add('-h');
-
-        $process = $builder->getProcess();
-        $process->run();
-
-        return $process->isSuccessful();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function open($path)
-    {
-        return new Archive($path, $this);
+        return 0 === $this->getProcessBuilder()
+            ->add('-h')
+            ->getProcess()
+            ->run();
     }
 
     /**
@@ -110,7 +107,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
             ));
         }
 
-        return $this->parser->parse($process->getOutput());
+        return $this->parser->parseFileListing($process->getOutput());
     }
 
     /**
@@ -122,15 +119,13 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
         $builder->add('-rf');
         $builder->add($path);
 
-        $fileIterator = $this->getFilesIterator($files);
+        $files = (array) $files;
 
-        foreach ($fileIterator as $file) {
-            $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-
-            if (is_file($file)) {
-                $builder->add($file);
-            }
-        }
+        $this->addBuilderFileArgument(
+            $files,
+            $builder,
+            self::FILES
+        );
 
         $process = $builder->getProcess();
         $process->run();
@@ -143,7 +138,26 @@ class GNUTarAdapter extends AbstractBinaryAdapter implements AdapterInterface
             ));
         }
 
-        return $fileIterator;
+        return $files;
+    }
+    
+    public function getVersion()
+    {
+        $process = $this->getProcessBuilder()
+            ->add('--version')
+            ->getProcess();
+        
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+        
+        return $this->parser->parseVersion($process->getOutput());
     }
 
     /**

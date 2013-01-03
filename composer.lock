@@ -1,27 +1,27 @@
 {
-    "hash": "8ddff21595c0d0e1ffbf8267df8091f8",
+    "hash": "f9ac31ad4d8d32f550ab7d392d4a1610",
     "packages": [
         {
             "name": "symfony/process",
-            "version": "v2.1.5",
+            "version": "2.1.x-dev",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "v2.1.5"
+                "reference": "cbba493e324cc41b6f408513d74df999b5b6306e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/archive/v2.1.5.zip",
-                "reference": "v2.1.5",
+                "url": "https://github.com/symfony/Process/archive/cbba493e324cc41b6f408513d74df999b5b6306e.zip",
+                "reference": "cbba493e324cc41b6f408513d74df999b5b6306e",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-19 13:27:19",
+            "time": "2012-12-30 12:18:39",
             "type": "library",
-            "installation-source": "dist",
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Process": ""

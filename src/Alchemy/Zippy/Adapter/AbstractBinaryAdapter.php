@@ -32,7 +32,14 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @var ParserInterface
      */
     protected $parser;
-
+    
+    /**
+     * Gets the default adapter binary name
+     *
+     * @return String
+     */
+    abstract public function getDefaultBinaryName();
+    
     /**
      * @inheritdoc
      */
@@ -42,9 +49,9 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
             throw new InvalidArgumentException(sprintf('%s is not executable', $path));
         }
 
-       $this->binary = $path;
+        $this->binary = $path;
 
-       return $path;
+        return $path;
     }
 
     /**
@@ -54,15 +61,16 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      */
     public function useDefaultBinary()
     {
-       $this->binary = $this->getDefaultBinaryName();
+        $this->binary = $this->getDefaultBinaryName();
 
-       return $this;
+        return $this;
     }
 
     /**
      * Gets the used binary adapter
      *
      * @return String
+     * 
      * @throws Exception In case the default binary file could not be found
      */
     public function getBinary()
@@ -91,16 +99,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     }
 
     /**
-     * Gets the default adapter binary name
-     *
-     * @return String
-     */
-    abstract public function getDefaultBinaryName();
-
-    /**
-     * Returns the parser
-     *
-     * @return ParserInterface
+     * @inheritdoc
      */
     public function getParser()
     {
@@ -108,11 +107,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     }
 
     /**
-     * Sets the parser
-     *
-     * @param ParserInterface $parser The parser to use
-     *
-     * @return AbstractBinaryAdapter
+     * @inheritdoc
      */
     public function setParser(ParserInterface $parser)
     {
@@ -120,5 +115,20 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         return $this;
     }
-
+    
+    protected function addBuilderFileArgument(array $files, $builder, $type) {
+        array_walk($files, function($file) use ($builder, $type) {
+            $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
+            
+            if (file_exists($file)) {
+                if ($type === self::FILES && is_file($file)) {
+                    $builder->add($file);
+                } else if($type === self::DIRECTORIES && is_dir($file)) {
+                    $builder->add($file);
+                } else {
+                    $builder->add($file);
+                }
+            }
+        });
+    }
 }
