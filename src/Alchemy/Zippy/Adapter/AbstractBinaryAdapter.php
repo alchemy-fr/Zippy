@@ -14,8 +14,7 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Parser\ParserInterface;
-use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\ProcessBuilder;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
@@ -34,6 +33,13 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     protected $parser;
     
     /**
+     * The processBuilder use to build binary command line
+     *
+     * @var ProcessBuilderInterface
+     */
+    protected $processBuilder;
+    
+    /**
      * Gets the default adapter binary name
      *
      * @return String
@@ -43,13 +49,13 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * @inheritdoc
      */
-    public function useBinary($path)
+    public function useBinary($path, array $extraDirs = array())
     {
         if (!is_executable($path)) {
             throw new InvalidArgumentException(sprintf('%s is not executable', $path));
         }
 
-        $this->binary = $path;
+        $this->getProcessBuilder()->setBinary($path, $extraDirs);
 
         return $path;
     }
@@ -61,7 +67,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      */
     public function useDefaultBinary()
     {
-        $this->binary = $this->getDefaultBinaryName();
+        $this->getProcessBuilder()->setBinary($this->getDefaultBinaryName());
 
         return $this;
     }
@@ -75,27 +81,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      */
     public function getBinary()
     {
-        if ($this->binary) {
-            return $this->binary;
-        }
-
-        $finder = new ExecutableFinder();
-
-        if (null === $this->binary = $finder->find($this->getDefaultBinaryName())) {
-            throw new Exception(sprintf('Could not find `%s` binary', $this->getDefaultBinaryName()));
-        }
-
-        return $this->binary;
-    }
-
-    /**
-     * Gets the binary process build
-     *
-     * @return ProcessBuilder
-     */
-    protected function getProcessBuilder()
-    {
-        return ProcessBuilder::create(array($this->getBinary()));
+        return $this->getProcessBuilder()->getBinary();
     }
 
     /**
@@ -116,19 +102,21 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         return $this;
     }
     
-    protected function addBuilderFileArgument(array $files, $builder, $type) {
-        array_walk($files, function($file) use ($builder, $type) {
-            $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-            
-            if (file_exists($file)) {
-                if ($type === self::FILES && is_file($file)) {
-                    $builder->add($file);
-                } else if($type === self::DIRECTORIES && is_dir($file)) {
-                    $builder->add($file);
-                } else {
-                    $builder->add($file);
-                }
-            }
-        });
+    /**
+     * @inheritdoc
+     */
+    public function getProcessBuilder()
+    {
+        return $this->processBuilder;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function setProcessBuilder(ProcessBuilderInterface $processBuilder)
+    {
+        $this->processBuilder = $processBuilder;
+    }
+
+
 }

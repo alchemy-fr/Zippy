@@ -15,6 +15,7 @@ use Alchemy\Zippy\Archive;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 
 /**
  * GNUTarAdapter allows you to creates and extracts files from archives using GNU tar
@@ -25,9 +26,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * Constructor.
      */
-    public function __construct(ParserInterface $parser)
+    public function __construct(ParserInterface $parser, ProcessBuilderFactory $processBuilderFactory)
     {
-        $this->setParser($parser);
+        $this
+            ->setParser($parser)
+            ->setProcessBuilder($processBuilderFactory->create($this));
     }
     
     /**
@@ -39,24 +42,12 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             throw new NotSupportedException('Gnu tar does not allow to create empty archive');
         }
         
-        $builder = $this->getProcessBuilder();
+        $files = (array) $files;
         
-        if (!$recursive) {
-           $builder->add('--no-recursion');
-        }
-        
-        $builder->add('-cf');
-        $builder->add($path);
-        
-        $this->addBuilderFileArgument(
-            (array) $files,
-            $builder,
-            self::FILES_AND_DIRECTORIES
-        );
-        
-        $process = $builder->getProcess();
-        $process->run();
+        $process = $this->processBuilder->getCreateArchiveProcess($path, $files, $recursive);
 
+        $process->run();
+        
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
                 'Unable to execute the following command %s {output: %s}',
@@ -81,10 +72,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function isSupported()
     {
-        return 0 === $this->getProcessBuilder()
-            ->add('-h')
-            ->getProcess()
-            ->run();
+        $process = $this->processBuilder->getHelpProcess();
+
+        $process->run();
+        
+        return $process->isSuccessful();
     }
 
     /**
@@ -92,11 +84,8 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function listMembers($path)
     {
-        $builder = $this->getProcessBuilder();
-        $builder->add('-tf');
-        $builder->add($path);
+        $process = $this->processBuilder->getListMembersProcess($path);
 
-        $process = $builder->getProcess();
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -115,19 +104,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function addFile($path, $files)
     {
-        $builder = $this->getProcessBuilder();
-        $builder->add('-rf');
-        $builder->add($path);
-
         $files = (array) $files;
-
-        $this->addBuilderFileArgument(
-            $files,
-            $builder,
-            self::FILES
-        );
-
-        $process = $builder->getProcess();
+        
+        $process = $this->processBuilder->getAddFileProcess($path, $files);
+        
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -141,11 +121,12 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
     
+    /**
+     * @inheritdoc
+     */
     public function getVersion()
     {
-        $process = $this->getProcessBuilder()
-            ->add('--version')
-            ->getProcess();
+        $process = $this->processBuilder->getVersionProcess();
         
         $process->run();
         
