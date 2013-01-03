@@ -1,4 +1,4 @@
 <?php
 
 $loader = require __DIR__.'/../vendor/autoload.php';
-$loader->add('Zippy\Tests', __DIR__);
+$loader->add('Alchemy\Zippy\Tests', __DIR__ . '/Alchemy/Zippy/Tests');
