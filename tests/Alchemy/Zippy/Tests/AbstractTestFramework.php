@@ -2,7 +2,7 @@
 
 namespace Alchemy\Zippy\Tests;
 
-abstract class AbstractTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractTestFramework extends \PHPUnit_Framework_TestCase
 {
     public static function getResourcesPath()
     {

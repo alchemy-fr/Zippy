@@ -3,9 +3,9 @@
 namespace Alchemy\Zippy\Tests\Parser;
 
 use Alchemy\Zippy\Parser\GNUTarOutputParser;
-use Alchemy\Zippy\Tests\AbstractTest;
+use Alchemy\Zippy\Tests\AbstractTestFramework;
 
-class GNUTarOutputParserTest extends AbstractTest
+class GNUTarOutputParserTest extends AbstractTestFramework
 {
     public function testParse()
     {

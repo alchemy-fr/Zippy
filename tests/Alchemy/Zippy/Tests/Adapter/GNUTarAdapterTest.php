@@ -4,9 +4,10 @@ namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\GNUTarAdapter;
 use Alchemy\Zippy\Parser\GNUTarOutputParser;
-use Alchemy\Zippy\Tests\AbstractTest;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
+use Alchemy\Zippy\Tests\AbstractTestFramework;
 
-class GNUTarAdapterTest extends AbstractTest
+class GNUTarAdapterTest extends AbstractTestFramework
 {
     protected static $tarFile;
     protected $adapter;
@@ -29,7 +30,7 @@ class GNUTarAdapterTest extends AbstractTest
     
     public function setUp()
     {
-        $this->adapter = new GNUTarAdapter(new GNUTarOutputParser());
+        $this->adapter = new GNUTarAdapter(new GNUTarOutputParser(), new ProcessBuilderFactory());
         
         if (!$this->adapter->isSupported()) {
             $this->markTestSkipped(sprintf('`%s` is not supported', $this->adapter->getDefaultBinaryName()));
@@ -37,9 +38,17 @@ class GNUTarAdapterTest extends AbstractTest
     }
     
     /**
-     * @expectedException  Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException  Alchemy\Zippy\Exception\NotSupportedException
      */
-    public function testCreateFailed()
+    public function testCreateWithFilesFailed()
+    {
+        $this->adapter->create(self::$tarFile);
+    }
+    
+    /**
+     * @expectedException  Alchemy\Zippy\Exception\InvalidArgumentException
+     */
+    public function testCreateNoFilesFailed()
     {
         $this->adapter->create(self::$tarFile, array());
     }
@@ -79,7 +88,7 @@ class GNUTarAdapterTest extends AbstractTest
      */
     public function testAddFile($archive)
     {
-        $fileIterator = $this->adapter->addFile($archive->getLocation(), array(__DIR__ . '/../AbstractTest.php'));
+        $fileIterator = $this->adapter->addFile($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
         
         $this->assertEquals(1, count($fileIterator));
         $this->assertEquals(3, count($archive->members()));
