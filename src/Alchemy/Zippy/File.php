@@ -20,28 +20,13 @@ class File
     }
 
     /**
-     * Gets location of the file
-     *
-     * @return string
+     * @inheritdoc
      */
     public function getLocation()
     {
         return $this->location;
     }
 
-    /**
-     * Sets file location
-     *
-     * @param string $location the new location
-     *
-     * @return File
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
-
-        return $this;
-    }
 
     /**
      * Tells wethe the file is a directory or not

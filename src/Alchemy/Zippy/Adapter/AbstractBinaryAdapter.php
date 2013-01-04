@@ -73,11 +73,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     }
 
     /**
-     * Gets the used binary adapter
-     *
-     * @return String
-     * 
-     * @throws Exception In case the default binary file could not be found
+     * @inheritdoc
      */
     public function getBinary()
     {

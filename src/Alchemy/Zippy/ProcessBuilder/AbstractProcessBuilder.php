@@ -82,7 +82,7 @@ abstract class AbstractProcessBuilder implements ProcessBuilderInterface
      * @param ProcessBuilder    $builder    A Builder instance
      * @param Integer           $type       Authorized type of files
      * 
-     * @return AbstractProcess
+     * @return Boolean
      */
     protected function addBuilderFileArgument(array $files, ProcessBuilder $builder, $type) {
         $iterations = 0;

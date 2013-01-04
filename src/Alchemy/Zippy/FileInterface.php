@@ -23,27 +23,11 @@ class FileInterface
     public function getLocation();
 
     /**
-     * Extracts a file from the archive to the given path
-     *
-     * @throws RuntimeException In case the extraction failed
-     */
-    public function extract($target);
-
-    /**
      * Tells whether the current file is a directory or not
      *
      * @return Boolean
      */
     public function isDir();
-
-    /**
-     * Relocates a file with the given path
-     *
-     * @return FileInterface
-     *
-     * @throws RuntimeException In case of failure
-     */
-    public function rename($location);
 
     /**
      * @inheritdoc

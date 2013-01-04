@@ -53,4 +53,13 @@ interface ArchiveInterface
      * @throws RuntimeException In case of failure
      */
     public function remove(FileInterface $file);
+    
+    /**
+     * Searches files and directories archives members
+     *
+     * @return Archive The current Archive instance
+     *
+     * @throws RuntimeException In case archive could not be read
+     */
+    public function members();
 }

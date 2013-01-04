@@ -73,11 +73,7 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * Searches files and directories archives members
-     *
-     * @return Archive The current Archive instance
-     *
-     * @throws RuntimeException In case archive could not be read
+     * @inheritdoc
      */
     public function members()
     {

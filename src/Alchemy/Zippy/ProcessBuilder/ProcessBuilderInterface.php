@@ -71,7 +71,7 @@ interface ProcessBuilderInterface
     public function getBinary();
 
     /**
-     * Stes the binary path
+     * Sets the binary path
      * 
      * @param ProcessBuilderInterface
      */
