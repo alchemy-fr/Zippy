@@ -12,39 +12,44 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive;
-use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\NotSupportedException;
-use Alchemy\Zippy\Parser\ParserInterface;
-use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
+use Alchemy\Zippy\Exception\RuntimeException;
 
 /**
  * GNUTarAdapter allows you to creates and extracts files from archives using GNU tar
+ *
  * @see http://www.gnu.org/software/tar/manual/tar.html
  */
 class GNUTarAdapter extends AbstractBinaryAdapter
 {
-    /**
-     * Constructor.
-     */
-    public function __construct(ParserInterface $parser, ProcessBuilderInterface $processBuilder)
-    {
-        $this
-            ->setParser($parser)
-            ->setProcessBuilder($processBuilder);
-    }
-
     /**
      * @inheritdoc
      */
     public function create($path, $files = null, $recursive = true)
     {
         if (null === $files) {
-            throw new NotSupportedException('Gnu tar does not allow to create empty archive');
+            throw new NotSupportedException('Gnu tar does not allow to create an empty archive');
         }
 
         $files = (array) $files;
 
-        $process = $this->processBuilder->getCreateArchiveProcess($path, $files, $recursive);
+        $builder = $this
+            ->processBuilder
+            ->create();
+
+        if (!$recursive) {
+           $builder->add('--no-recursion');
+        }
+
+        $builder->add('-cf');
+        $builder->add($path);
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
 
         $process->run();
 
@@ -62,17 +67,13 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public static function getName()
-    {
-        return 'gnu-tar';
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function isSupported()
     {
-        $process = $this->processBuilder->getHelpProcess();
+        $process = $this
+            ->processBuilder
+            ->create()
+            ->add('-h')
+            ->getProcess();
 
         $process->run();
 
@@ -84,7 +85,12 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function listMembers($path)
     {
-        $process = $this->processBuilder->getListMembersProcess($path);
+        $process = $this
+            ->processBuilder
+            ->create()
+            ->add('-tf')
+            ->add($path)
+            ->getProcess();
 
         $process->run();
 
@@ -96,17 +102,33 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseFileListing($process->getOutput());
+        return $this->parser->parseFileListing($process->getOutput() ?: '');
     }
 
     /**
      * @inheritdoc
      */
-    public function addFile($path, $files)
+    public function add($path, $files, $recursive = true)
     {
         $files = (array) $files;
 
-        $process = $this->processBuilder->getAddFileProcess($path, $files);
+        $builder = $this
+            ->processBuilder
+            ->create();
+        
+        if (!$recursive) {
+           $builder->add('--no-recursion');
+        }
+        
+        $builder
+            ->add('-rf')
+            ->add($path);
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
 
         $process->run();
 
@@ -126,7 +148,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function getVersion()
     {
-        $process = $this->processBuilder->getVersionProcess();
+        $process = $this
+            ->processBuilder
+            ->create()
+            ->add('--version')
+            ->getProcess();
 
         $process->run();
 
@@ -138,7 +164,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseVersion($process->getOutput());
+        return $this->parser->parseVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -147,5 +173,13 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public static function getDefaultBinaryName()
     {
         return 'tar';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getName()
+    {
+        return 'gnu-tar';
     }
 }

@@ -3,14 +3,15 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Parser\ParserInterface;
-use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 
 interface BinaryAdapterInterface
 {
-    const FILES = 1;
-    const DIRECTORIES = 2;
-    const FILES_AND_DIRECTORIES = 4;
-
+    /**
+     * Gets the output parser
+     * 
+     * @return ParserInterface
+     */
     public function getParser();
 
     /**
@@ -25,7 +26,7 @@ interface BinaryAdapterInterface
     /**
      * Returns the parser
      *
-     * @return ProcessBuilderInterface
+     * @return ProcessBuilderFactoryInterface
      */
     public function getProcessBuilder();
 
@@ -36,7 +37,7 @@ interface BinaryAdapterInterface
      *
      * @return AbstractBinaryAdapter
      */
-    public function setProcessBuilder(ProcessBuilderInterface $processBuilder);
+    public function setProcessBuilder(ProcessBuilderFactoryInterface $processBuilder);
 
     /**
      * Returns the binary version
@@ -44,7 +45,7 @@ interface BinaryAdapterInterface
      * @return string
      */
     public function getVersion();
-    
+
     /**
      * Gets the default adapter binary name
      *

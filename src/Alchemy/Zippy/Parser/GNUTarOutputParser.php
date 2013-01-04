@@ -13,9 +13,8 @@ namespace Alchemy\Zippy\Parser;
 /**
  * This class is responsable of parsing GNUTar command line output
  */
-class GNUTarOutputParser  implements ParserInterface
+class GNUTarOutputParser implements ParserInterface
 {
-
     /**
      * @inheritdoc
      */
@@ -29,9 +28,14 @@ class GNUTarOutputParser  implements ParserInterface
      */
     public function parseVersion($output)
     {
-        list($name, $version) = explode(' ', $output, 3);
+        $chuncks = explode(' ', $output, 3);
+
+        if (2 > count($chuncks)) {
+            return null;
+        }
+
+        list($name, $version) = $chuncks;
 
         return $version;
     }
-
 }

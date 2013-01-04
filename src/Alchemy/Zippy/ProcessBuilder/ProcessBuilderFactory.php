@@ -12,32 +12,61 @@
 namespace Alchemy\Zippy\ProcessBuilder;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\ProcessBuilder\GNUTarProcessBuilder;
-use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
-use Symfony\Component\Process\ExecutableFinder;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
+use Symfony\Component\Process\ProcessBuilder;
 
-class ProcessBuilderFactory
+class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
 {
     /**
-     * Maps the corresponding process builder to the selected adapter
+     * The binary path
      *
-     * @param String $adapterName       An adapter name
-     * @param String $adapterBinaryName A binary path
-     *
-     * @return ProcessBuilderInterface
-     *
-     * @throws InvalidArgumentException In case no adapter were found
+     * @var String
      */
-    public static function create($adapterName, $adapterBinaryName)
-    {
-        switch ($adapterName) {
-            case 'gnu-tar':
-                return new GNUTarProcessBuilder($adapterBinaryName, new ExecutableFinder());
-                break;
+    protected $binary;
 
-            default:
-                throw InvalidArgumentException();
-                break;
+    /**
+     * Constructor
+     *
+     * @param String $binary The path to the binary
+     *
+     * @throws InvalidArgumentException In case binary path is invalid
+     */
+    public function __construct($binary)
+    {
+        $this->useBinary($binary);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getBinary()
+    {
+        return $this->binary;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function useBinary($binary)
+    {
+        if (!is_executable($binary)) {
+            throw new InvalidArgumentException(sprintf('`%s` is not an executable binary', $binary));
         }
+
+        $this->binary = $binary;
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function create()
+    {
+        if (null === $this->binary) {
+            throw new InvalidArgumentException('No binary set');
+        }
+
+        return ProcessBuilder::create(array($this->binary));
     }
 }

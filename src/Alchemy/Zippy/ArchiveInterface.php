@@ -55,11 +55,11 @@ interface ArchiveInterface
     public function remove(FileInterface $file);
 
     /**
-     * Searches files and directories archives members
+     * List files and directories archives members
      *
-     * @return Archive The current Archive instance
+     * @return array An array of File
      *
      * @throws RuntimeException In case archive could not be read
      */
-    public function members();
+    public function getMembers();
 }

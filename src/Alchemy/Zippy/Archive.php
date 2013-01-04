@@ -38,6 +38,12 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      */
     protected $members = array();
 
+    /**
+     * Constructor
+     * 
+     * @param String            $location   Path to the archive
+     * @param AdapterInterface  $adapter    An archiveAdapter 
+     */
     public function __construct($location, AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
@@ -47,11 +53,11 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     /**
      * Counts all the archives members
      *
-     * @return int
+     * @return Integer
      */
     public function count()
     {
-        return iterator_count($this->getIterator());
+        return count($this->getMembers());
     }
 
       /**
@@ -59,29 +65,23 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      *
      * This method implements the IteratorAggregate interface.
      *
-     * @return \Iterator An iterator
+     * @return \ArrayIterator An iterator
      *
      * @throws LogicException if the in() method has not been called
      */
     public function getIterator()
     {
-        if (0 === count($this->members)) {
-            throw new LogicException('You must call members() method before iterating over a Finder.');
-        }
-
-        return new \ArrayIterator($this->members);
+        return new \ArrayIterator($this->getMembers());
     }
 
     /**
      * @inheritdoc
      */
-    public function members()
+    public function getMembers()
     {
-        $this->members = array_map(function($filename) {
+        return $this->members = array_map(function($filename) {
             return new File($filename);
         }, $this->adapter->listMembers($this->location));
-
-        return $this;
     }
 
     /**
@@ -89,9 +89,7 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      */
     public function add($sources)
     {
-        foreach ($this->adapter->addFile($this->location, $sources) as $file) {
-            $this->members[] = new File($file->getRealPath());
-        }
+        $this->adapter->addFile($this->location, $sources);
     }
 
     /**

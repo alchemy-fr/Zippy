@@ -13,20 +13,16 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
-use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
+use Symfony\Component\Process\ExecutableFinder;
+use Symfony\Component\Process\ProcessBuilder;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
-    /**
-     * The path to the binary file
-     *
-     * @var string
-     */
-    protected $binary;
-
     /**
      * The parser to use to parse command output
      *
@@ -37,9 +33,21 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * The processBuilder use to build binary command line
      *
-     * @var ProcessBuilderInterface
+     * @var ProcessBuilderFactoryInterface
      */
     protected $processBuilder;
+
+    /**
+     * Constructor
+     *
+     * @param ParserInterface                   $parser         An output parser
+     * @param ProcessBuilderFactoryInterface    $processBuilder A process builder
+     */
+    public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $processBuilder)
+    {
+        $this->parser = $parser;
+        $this->processBuilder = $processBuilder;
+    }
 
     /**
      * @inheritdoc
@@ -70,10 +78,10 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * @inheritdoc
      */
-    public function setProcessBuilder(ProcessBuilderInterface $processBuilder)
+    public function setProcessBuilder(ProcessBuilderFactoryInterface $processBuilder)
     {
         $this->processBuilder = $processBuilder;
-        
+
         return $this;
     }
 
@@ -82,19 +90,43 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @return AbstractBinaryAdapter
      *
-     * @throws InvalidArgumentException In case no process builder or output parser were found
+     * @throws RuntimeException In case object could not be instanciated
      */
     public static function newInstance()
     {
-        $adapterName = static::getName();
+        $finder = new ExecutableFinder();
 
-        $processBuilder = ProcessBuilderFactory::create(
-            $adapterName,
-            static::getDefaultBinaryName()
-        );
+        $processBuilder = new ProcessBuilderFactory($finder->find(static::getDefaultBinaryName()));
 
-        $outputParser = ParserFactory::create($adapterName);
+        try {
+            $outputParser = ParserFactory::create(static::getName());
+        } catch (InvalidArgumentException $e) {
+            throw new RuntimeException(sprintf(
+                'Failed to get a new instance of %s',
+                get_called_class()), $e->getCode(), $e
+            );
+        }
 
         return new static($outputParser, $processBuilder);
+    }
+
+    /**
+     * Adds files to argument list
+     *
+     * @param Array             $files   An array of files
+     * @param ProcessBuilder    $builder A Builder instance
+     *
+     * @return Boolean
+     */
+    protected function addBuilderFileArgument(array $files, ProcessBuilder $builder)
+    {
+        $iterations = 0;
+
+        array_walk($files, function($file) use ($builder, &$iterations) {
+            $builder->add($file instanceof \SplFileInfo ? $file->getRealpath() : $file);
+            $iterations++;
+        });
+
+        return 0 !== $iterations;
     }
 }
