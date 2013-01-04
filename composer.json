@@ -12,7 +12,8 @@
     }
     ],
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "symfony/process": ">=2.0, <=2.2.x-dev"
     },
     "autoload": {
         "psr-0": {
