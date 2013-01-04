@@ -30,7 +30,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
     
     public function setUp()
     {
-        $this->adapter = new GNUTarAdapter(new GNUTarOutputParser(), new ProcessBuilderFactory());
+        $this->adapter = GNUTarAdapter::newInstance();
         
         if (!$this->adapter->isSupported()) {
             $this->markTestSkipped(sprintf('`%s` is not supported', $this->adapter->getDefaultBinaryName()));
@@ -55,7 +55,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
     
     public function testCreate()
     {
-        $this->adapter->create(self::$tarFile, array(__FILE__, __DIR__ . '/AbstractAdapterBinaryTest.php'));
+        $this->adapter->create(self::$tarFile, array(__FILE__));
         $this->assertFileExists(self::$tarFile);
         
         return self::$tarFile;
@@ -80,7 +80,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $members = $this->adapter->listMembers($archive->getLocation());
         
         $this->assertTrue(is_array($members));
-        $this->assertEquals(2, count($members));
+        $this->assertEquals(1, count($members));
     }
     
     /**
@@ -91,7 +91,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $fileIterator = $this->adapter->addFile($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
         
         $this->assertEquals(1, count($fileIterator));
-        $this->assertEquals(3, count($archive->members()));
+        $this->assertEquals(2, count($archive->members()));
     }
     
     public function testgetVersion()
@@ -102,11 +102,11 @@ class GNUTarAdapterTest extends AbstractTestFramework
     
     public function testGetName()
     {
-        $this->assertEquals('gnu-tar', $this->adapter->getName());
+        $this->assertEquals('gnu-tar', GNUTarAdapter::getName());
     }
     
     public function testGetDefaultBinaryName()
     {
-        $this->assertEquals('tar', $this->adapter->getDefaultBinaryName());
+        $this->assertEquals('tar', GNUTarAdapter::getDefaultBinaryName());
     }
 }
