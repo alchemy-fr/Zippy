@@ -21,14 +21,13 @@ interface ArchiveInterface
      * Adds a file into the archive
      *
      * @param String|\SplFileInfo $source The path to the file
-     * @param String|null         $target The archive file path, null to use the same as source
      *
      * @return ArchiveInterface
      *
      * @throws InvalidArgumentException In case the provided source path is not valid
      * @throws RuntimeException         In case of failure
      */
-    public function add($source, $target = null);
+    public function add($source);
 
     /**
      * Adds a directory into the archive
@@ -54,4 +53,13 @@ interface ArchiveInterface
      * @throws RuntimeException In case of failure
      */
     public function remove(FileInterface $file);
+
+    /**
+     * List files and directories archives members
+     *
+     * @return array An array of File
+     *
+     * @throws RuntimeException In case archive could not be read
+     */
+    public function getMembers();
 }
