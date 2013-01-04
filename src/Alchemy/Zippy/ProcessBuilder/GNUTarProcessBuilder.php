@@ -39,7 +39,7 @@ class GNUTarProcessBuilder extends AbstractProcessBuilder
 
         return $builder->getProcess();
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -50,21 +50,21 @@ class GNUTarProcessBuilder extends AbstractProcessBuilder
             ->add($path)
             ->getProcess();
     }
-    
+
     /**
      * @inheritdoc
      */
     public function getCreateArchiveProcess($path, array $files = null, $recursive = true)
     {
         $builder = $this->getProcessBuilder();
-        
+
         if (!$recursive) {
            $builder->add('--no-recursion');
         }
-        
+
         $builder->add('-cf');
         $builder->add($path);
-        
+
         if (!$this->addBuilderFileArgument(
             $files,
             $builder,
@@ -72,10 +72,10 @@ class GNUTarProcessBuilder extends AbstractProcessBuilder
         )) {
             throw new InvalidArgumentException('Invalid files');
         }
-        
+
         return $builder->getProcess();
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -85,7 +85,7 @@ class GNUTarProcessBuilder extends AbstractProcessBuilder
             ->add('--version')
             ->getProcess();
     }
-    
+
     /**
      * @inheritdoc
      */

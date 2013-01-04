@@ -19,13 +19,6 @@ use Alchemy\Zippy\Options;
 Interface AdapterInterface
 {
     /**
-     * Returns the adapter name
-     *
-     * @return String
-     */
-    public function getName();
-
-    /**
      * Returns the adapter options
      *
      * @return Options
@@ -56,13 +49,14 @@ Interface AdapterInterface
     /**
      * Creates a new archive
      *
-     * @param String                            $path       The path to the archive
-     * @param String|Array|\Traversable|null    $files      A filename, an array of files, or a \Traversable instance
-     * @param Boolean                           $recursive  Recurse into directories
+     * @param String                         $path      The path to the archive
+     * @param String|Array|\Traversable|null $files     A filename, an array of files, or a \Traversable instance
+     * @param Boolean                        $recursive Recurse into directories
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException In case of failure
+     * @throws RuntimeException      In case of failure
+     * @throws NotSupportedException In case the archive can not be created without at least one file
      */
     public function create($path, $files = null, $recursive = true);
 
@@ -79,6 +73,8 @@ Interface AdapterInterface
      * @param String $path The path to the archive
      *
      * @return Array
+     *
+     * @throws RuntimeException In case of failure
      */
     public function listMembers($path);
 
@@ -89,6 +85,15 @@ Interface AdapterInterface
      * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
      *
      * @return Array
+     *
+     * @throws RuntimeException In case of failure
      */
     public function addFile($path, $files);
+    
+    /**
+     * Returns the adapter name
+     *
+     * @return String
+     */
+    public static function getName();
 }

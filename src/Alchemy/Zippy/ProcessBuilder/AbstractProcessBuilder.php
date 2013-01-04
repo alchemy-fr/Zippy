@@ -21,26 +21,26 @@ abstract class AbstractProcessBuilder implements ProcessBuilderInterface
 {
     /**
      * The binary path
-     * 
-     * @var string 
+     *
+     * @var string
      */
     protected $binary;
-    
+
     /**
      *
-     * @var type 
+     * @var type
      */
     protected $binaryFinder;
-    
+
     /**
      * Constructor
      */
     public function __construct($binary, ExecutableFinder $finder)
     {
         $this->binaryFinder = $finder;
-        $this->setBinary($binary);
+        $this->findBinary($binary);
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -52,57 +52,72 @@ abstract class AbstractProcessBuilder implements ProcessBuilderInterface
     /**
      * @inheritdoc
      */
-    public function setBinary($binary, array $extraDirs = array())
+    public function findBinary($binary, array $extraDirs = array())
     {
         $this->binary = $this->binaryFinder->find($binary, null, $extraDirs);
-        
+
         return $this;
     }
-    
+
+    /**
+     * @inheritdoc
+     */
+    public function useBinary($binary)
+    {
+        if (!is_executable($binary)) {
+            throw new InvalidArgumentException(sprintf('`%s` is not an executable binary', $binary));
+        }
+
+        $this->binary = $binary;
+
+        return $this;
+    }
+
     /**
      * Returns a new instance of Symfony ProcessBuilder
-     * 
+     *
      * @return ProcessBuilder
-     * 
+     *
      * @throws InvalidArgumentException
      */
     protected function getProcessBuilder()
     {
         if (null === $this->binary) {
-            throw new InvalidArgumentException(sprintf('Could not find `%s` binary', $this->binary));
+            throw new InvalidArgumentException(sprintf('Could not find binary'));
         }
-        
+
         return ProcessBuilder::create(array($this->binary));
     }
-    
+
     /**
      * Adds files to argument list
-     * 
-     * @param array             $files      An array of files
-     * @param ProcessBuilder    $builder    A Builder instance
-     * @param Integer           $type       Authorized type of files
-     * 
+     *
+     * @param array          $files   An array of files
+     * @param ProcessBuilder $builder A Builder instance
+     * @param Integer        $type    Authorized type of files
+     *
      * @return Boolean
      */
-    protected function addBuilderFileArgument(array $files, ProcessBuilder $builder, $type) {
+    protected function addBuilderFileArgument(array $files, ProcessBuilder $builder, $type)
+    {
         $iterations = 0;
-        
+
         array_walk($files, function($file) use ($builder, $type, &$iterations) {
             $file = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-            
+
             if (file_exists($file)) {
                 if ($type === BinaryAdapterInterface::FILES && is_file($file)) {
                     $builder->add($file);
-                } else if($type === BinaryAdapterInterface::DIRECTORIES && is_dir($file)) {
+                } elseif ($type === BinaryAdapterInterface::DIRECTORIES && is_dir($file)) {
                     $builder->add($file);
                 } else {
                     $builder->add($file);
                 }
-                
+
                 $iterations++;
             }
         });
-        
+
         return 0 !== $iterations;
     }
 }

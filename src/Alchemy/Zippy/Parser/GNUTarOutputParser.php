@@ -23,14 +23,14 @@ class GNUTarOutputParser  implements ParserInterface
     {
         return array_values(array_filter(explode("\n", $output)));
     }
-    
+
     /**
      * @inheritdoc
      */
     public function parseVersion($output)
     {
         list($name, $version) = explode(' ', $output, 3);
-        
+
         return $version;
     }
 

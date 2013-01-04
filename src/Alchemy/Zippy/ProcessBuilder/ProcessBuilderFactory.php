@@ -11,28 +11,28 @@
 
 namespace Alchemy\Zippy\ProcessBuilder;
 
-use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
-use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\ProcessBuilder\GNUTarProcessBuilder;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
 use Symfony\Component\Process\ExecutableFinder;
 
 class ProcessBuilderFactory
 {
     /**
      * Maps the corresponding process builder to the selected adapter
-     * 
-     * @param AbstractBinaryAdapter $adapter
-     * 
-     * @return AdapterInterface
-     * 
+     *
+     * @param String $adapterName       An adapter name
+     * @param String $adapterBinaryName A binary path
+     *
+     * @return ProcessBuilderInterface
+     *
      * @throws InvalidArgumentException In case no adapter were found
      */
-    public function create(AbstractBinaryAdapter $adapter)
+    public static function create($adapterName, $adapterBinaryName)
     {
-        switch ($adapter->getName()) {
+        switch ($adapterName) {
             case 'gnu-tar':
-                return new GNUTarProcessBuilder($adapter->getDefaultBinaryName(), new ExecutableFinder());
+                return new GNUTarProcessBuilder($adapterBinaryName, new ExecutableFinder());
                 break;
 
             default:

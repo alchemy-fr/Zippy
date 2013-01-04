@@ -17,63 +17,79 @@ interface ProcessBuilderInterface
 {
     /**
      * Returns a process to add files to an archive
-     * 
-     * @param String    $path   The archive path
-     * @param array     $files  An array of files
-     * 
+     *
+     * @param String $path  The archive path
+     * @param array  $files An array of files
+     *
      * @return Process
      *
      * @throws InvalidArgumentException In case no files could be added
      */
     public function getAddFileProcess($path, array $files);
-    
+
     /**
      * Returns a process to list archive members
-     * 
-     * @param String $path  The archive path
-     * 
+     *
+     * @param String $path The archive path
+     *
      * @return Process
      */
     public function getListMembersProcess($path);
-    
+
     /**
      * Returns a process to create an archive
-     * 
-     * @param String    $path       The archive path
-     * @param array     $files      An array of files
-     * @param Boolean   $recursive  Recurse into directories
-     * 
+     *
+     * @param String  $path      The archive path
+     * @param array   $files     An array of files
+     * @param Boolean $recursive Recurse into directories
+     *
      * @return Process
      *
      * @throws InvalidArgumentException In case no files could be added
      */
     public function getCreateArchiveProcess($path, array $files = null, $recursive = true);
-    
+
     /**
      * Returns a process to get binary version
-     * 
+     *
      * @return Process
      */
     public function getVersionProcess();
-    
+
     /**
      * Returns a process to get binary help
-     * 
+     *
      * @return Process
      */
     public function getHelpProcess();
-    
+
     /**
      * Returns the binary path
-     * 
+     *
      * @return String
      */
     public function getBinary();
 
     /**
      * Sets the binary path
-     * 
-     * @param ProcessBuilderInterface
+     *
+     * @param String $binary A binary path
+     *
+     * @return ProcessBuilderInterface
+     *
+     * @throws InvalidArgumentException In case no files could be added
      */
-    public function setBinary($binary);
+    public function useBinary($binary);
+
+    /**
+     * Finds a binary path
+     *
+     * @param String $binary    A binary path
+     * @param Array  $extraDirs An Array of extra path
+     *
+     * @return ProcessBuilderInterface
+     *
+     * @throws InvalidArgumentException In case no files could be added
+     */
+    public function findBinary($binary, array $extraDirs = array());
 }

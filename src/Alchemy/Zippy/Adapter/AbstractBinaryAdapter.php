@@ -14,7 +14,9 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
@@ -31,54 +33,13 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @var ParserInterface
      */
     protected $parser;
-    
+
     /**
      * The processBuilder use to build binary command line
      *
      * @var ProcessBuilderInterface
      */
     protected $processBuilder;
-    
-    /**
-     * Gets the default adapter binary name
-     *
-     * @return String
-     */
-    abstract public function getDefaultBinaryName();
-    
-    /**
-     * @inheritdoc
-     */
-    public function useBinary($path, array $extraDirs = array())
-    {
-        if (!is_executable($path)) {
-            throw new InvalidArgumentException(sprintf('%s is not executable', $path));
-        }
-
-        $this->getProcessBuilder()->setBinary($path, $extraDirs);
-
-        return $path;
-    }
-
-    /**
-     * Uses the default binary
-     *
-     * @return AbstractBinaryAdapter
-     */
-    public function useDefaultBinary()
-    {
-        $this->getProcessBuilder()->setBinary($this->getDefaultBinaryName());
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getBinary()
-    {
-        return $this->getProcessBuilder()->getBinary();
-    }
 
     /**
      * @inheritdoc
@@ -97,7 +58,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         return $this;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -112,7 +73,28 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     public function setProcessBuilder(ProcessBuilderInterface $processBuilder)
     {
         $this->processBuilder = $processBuilder;
+        
+        return $this;
     }
 
+    /**
+     * Returns a new instance of the invoked adapter
+     *
+     * @return AbstractBinaryAdapter
+     *
+     * @throws InvalidArgumentException In case no process builder or output parser were found
+     */
+    public static function newInstance()
+    {
+        $adapterName = static::getName();
 
+        $processBuilder = ProcessBuilderFactory::create(
+            $adapterName,
+            static::getDefaultBinaryName()
+        );
+
+        $outputParser = ParserFactory::create($adapterName);
+
+        return new static($outputParser, $processBuilder);
+    }
 }

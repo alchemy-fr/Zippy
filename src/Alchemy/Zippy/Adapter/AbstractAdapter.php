@@ -41,7 +41,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         return $this->options;
     }
-    
+
     /**
      * @inheritdoc
      */

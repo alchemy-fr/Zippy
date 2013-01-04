@@ -27,7 +27,6 @@ class File
         return $this->location;
     }
 
-
     /**
      * Tells wethe the file is a directory or not
      *

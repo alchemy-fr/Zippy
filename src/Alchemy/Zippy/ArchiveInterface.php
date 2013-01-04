@@ -53,7 +53,7 @@ interface ArchiveInterface
      * @throws RuntimeException In case of failure
      */
     public function remove(FileInterface $file);
-    
+
     /**
      * Searches files and directories archives members
      *

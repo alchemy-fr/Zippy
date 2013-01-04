@@ -21,13 +21,13 @@ interface ParserInterface
      * @return Array The chunk of output
      */
     public function parseFileListing($output);
-    
+
     /**
      * Parse a version
-     * 
-     * @param   String  $output
-     * 
-     * @return  String The version
+     *
+     * @param String $output
+     *
+     * @return String The version
      */
     public function parseVersion($output);
 }

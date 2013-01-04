@@ -11,8 +11,6 @@
 
 namespace Alchemy\Zippy;
 
-use Alchemy\Zippy\Exception\RuntimeException;
-
 class FileInterface
 {
     /**
