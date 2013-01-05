@@ -64,7 +64,7 @@ Interface AdapterInterface
     public function create($path, $files = null, $recursive = true);
 
     /**
-     * Tests adapter support for current environment
+     * Tests if the adapter is supported by the current environment
      *
      * @return Boolean
      */
@@ -86,7 +86,7 @@ Interface AdapterInterface
      *
      * @param String                    $path  The path to the archive
      * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
-     * @param Boolean                   $files Whether or not to recurse in directories
+     * @param Boolean                   $files Whether or not to recurse in the provided directories
      *
      * @return Array
      *

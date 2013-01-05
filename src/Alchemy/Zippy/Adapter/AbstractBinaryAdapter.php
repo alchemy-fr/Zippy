@@ -31,7 +31,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     protected $parser;
 
     /**
-     * The processBuilder use to build binary command line
+     * The process builder factory to use to build binary command line
      *
      * @var ProcessBuilderFactoryInterface
      */
@@ -41,7 +41,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * Constructor
      *
      * @param ParserInterface                   $parser         An output parser
-     * @param ProcessBuilderFactoryInterface    $processBuilder A process builder
+     * @param ProcessBuilderFactoryInterface    $processBuilder A process builder factory
      */
     public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $processBuilder)
     {

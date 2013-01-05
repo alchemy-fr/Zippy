@@ -42,7 +42,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
     /**
      * @expectedException  Alchemy\Zippy\Exception\NotSupportedException
      */
-    public function testCreateWithFilesFailed()
+    public function testCreateWithoutFilesFailed()
     {
         $this->adapter->create(self::$tarFile);
     }
