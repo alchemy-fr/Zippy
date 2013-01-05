@@ -7,7 +7,7 @@ class File
     /**
      * The location of the file
      *
-     * @var     string
+     * @var     String
      */
     private $location;
 
@@ -28,9 +28,7 @@ class File
     }
 
     /**
-     * Tells wethe the file is a directory or not
-     *
-     * @return Boolean
+     * @inheritdoc
      */
     public function isDir()
     {

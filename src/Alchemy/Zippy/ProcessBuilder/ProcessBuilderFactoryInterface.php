@@ -39,7 +39,7 @@ interface ProcessBuilderFactoryInterface
      *
      * @return ProcessBuilderFactoryInterface
      *
-     * @throws InvalidArgumentException In case no files could be added
+     * @throws InvalidArgumentException In case binary is not executable
      */
     public function useBinary($binary);
 }

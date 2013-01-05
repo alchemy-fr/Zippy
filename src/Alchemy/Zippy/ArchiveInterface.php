@@ -55,9 +55,9 @@ interface ArchiveInterface
     public function remove(FileInterface $file);
 
     /**
-     * List files and directories archives members
+     * Lists files and directories archive members
      *
-     * @return array An array of File
+     * @return Array An array of File
      *
      * @throws RuntimeException In case archive could not be read
      */

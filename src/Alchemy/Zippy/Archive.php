@@ -20,7 +20,7 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     /**
      * The path to the archive
      *
-     * @var string
+     * @var String
      */
     protected $location;
 
@@ -42,7 +42,7 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      * Constructor
      * 
      * @param String            $location   Path to the archive
-     * @param AdapterInterface  $adapter    An archiveAdapter 
+     * @param AdapterInterface  $adapter    An archive adapter 
      */
     public function __construct($location, AdapterInterface $adapter)
     {
@@ -66,8 +66,6 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      * This method implements the IteratorAggregate interface.
      *
      * @return \ArrayIterator An iterator
-     *
-     * @throws LogicException if the in() method has not been called
      */
     public function getIterator()
     {

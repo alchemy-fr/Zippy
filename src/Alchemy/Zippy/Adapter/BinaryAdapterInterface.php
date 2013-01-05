@@ -42,7 +42,7 @@ interface BinaryAdapterInterface
     /**
      * Returns the binary version
      *
-     * @return string
+     * @return String
      */
     public function getVersion();
 
