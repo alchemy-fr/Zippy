@@ -17,7 +17,7 @@ use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
 /**
- * GNUTarAdapter allows you to creates and extracts files from archives using GNU tar
+ * GNUTarAdapter allows you to create and extract files from archives using GNU tar
  *
  * @see http://www.gnu.org/software/tar/manual/tar.html
  */

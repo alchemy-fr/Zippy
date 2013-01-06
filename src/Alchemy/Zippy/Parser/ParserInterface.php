@@ -14,7 +14,7 @@ namespace Alchemy\Zippy\Parser;
 interface ParserInterface
 {
     /**
-     * Parse a file listing
+     * Parses a file listing
      *
      * @param String $output The string to parse
      *
@@ -23,7 +23,7 @@ interface ParserInterface
     public function parseFileListing($output);
 
     /**
-     * Parse a version
+     * Parses a version
      *
      * @param String $output
      *
