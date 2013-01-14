@@ -14,6 +14,7 @@ namespace Alchemy\Zippy\Parser;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Parser\GNUTarOutputParser;
 use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\Parser\ZipOutputParser;
 
 class ParserFactory
 {
@@ -30,7 +31,10 @@ class ParserFactory
     {
         switch ($adapterName) {
             case 'gnu-tar':
-                return new GNUTarOutputParser($adapterName);
+                return new GNUTarOutputParser();
+                break;
+            case 'zip':
+                return new ZipOutputParser();
                 break;
 
             default:

@@ -31,8 +31,12 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-                ->processBuilder
-                ->create();
+            ->inflatorProcessBuilder
+            ->create();
+
+        if (!$recursive) {
+           $builder->add('--no-recursion');
+        }
 
         $builder->add('-cf');
 
@@ -77,7 +81,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function isSupported()
     {
         $process = $this
-            ->processBuilder
+            ->inflatorProcessBuilder
             ->create()
             ->add('-h')
             ->getProcess();
@@ -93,7 +97,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function listMembers($path)
     {
         $process = $this
-            ->processBuilder
+            ->inflatorProcessBuilder
             ->create()
             ->add('--utc -tf')
             ->add($path)
@@ -120,7 +124,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->processBuilder
+            ->inflatorProcessBuilder
             ->create();
 
         if (!$recursive) {
@@ -153,10 +157,10 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function getVersion()
+    public function getInflatorVersion()
     {
         $process = $this
-            ->processBuilder
+            ->inflatorProcessBuilder
             ->create()
             ->add('--version')
             ->getProcess();
@@ -211,9 +215,9 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public static function getDefaultBinaryName()
+    public static function getDeflatorVersion()
     {
-        return 'tar';
+        return $this->getInflatorVersion();
     }
 
     /**
@@ -222,5 +226,21 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public static function getName()
     {
         return 'gnu-tar';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getDefaultDeflatorBinaryName()
+    {
+        return 'tar';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function getDefaultInflatorBinaryName()
+    {
+        return 'tar';
     }
 }

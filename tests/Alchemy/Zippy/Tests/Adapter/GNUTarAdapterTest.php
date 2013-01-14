@@ -106,7 +106,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
@@ -148,7 +148,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->listMembers($archive->getLocation());
     }
@@ -177,7 +177,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
     }
@@ -197,9 +197,9 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->adapter->getVersion();
+        $this->adapter->getInflatorVersion();
     }
     
     /**
@@ -261,9 +261,14 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $this->assertEquals('gnu-tar', GNUTarAdapter::getName());
     }
 
-    public function testGetDefaultBinaryName()
+    public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('tar', GNUTarAdapter::getDefaultBinaryName());
+        $this->assertEquals('tar', GNUTarAdapter::getDefaultInflatorBinaryName());
+    }
+
+    public function testGetDefaultDeflatorBinaryName()
+    {
+        $this->assertEquals('tar', GNUTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()
