@@ -52,7 +52,7 @@ class Member implements MemberInterface
      * @param \DateTime $lastModifiedDate The last modifed date of the member
      * @param Boolean   $isDir            Tells wheteher the member is a directory or not
      */
-    public function __construct($location, $fileSize, \DateTime $lastModifiedDate, $isDir = false)
+    public function __construct($location, $fileSize, \DateTime $lastModifiedDate, $isDir)
     {
         $this->location = $location;
         $this->isDir = $isDir;
