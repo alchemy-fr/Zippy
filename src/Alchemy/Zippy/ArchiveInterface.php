@@ -22,11 +22,11 @@ interface ArchiveInterface
      * @return String
      */
     public function getLocation();
-    
+
     /**
      * Adds a file or a folder into the archive
      *
-     * @param String|Array|\SplFileInfo $sources The path to the file or a folder
+     * @param String|Array|\SplFileInfo $sources   The path to the file or a folder
      * @param Boolean                   $recursive Recurse into directories
      *
      * @return ArchiveInterface
@@ -55,7 +55,7 @@ interface ArchiveInterface
      * @throws RuntimeException In case archive could not be read
      */
     public function getMembers();
-    
+
     /**
      * @inheritdoc
      */

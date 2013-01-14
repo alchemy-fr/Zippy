@@ -26,17 +26,17 @@ interface MemberInterface
      * @return Boolean
      */
     public function isDir();
-    
+
     /*
      * Returns the last modified date of the member
-     * 
+     *
      * @return \DateTime
      */
     public function getLastModifiedDate();
 
-    /** 
+    /**
      * Returns the (uncompressed) size of the member
-     * 
+     *
      * If the size is unknown, returns -1
      *
      * @return Integer

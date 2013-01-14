@@ -25,32 +25,32 @@ class Member implements MemberInterface
 
     /**
      * Tells whether the archive member is a directory or not
-     * 
+     *
      * @var Boolean
      */
     private $isDir;
-    
+
     /**
      * The uncompressed size of the file
-     * 
+     *
      * @var Integer
      */
     private $size;
-    
+
     /**
      * The last modified date of the file
-     * 
+     *
      * @var \DateTime
      */
     private $lastModifiedDate;
-    
+
     /**
      * Constructor
-     * 
-     * @param String    $location           The path of the archive member
-     * @param Integer   $fileSize           The uncompressed file size 
-     * @param \DateTime $lastModifiedDate   The last modifed date of the member
-     * @param Boolean   $isDir              Tells wheteher the member is a directory or not
+     *
+     * @param String    $location         The path of the archive member
+     * @param Integer   $fileSize         The uncompressed file size
+     * @param \DateTime $lastModifiedDate The last modifed date of the member
+     * @param Boolean   $isDir            Tells wheteher the member is a directory or not
      */
     public function __construct($location, $fileSize, \DateTime $lastModifiedDate, $isDir = false)
     {
@@ -73,9 +73,9 @@ class Member implements MemberInterface
      */
     public function isDir()
     {
-        return $this->isDir();
+        return $this->isDir;
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -91,7 +91,7 @@ class Member implements MemberInterface
     {
         return $this->size;
     }
-    
+
     /**
      * @inheritdoc
      */
