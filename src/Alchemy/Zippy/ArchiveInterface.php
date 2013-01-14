@@ -27,7 +27,7 @@ interface ArchiveInterface
      * Adds a file or a folder into the archive
      *
      * @param String|Array|\SplFileInfo $sources   The path to the file or a folder
-     * @param Boolean                   $recursive Recurse into directories
+     * @param Boolean                   $recursive Recurse into sub-directories
      *
      * @return ArchiveInterface
      *
