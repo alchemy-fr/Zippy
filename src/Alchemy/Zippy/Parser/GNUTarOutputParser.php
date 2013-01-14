@@ -10,6 +10,8 @@
  */
 namespace Alchemy\Zippy\Parser;
 
+use Alchemy\Zippy\Member;
+
 /**
  * This class is responsable of parsing GNUTar command line output
  */
@@ -20,7 +22,26 @@ class GNUTarOutputParser implements ParserInterface
      */
     public function parseFileListing($output)
     {
-        return array_values(array_filter(explode("\n", $output)));
+        $lines = array_values(array_filter(explode("\n", $output)));
+        $members = array();
+
+        foreach ($lines as $line) {
+            $chunks = explode(' ', trim($line));
+
+            $members[] = new Member(
+                $chunks[7],
+                $chunks[2],
+               \DateTime::createFromFormat("F d H:i Y", sprintf('%s %s %s %s',
+                   $chunks[3],
+                   $chunks[4],
+                   $chunks[5],
+                   $chunks[6]
+                )),
+                'd' === $line[0]
+            );
+        }
+
+        return $members;
     }
 
     /**
