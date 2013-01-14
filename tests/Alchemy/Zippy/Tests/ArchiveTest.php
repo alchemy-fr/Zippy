@@ -70,19 +70,10 @@ class ArchiveTest extends AbstractTestFramework
         $this->assertEquals($archive, $archive->addMembers('hello'));
     }
 
-//    Remove is not yet implemented in adapter
-//    public function testRemoveMember()
-//    {
-//        $mockAdapter = $this->getAdapterMock();
-//
-//        $mockAdapter
-//            ->expects($this->once())
-//            ->method('add');
-//
-//        $archive = new Archive('location', $mockAdapter);
-//
-//        $this->assertEquals($archive, $archive->removeMembers('hello'));
-//    }
+    public function testRemoveMember()
+    {
+        $this->marktestSkipped('Not yest implemented');
+    }
 
     private function getAdapterMock()
     {
