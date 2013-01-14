@@ -17,7 +17,7 @@ use Alchemy\Zippy\Exception\RuntimeException;
 interface ArchiveInterface
 {
     /**
-     * Gets the location of a the archive
+     * Gets the location of the archive
      *
      * @return String
      */
