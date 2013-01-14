@@ -48,7 +48,7 @@ Interface AdapterInterface
 
     /**
      * Creates a new archive
-     * 
+     *
      * Please note some adapters can not create empty archives.
      * They would throw a `NotSupportedException` in case you ask to create an archive without files
      *

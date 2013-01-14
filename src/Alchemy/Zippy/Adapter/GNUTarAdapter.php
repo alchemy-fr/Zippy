@@ -115,11 +115,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $builder = $this
             ->processBuilder
             ->create();
-        
+
         if (!$recursive) {
            $builder->add('--no-recursion');
         }
-        
+
         $builder
             ->add('-rf')
             ->add($path);
