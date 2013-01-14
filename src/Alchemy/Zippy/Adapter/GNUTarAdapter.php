@@ -115,11 +115,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $builder = $this
             ->processBuilder
             ->create();
-        
+
         if (!$recursive) {
            $builder->add('--no-recursion');
         }
-        
+
         $builder
             ->add('-rf')
             ->add($path);
@@ -165,6 +165,40 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         }
 
         return $this->parser->parseVersion($process->getOutput() ?: '');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove($path, $files)
+    {
+        $files = (array) $files;
+
+        $builder = $this
+            ->processBuilder
+            ->create();
+
+        $builder
+            ->add('--delete')
+            ->add(sprintf('--file=%s', $path));
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $files;
     }
 
     /**

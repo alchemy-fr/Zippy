@@ -177,6 +177,60 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
         $this->adapter->getVersion();
     }
+    
+    /**
+     * @depends testOpen
+     */
+    public function testRemoveMembers($archive)
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo('--delete'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(1))
+            ->method('add')
+            ->with($this->equalTo('--file='.$archive->getLocation()))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo(__DIR__ . '/../AbstractTestFramework.php'))
+            ->will($this->returnSelf());
+        
+        $mockProcessBuilder
+            ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo('path-to-file'))
+            ->will($this->returnSelf());
+        
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $archiveFileMock = $this
+            ->getMockBuilder('Alchemy\Zippy\FileInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $archiveFileMock
+            ->expects($this->any())
+            ->method('getLocation')
+            ->will($this->returnValue('path-to-file'));
+        
+        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $this->adapter->remove($archive->getLocation(), array(
+            __DIR__ . '/../AbstractTestFramework.php',
+            $archiveFileMock
+        ));
+    }
 
     public function testGetName()
     {
