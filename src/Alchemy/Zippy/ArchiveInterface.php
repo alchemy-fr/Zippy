@@ -57,9 +57,7 @@ interface ArchiveInterface
     public function getMembers();
     
     /**
-     * Counts all the archives members
-     *
-     * @return Integer
+     * @inheritdoc
      */
     public function count();
 }
