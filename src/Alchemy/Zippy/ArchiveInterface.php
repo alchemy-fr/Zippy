@@ -13,46 +13,39 @@ namespace Alchemy\Zippy;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\FileInterface;
 
 interface ArchiveInterface
 {
     /**
-     * Adds a file into the archive
+     * Gets the location of a the archive
      *
-     * @param String|\SplFileInfo $source The path to the file
-     *
-     * @return ArchiveInterface
-     *
-     * @throws InvalidArgumentException In case the provided source path is not valid
-     * @throws RuntimeException         In case of failure
+     * @return String
      */
-    public function add($source);
-
+    public function getLocation();
+    
     /**
-     * Adds a directory into the archive
-
-     * @param String|\SplFileInfo $source    The path to the directory
-     * @param String|null         $target    The directory file path, null to use the same as source
-     * @param Boolean             $recursive Recurse into directories
+     * Adds a file or a folder into the archive
+     *
+     * @param String|Array|\SplFileInfo $sources The path to the file or a folder
+     * @param Boolean                   $recursive Recurse into directories
      *
      * @return ArchiveInterface
      *
      * @throws InvalidArgumentException In case the provided source path is not valid
      * @throws RuntimeException         In case of failure
      */
-    public function addDirectory($source, $target = null, $recursive = true);
+    public function addMembers($sources, $recursive = true);
 
     /**
      * Removes a file from the archive
      *
-     * @param FileInterface $file The file to remove
+     * @param String|Array $sources The path to an archive or a folder member
      *
      * @return ArchiveInterface
      *
      * @throws RuntimeException In case of failure
      */
-    public function remove(FileInterface $file);
+    public function removeMembers($sources);
 
     /**
      * Lists files and directories archive members
@@ -62,4 +55,11 @@ interface ArchiveInterface
      * @throws RuntimeException In case archive could not be read
      */
     public function getMembers();
+    
+    /**
+     * Counts all the archives members
+     *
+     * @return Integer
+     */
+    public function count();
 }

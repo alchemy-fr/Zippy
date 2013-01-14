@@ -13,8 +13,10 @@ namespace Alchemy\Zippy;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\File;
-use Alchemy\Zippy\FileInterface;
 
+/**
+ * Represents an archive
+ */
 class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
 {
     /**
@@ -51,16 +53,14 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * Counts all the archives members
-     *
-     * @return Integer
+     * @inheritdoc
      */
     public function count()
     {
         return count($this->getMembers());
     }
 
-      /**
+    /**
      * Returns an Iterator for the current archive
      *
      * This method implements the IteratorAggregate interface.
@@ -85,25 +85,21 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     /**
      * @inheritdoc
      */
-    public function add($sources)
+    public function addMembers($sources, $recursive = true)
     {
-        $this->adapter->addFile($this->location, $sources);
+        $this->adapter->add($this->location, $sources, $recursive);
+        
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function addDirectory($source, $target = null, $recursive = true)
+    public function removeMembers($sources)
     {
-
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function remove(FileInterface $file)
-    {
-
+        $this->adapter->add($this->location, $sources);
+        
+        return $this;
     }
 
     /**
