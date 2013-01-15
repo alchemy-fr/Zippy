@@ -18,11 +18,11 @@ class GNUTarOutputParserTest extends AbstractTestFramework
      */
     public function testParseFileListing($parser)
     {
-        $output = "drwxrwxrwx myself/user 0 May 31 21:49 1990 practice/
-            -rw-rw-rw- myself/user 42 May 21 13:29 1990 practice/blues
-            -rw-rw-rw- myself/user 62 May 23 10:55 1990 practice/folk
-            -rw-rw-rw- myself/user 40 May 21 13:30 1990 practice/jazz
-            -rw-rw-rw- myself/user 10240 May 31 21:48 1990 practice/records";
+        $output = "drwxrwxrwx myself/user 0 2006-06-09 12:06 practice/
+            -rw-rw-rw- myself/user 62373 2006-06-09 12:06 practice/blues
+            -rw-rw-rw- myself/user 11481 2006-06-09 12:06 practice/folk
+            -rw-rw-rw- myself/user 23152 2006-06-09 12:06 practice/jazz
+            -rw-rw-rw- myself/user 10240 2006-06-09 12:06 practice/records";
 
         $members = $parser->parseFileListing($output);
 
@@ -39,7 +39,7 @@ class GNUTarOutputParserTest extends AbstractTestFramework
         $this->assertEquals(0, $memberDirectory->getSize());
         $date = $memberDirectory->getLastModifiedDate();
         $this->assertTrue($date instanceof \DateTime);
-        $this->assertEquals('644183340', $date->format("U"));
+        $this->assertEquals('1149847560', $date->format("U"));
 
         $memberFile = array_pop($members);
 
@@ -48,7 +48,7 @@ class GNUTarOutputParserTest extends AbstractTestFramework
         $this->assertEquals(10240, $memberFile->getSize());
         $date = $memberFile->getLastModifiedDate();
         $this->assertTrue($date instanceof \DateTime);
-        $this->assertEquals('644183280', $date->format("U"));
+        $this->assertEquals('1149847560', $date->format("U"));
     }
 
     /**
