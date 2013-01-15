@@ -39,7 +39,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         }
     }
 
-    public function testCreateNoFilesFailed()
+    public function testCreateNoFiles()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
@@ -52,13 +52,21 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(self::$tarFile))
+            ->with($this->equalTo('-'))
             ->will($this->returnSelf());
+
+        $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('/dev/null'))
+            ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
             ->will($this->returnSelf());
 
         $mockProcessBuilder

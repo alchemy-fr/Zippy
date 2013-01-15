@@ -35,11 +35,17 @@ class GNUTarAdapter extends AbstractBinaryAdapter
                 ->create();
 
         $builder->add('-cf');
-        $builder->add($path);
+
 
         if (0 === count($files)) {
-            $builder->add('/dev/null');
+            $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
+
+            $builder->add('-');
+            $builder->add(sprintf('--files-from %s', $nullFile));
+            $builder->add(sprintf('> %s', $path));
         } else {
+
+            $builder->add($path);
 
             if (!$recursive) {
                $builder->add('--no-recursion');
