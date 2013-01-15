@@ -39,19 +39,35 @@ class GNUTarAdapterTest extends AbstractTestFramework
         }
     }
 
-    /**
-     * @expectedException  Alchemy\Zippy\Exception\NotSupportedException
-     */
-    public function testCreateWithoutFilesFailed()
-    {
-        $this->adapter->create(self::$tarFile);
-    }
-
-    /**
-     * @expectedException  Alchemy\Zippy\Exception\InvalidArgumentException
-     */
     public function testCreateNoFilesFailed()
     {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo('-cf'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(1))
+            ->method('add')
+            ->with($this->equalTo(self::$tarFile))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo('/dev/null'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+
         $this->adapter->create(self::$tarFile, array());
     }
 

@@ -28,25 +28,26 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function create($path, $files = null, $recursive = true)
     {
-        if (null === $files) {
-            throw new NotSupportedException('Gnu tar does not allow to create an empty archive');
-        }
-
         $files = (array) $files;
 
         $builder = $this
-            ->processBuilder
-            ->create();
-
-        if (!$recursive) {
-           $builder->add('--no-recursion');
-        }
+                ->processBuilder
+                ->create();
 
         $builder->add('-cf');
         $builder->add($path);
 
-        if (!$this->addBuilderFileArgument($files, $builder)) {
-            throw new InvalidArgumentException('Invalid files');
+        if (0 === count($files)) {
+            $builder->add('/dev/null');
+        } else {
+
+            if (!$recursive) {
+               $builder->add('--no-recursion');
+            }
+
+            if (!$this->addBuilderFileArgument($files, $builder)) {
+                throw new InvalidArgumentException('Invalid files');
+            }
         }
 
         $process = $builder->getProcess();
@@ -115,11 +116,11 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $builder = $this
             ->processBuilder
             ->create();
-        
+
         if (!$recursive) {
            $builder->add('--no-recursion');
         }
-        
+
         $builder
             ->add('-rf')
             ->add($path);
