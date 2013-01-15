@@ -48,7 +48,7 @@ Interface AdapterInterface
 
     /**
      * Creates a new archive
-     * 
+     *
      * Please note some adapters can not create empty archives.
      * They would throw a `NotSupportedException` in case you ask to create an archive without files
      *
@@ -100,4 +100,16 @@ Interface AdapterInterface
      * @return String
      */
     public static function getName();
+
+    /**
+     * Removes a member of the archive
+     *
+     * @param String                    $path  The path to the archive
+     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     *
+     * @return Array
+     *
+     * @throws RuntimeException In case of failure
+     */
+    public function remove($path, $sources);
 }

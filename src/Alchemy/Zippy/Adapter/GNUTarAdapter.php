@@ -177,6 +177,40 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
+    public function remove($path, $files)
+    {
+        $files = (array) $files;
+
+        $builder = $this
+            ->processBuilder
+            ->create();
+
+        $builder
+            ->add('--delete')
+            ->add(sprintf('--file=%s', $path));
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $files;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public static function getDefaultBinaryName()
     {
         return 'tar';
