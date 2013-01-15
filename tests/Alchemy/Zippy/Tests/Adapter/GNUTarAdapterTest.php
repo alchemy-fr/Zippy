@@ -39,19 +39,43 @@ class GNUTarAdapterTest extends AbstractTestFramework
         }
     }
 
-    /**
-     * @expectedException  Alchemy\Zippy\Exception\NotSupportedException
-     */
-    public function testCreateWithoutFilesFailed()
+    public function testCreateNoFiles()
     {
-        $this->adapter->create(self::$tarFile);
-    }
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-    /**
-     * @expectedException  Alchemy\Zippy\Exception\InvalidArgumentException
-     */
-    public function testCreateNoFilesFailed()
-    {
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo('-cf'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(1))
+            ->method('add')
+            ->with($this->equalTo('-'))
+            ->will($this->returnSelf());
+
+        $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $this->adapter->setProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+
         $this->adapter->create(self::$tarFile, array());
     }
 
