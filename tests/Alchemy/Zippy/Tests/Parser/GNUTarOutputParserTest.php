@@ -18,6 +18,9 @@ class GNUTarOutputParserTest extends AbstractTestFramework
      */
     public function testParseFileListing($parser)
     {
+        $current_timezone = ini_get('date.timezone');
+        ini_set('date.timezone', 'UTC');
+
         $output = "drwxrwxrwx myself/user 0 2006-06-09 12:06 practice/
             -rw-rw-rw- myself/user 62373 2006-06-09 12:06 practice/blues
             -rw-rw-rw- myself/user 11481 2006-06-09 12:06 practice/folk
@@ -39,7 +42,7 @@ class GNUTarOutputParserTest extends AbstractTestFramework
         $this->assertEquals(0, $memberDirectory->getSize());
         $date = $memberDirectory->getLastModifiedDate();
         $this->assertTrue($date instanceof \DateTime);
-        $this->assertEquals('1149847560', $date->format("U"));
+        $this->assertEquals('1149854760', $date->format("U"));
 
         $memberFile = array_pop($members);
 
@@ -48,7 +51,9 @@ class GNUTarOutputParserTest extends AbstractTestFramework
         $this->assertEquals(10240, $memberFile->getSize());
         $date = $memberFile->getLastModifiedDate();
         $this->assertTrue($date instanceof \DateTime);
-        $this->assertEquals('1149847560', $date->format("U"));
+        $this->assertEquals('1149854760', $date->format("U"));
+
+        ini_set('date.timezone', $current_timezone);
     }
 
     /**

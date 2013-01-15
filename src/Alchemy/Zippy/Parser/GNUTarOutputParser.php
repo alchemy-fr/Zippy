@@ -11,7 +11,7 @@
 namespace Alchemy\Zippy\Parser;
 
 use Alchemy\Zippy\Member;
-#([ldrwx-]{10})\s+([a-z][-a-z0-9]*)/([a-z][-a-z0-9]*)\s+(\d*)\s+(([0-9]{4})-(1[0-2]|0[1-9])-(3[0-1]|0[1-9]|[1-2][0-9]))\s+((2[0-3]|[0-1][0-9]):([0-5][0-9]))\s+(.*)#
+
 /**
  * This class is responsable of parsing GNUTar command line output
  */
@@ -34,7 +34,7 @@ class GNUTarOutputParser implements ParserInterface
 
         foreach ($lines as $line) {
             $matches = array();
-            
+
             // -rw-r--r-- gray/staff    62373 2006-06-09 12:06 apple
             if (!preg_match_all("#".
                 self::PERMISSIONS       . "\s+" . // match (-rw-r--r--)
