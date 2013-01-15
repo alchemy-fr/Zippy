@@ -14,6 +14,7 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\FileInterface;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
@@ -123,7 +124,12 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         $iterations = 0;
 
         array_walk($files, function($file) use ($builder, &$iterations) {
-            $builder->add($file instanceof \SplFileInfo ? $file->getRealpath() : $file);
+            $builder->add(
+                $file instanceof \SplFileInfo ?
+                $file->getRealpath() :
+                ($file instanceof FileInterface ? $file->getLocation() : $file)
+            );
+
             $iterations++;
         });
 
