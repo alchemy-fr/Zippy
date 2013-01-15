@@ -88,7 +88,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $process = $this
             ->processBuilder
             ->create()
-            ->add('-tf')
+            ->add('--utc -tf')
             ->add($path)
             ->getProcess();
 
