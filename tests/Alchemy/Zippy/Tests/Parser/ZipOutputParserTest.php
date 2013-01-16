@@ -96,35 +96,26 @@ Examples (see unzip.txt for more info):
     public function testParseInflatorVersion($parser)
     {
         $output = "Copyright (c) 1990-2008 Info-ZIP - Type 'zip '-L'' for software license.
-This is Zip 3.0 (July 5th 2008), by Info-ZIP.
-Currently maintained by E. Gordon.  Please send bug reports to
-the authors using the web page at www.info-zip.org; see README for details.
-
-Latest sources and executables are at ftp://ftp.info-zip.org/pub/infozip,
-as of above date; see http://www.info-zip.org/ for other sites.
-
-Compiled with gcc 4.2.1 Compatible Apple Clang 4.0 (tags/Apple/clang-418.0.60) for Unix (Mac OS X) on Jun 20 2012.
-
-Zip special compilation options:
-    USE_EF_UT_TIME       (store Universal Time)
-    SYMLINK_SUPPORT      (symbolic links supported)
-    LARGE_FILE_SUPPORT   (can read and write large files on file system)
-    ZIP64_SUPPORT        (use Zip64 to store large files in archives)
-    STORE_UNIX_UIDs_GIDs (store UID/GID sizes/values using new extra field)
-    UIDGID_16BIT         (old Unix 16-bit UID/GID extra field also used)
-    [encryption, version 2.91 of 05 Jan 2007] (modified for Zip 3)
-
-Encryption notice:
-    The encryption code of this program is not copyrighted and is
-    put in the public domain.  It was originally written in Europe
-    and, to the best of our knowledge, can be freely distributed
-    in both source and object forms from any country, including
-    the USA under License Exception TSU of the U.S. Export
-    Administration Regulations (section 740.13(e)) of 6 June 2002.
-
-Zip environment options:
-             ZIP:  [none]
-          ZIPOPT:  [none]";
+Zip 3.0 (July 5th 2008). Usage:
+zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
+  The default action is to add or replace zipfile entries from list, which
+  can include the special name - to compress standard input.
+  If zipfile and list are omitted, zip compresses stdin to stdout.
+  -f   freshen: only changed files  -u   update: only changed or new files
+  -d   delete entries in zipfile    -m   move into zipfile (delete OS files)
+  -r   recurse into directories     -j   junk (don't record) directory names
+  -0   store only                   -l   convert LF to CR LF (-ll CR LF to LF)
+  -1   compress faster              -9   compress better
+  -q   quiet operation              -v   verbose operation/print version info
+  -c   add one-line comments        -z   add zipfile comment
+  -@   read names from stdin        -o   make zipfile as old as latest entry
+  -x   exclude the following names  -i   include only the following names
+  -F   fix zipfile (-FF try harder) -D   do not add directory entries
+  -A   adjust self-extracting exe   -J   junk zipfile prefix (unzipsfx)
+  -T   test zipfile integrity       -X   eXclude eXtra file attributes
+  -y   store symbolic links as the link instead of the referenced file
+  -e   encrypt                      -n   don't compress these suffixes
+  -h2  show more help";
 
         $this->assertEquals('3.0', $parser->parseInflatorVersion($output));
     }

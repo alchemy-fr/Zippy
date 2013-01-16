@@ -67,13 +67,15 @@ class ZipOutputParser implements ParserInterface
     {
         $lines = array_values(array_filter(explode("\n", $output, 3)));
 
-        $chuncks = explode(' ', $lines[1], 5);
+        $chuncks = explode(' ', $lines[1], 3);
 
-        if (4 > count($chuncks)) {
+        if (2 > count($chuncks)) {
             return null;
         }
 
-        return $chuncks[3];
+        list($name, $version) = $chuncks;
+
+        return $version;
     }
 
     /**
