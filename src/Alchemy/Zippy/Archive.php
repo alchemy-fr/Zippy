@@ -12,9 +12,10 @@
 namespace Alchemy\Zippy;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
-use Alchemy\Zippy\File;
-use Alchemy\Zippy\FileInterface;
 
+/**
+ * Represents an archive
+ */
 class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
 {
     /**
@@ -40,9 +41,9 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
 
     /**
      * Constructor
-     * 
-     * @param String            $location   Path to the archive
-     * @param AdapterInterface  $adapter    An archive adapter 
+     *
+     * @param String           $location Path to the archive
+     * @param AdapterInterface $adapter  An archive adapter
      */
     public function __construct($location, AdapterInterface $adapter)
     {
@@ -51,16 +52,14 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * Counts all the archives members
-     *
-     * @return Integer
+     * @inheritdoc
      */
     public function count()
     {
         return count($this->getMembers());
     }
 
-      /**
+    /**
      * Returns an Iterator for the current archive
      *
      * This method implements the IteratorAggregate interface.
@@ -77,33 +76,27 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
      */
     public function getMembers()
     {
-        return $this->members = array_map(function($filename) {
-            return new File($filename);
-        }, $this->adapter->listMembers($this->location));
+        return $this->members = $this->adapter->listMembers($this->location);
     }
 
     /**
      * @inheritdoc
      */
-    public function add($sources)
+    public function addMembers($sources, $recursive = true)
     {
-        $this->adapter->addFile($this->location, $sources);
+        $this->adapter->add($this->location, $sources, $recursive);
+
+        return $this;
     }
 
     /**
      * @inheritdoc
      */
-    public function addDirectory($source, $target = null, $recursive = true)
+    public function removeMembers($sources)
     {
+        $this->adapter->remove($this->location, $sources);
 
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function remove(FileInterface $file)
-    {
-
+        return $this;
     }
 
     /**

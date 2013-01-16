@@ -134,7 +134,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-tf'))
+            ->with($this->equalTo('--utc -tf'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
