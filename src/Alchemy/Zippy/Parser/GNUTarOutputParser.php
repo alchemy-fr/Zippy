@@ -69,7 +69,7 @@ class GNUTarOutputParser implements ParserInterface
     /**
      * @inheritdoc
      */
-    public function parseVersion($output)
+    public function parseInflatorVersion($output)
     {
         $chuncks = explode(' ', $output, 3);
 
@@ -80,5 +80,14 @@ class GNUTarOutputParser implements ParserInterface
         list($name, $version) = $chuncks;
 
         return $version;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function parseDeflatorVersion($output)
+    {
+        return $this->parseInflatoVersion($output);
     }
 }
