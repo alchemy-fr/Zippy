@@ -12,7 +12,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\RuntimeException;
-
+use Alchemy\Zippy\Exception\NotSupportedException;
 /**
  * GNUTarAdapter allows you to create and extract files from archives using GNU tar
  *
@@ -25,6 +25,40 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public function create($path, $files = null, $recursive = true)
     {
+        $files = (array) $files;
+
+        $builder = $this
+            ->inflatorProcessBuilder
+            ->create();
+
+        if (0 === count($files)) {
+           throw new NotSupportedException('Can not create empty zip archive');
+        } else {
+
+            if ($recursive) {
+                $builder->add('-R');
+            }
+
+            $builder->add($path);
+
+            if (!$this->addBuilderFileArgument($files, $builder)) {
+                throw new InvalidArgumentException('Invalid files');
+            }
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return new Archive($path, $this);
     }
 
     /**
@@ -81,6 +115,36 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public function add($path, $files, $recursive = true)
     {
+        $files = (array) $files;
+
+        $builder = $this
+            ->inflatorProcessBuilder
+            ->create();
+
+
+        if ($recursive) {
+            $builder->add('-R');
+        }
+
+        $builder
+            ->add('-u')
+            ->add($path);
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
     }
 
     /**
@@ -129,6 +193,40 @@ class ZipAdapter extends AbstractBinaryAdapter
         }
 
         return $this->parser->parseVersion($process->getOutput() ?: '');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove($path, $files)
+    {
+         $files = (array) $files;
+
+        $builder = $this
+            ->inflatorProcessBuilder
+            ->create();
+
+        $builder
+            ->add('-d')
+            ->add($path);
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $files;
     }
 
     /**
