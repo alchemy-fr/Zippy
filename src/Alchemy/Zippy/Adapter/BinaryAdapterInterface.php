@@ -9,7 +9,7 @@ interface BinaryAdapterInterface
 {
     /**
      * Gets the output parser
-     * 
+     *
      * @return ParserInterface
      */
     public function getParser();

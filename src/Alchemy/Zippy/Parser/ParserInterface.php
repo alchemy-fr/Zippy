@@ -18,7 +18,7 @@ interface ParserInterface
      *
      * @param String $output The string to parse
      *
-     * @return Array The chunk of output
+     * @return Array An array of Members
      */
     public function parseFileListing($output);
 

@@ -41,8 +41,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Constructor
      *
-     * @param ParserInterface                   $parser         An output parser
-     * @param ProcessBuilderFactoryInterface    $processBuilder A process builder factory
+     * @param ParserInterface                $parser         An output parser
+     * @param ProcessBuilderFactoryInterface $processBuilder A process builder factory
      */
     public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $processBuilder)
     {
@@ -114,8 +114,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Adds files to argument list
      *
-     * @param Array             $files   An array of files
-     * @param ProcessBuilder    $builder A Builder instance
+     * @param Array          $files   An array of files
+     * @param ProcessBuilder $builder A Builder instance
      *
      * @return Boolean
      */
