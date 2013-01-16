@@ -13,6 +13,8 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Archive;
+
 /**
  * GNUTarAdapter allows you to create and extract files from archives using GNU tar
  *
@@ -67,7 +69,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     public function isSupported()
     {
         $processDeflate = $this
-            ->deflateProcessBuilder
+            ->deflatorProcessBuilder
             ->create()
             ->add('-h')
             ->getProcess();
@@ -75,7 +77,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $processDeflate->run();
 
         $processInflate = $this
-            ->inflateProcessBuilder
+            ->inflatorProcessBuilder
             ->create()
             ->add('-h')
             ->getProcess();
@@ -167,7 +169,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseVersion($process->getOutput() ?: '');
+        return $this->parser->parseDeflatorVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -191,7 +193,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseVersion($process->getOutput() ?: '');
+        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -240,7 +242,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'zip';
+        return 'unzip';
     }
 
     /**
@@ -248,6 +250,6 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'unzip';
+        return 'zip';
     }
 }
