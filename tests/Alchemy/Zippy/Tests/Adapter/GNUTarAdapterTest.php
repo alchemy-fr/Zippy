@@ -16,7 +16,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
     public static function setUpBeforeClass()
     {
-        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), __CLASS__);
+        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), GNUTarAdapter::getName());
 
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
@@ -35,7 +35,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $this->adapter = GNUTarAdapter::newInstance();
 
         if (!$this->adapter->isSupported()) {
-            $this->markTestSkipped(sprintf('`%s` is not supported', $this->adapter->getDefaultBinaryName()));
+            $this->markTestSkipped(sprintf('`%s` is not supported', GNUTarAdapter::getName()));
         }
     }
 
