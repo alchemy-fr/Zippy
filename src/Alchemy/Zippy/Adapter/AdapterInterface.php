@@ -58,8 +58,8 @@ Interface AdapterInterface
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException      In case of failure
-     * @throws NotSupportedException In case the operation in not supported
+     * @throws RuntimeException         In case of failure
+     * @throws NotSupportedException    In case the operation in not supported
      * @throws InvalidArgumentException In case no files could be added
      */
     public function create($path, $files = null, $recursive = true);
@@ -91,7 +91,7 @@ Interface AdapterInterface
      *
      * @return Array
      *
-     * @throws RuntimeException In case of failure
+     * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no files could be added
      */
     public function add($path, $files, $recursive = true);
@@ -111,7 +111,7 @@ Interface AdapterInterface
      *
      * @return Array
      *
-     * @throws RuntimeException In case of failure
+     * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no files could be removed
      */
     public function remove($path, $files);

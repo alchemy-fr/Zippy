@@ -121,7 +121,6 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->inflatorProcessBuilder
             ->create();
 
-
         if ($recursive) {
             $builder->add('-R');
         }

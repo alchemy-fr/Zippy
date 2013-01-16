@@ -82,7 +82,6 @@ class GNUTarOutputParser implements ParserInterface
         return $version;
     }
 
-
     /**
      * @inheritdoc
      */

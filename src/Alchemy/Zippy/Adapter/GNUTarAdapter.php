@@ -39,7 +39,6 @@ class GNUTarAdapter extends AbstractBinaryAdapter
 
         $builder->add('-cf');
 
-
         if (0 === count($files)) {
             $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 

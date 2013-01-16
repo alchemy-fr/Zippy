@@ -76,7 +76,6 @@ class ZipOutputParser implements ParserInterface
         return $chuncks[3];
     }
 
-
     /**
      * @inheritdoc
      */

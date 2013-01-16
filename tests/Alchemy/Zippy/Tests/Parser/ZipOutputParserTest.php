@@ -106,21 +106,21 @@ as of above date; see http://www.info-zip.org/ for other sites.
 Compiled with gcc 4.2.1 Compatible Apple Clang 4.0 (tags/Apple/clang-418.0.60) for Unix (Mac OS X) on Jun 20 2012.
 
 Zip special compilation options:
-	USE_EF_UT_TIME       (store Universal Time)
-	SYMLINK_SUPPORT      (symbolic links supported)
-	LARGE_FILE_SUPPORT   (can read and write large files on file system)
-	ZIP64_SUPPORT        (use Zip64 to store large files in archives)
-	STORE_UNIX_UIDs_GIDs (store UID/GID sizes/values using new extra field)
-	UIDGID_16BIT         (old Unix 16-bit UID/GID extra field also used)
-	[encryption, version 2.91 of 05 Jan 2007] (modified for Zip 3)
+    USE_EF_UT_TIME       (store Universal Time)
+    SYMLINK_SUPPORT      (symbolic links supported)
+    LARGE_FILE_SUPPORT   (can read and write large files on file system)
+    ZIP64_SUPPORT        (use Zip64 to store large files in archives)
+    STORE_UNIX_UIDs_GIDs (store UID/GID sizes/values using new extra field)
+    UIDGID_16BIT         (old Unix 16-bit UID/GID extra field also used)
+    [encryption, version 2.91 of 05 Jan 2007] (modified for Zip 3)
 
 Encryption notice:
-	The encryption code of this program is not copyrighted and is
-	put in the public domain.  It was originally written in Europe
-	and, to the best of our knowledge, can be freely distributed
-	in both source and object forms from any country, including
-	the USA under License Exception TSU of the U.S. Export
-	Administration Regulations (section 740.13(e)) of 6 June 2002.
+    The encryption code of this program is not copyrighted and is
+    put in the public domain.  It was originally written in Europe
+    and, to the best of our knowledge, can be freely distributed
+    in both source and object forms from any country, including
+    the USA under License Exception TSU of the U.S. Export
+    Administration Regulations (section 740.13(e)) of 6 June 2002.
 
 Zip environment options:
              ZIP:  [none]
