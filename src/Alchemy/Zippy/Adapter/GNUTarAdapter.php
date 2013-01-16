@@ -13,7 +13,6 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
 /**
@@ -175,7 +174,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseVersion($process->getOutput() ?: '');
+        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -186,7 +185,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->processBuilder
+            ->inflatorProcessBuilder
             ->create();
 
         $builder
@@ -215,7 +214,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public static function getDeflatorVersion()
+    public function getDeflatorVersion()
     {
         return $this->getInflatorVersion();
     }
