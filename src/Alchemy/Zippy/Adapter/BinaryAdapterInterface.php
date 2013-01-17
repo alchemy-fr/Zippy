@@ -28,7 +28,7 @@ interface BinaryAdapterInterface
      *
      * @return ProcessBuilderFactoryInterface
      */
-    public function getInflatorProcessBuilder();
+    public function getInflator();
 
     /**
      * Sets the inflator process builder
@@ -37,14 +37,14 @@ interface BinaryAdapterInterface
      *
      * @return AbstractBinaryAdapter
      */
-    public function setInflatorProcessBuilder(ProcessBuilderFactoryInterface $processBuilder);
+    public function setInflator(ProcessBuilderFactoryInterface $processBuilder);
 
     /**
      * Returns the deflator process builder
      *
      * @return ProcessBuilderFactoryInterface
      */
-    public function getDeflatorProcessBuilder();
+    public function getDeflator();
 
     /**
      * Sets the deflator process builder
@@ -53,7 +53,7 @@ interface BinaryAdapterInterface
      *
      * @return AbstractBinaryAdapter
      */
-    public function setDeflatorProcessBuilder(ProcessBuilderFactoryInterface $processBuilder);
+    public function setDeflator(ProcessBuilderFactoryInterface $processBuilder);
 
     /**
      * Returns the inflator binary version

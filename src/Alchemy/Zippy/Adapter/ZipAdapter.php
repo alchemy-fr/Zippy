@@ -30,7 +30,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         if (0 === count($files)) {
@@ -69,7 +69,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     public function isSupported()
     {
         $processDeflate = $this
-            ->deflatorProcessBuilder
+            ->deflator
             ->create()
             ->add('-h')
             ->getProcess();
@@ -77,7 +77,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $processDeflate->run();
 
         $processInflate = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create()
             ->add('-h')
             ->getProcess();
@@ -93,7 +93,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     public function listMembers($path)
     {
         $process = $this
-            ->deflatorProcessBuilder
+            ->deflator
             ->create()
             ->add('-l')
             ->add($path)
@@ -120,7 +120,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         if ($recursive) {
@@ -154,7 +154,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     public function getDeflatorVersion()
     {
         $process = $this
-            ->deflatorProcessBuilder
+            ->deflator
             ->create()
             ->add('-h')
             ->getProcess();
@@ -178,7 +178,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     public function getInflatorVersion()
     {
         $process = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create()
             ->add('-h')
             ->getProcess();
@@ -204,7 +204,7 @@ class ZipAdapter extends AbstractBinaryAdapter
          $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         $builder

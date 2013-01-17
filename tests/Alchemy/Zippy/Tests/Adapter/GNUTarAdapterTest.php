@@ -74,7 +74,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array());
     }
@@ -106,7 +106,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
@@ -148,7 +148,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->listMembers($archive->getLocation());
     }
@@ -177,7 +177,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
     }
@@ -197,7 +197,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->getInflatorVersion();
     }
@@ -245,7 +245,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getLocation')
             ->will($this->returnValue('path-to-file'));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->remove($archive->getLocation(), array(
             __DIR__ . '/../AbstractTestFramework.php',

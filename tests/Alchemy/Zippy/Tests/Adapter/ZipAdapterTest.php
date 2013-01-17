@@ -74,7 +74,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$zipFile, array(__FILE__));
 
@@ -116,7 +116,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setDeflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->listMembers($archive->getLocation());
     }
@@ -151,7 +151,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
     }
@@ -172,7 +172,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
         $this->adapter->setParser($this->getMock('Alchemy\Zippy\Parser\ParserInterface'));
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->getInflatorVersion();
     }
@@ -193,7 +193,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
         $this->adapter->setParser($this->getMock('Alchemy\Zippy\Parser\ParserInterface'));
-        $this->adapter->setDeflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->getDeflatorVersion();
     }
@@ -241,7 +241,7 @@ class ZipAdapterTest extends AbstractTestFramework
             ->method('getLocation')
             ->will($this->returnValue('path-to-file'));
 
-        $this->adapter->setInflatorProcessBuilder($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->remove($archive->getLocation(), array(
             __DIR__ . '/../AbstractTestFramework.php',

@@ -36,27 +36,27 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @var ProcessBuilderFactoryInterface
      */
-    protected $deflatorProcessBuilder;
+    protected $deflator;
 
     /**
      * The inflator process builder factory to use to build binary command line
      *
      * @var ProcessBuilderFactoryInterface
      */
-    protected $inflatorProcessBuilder;
+    protected $inflator;
 
     /**
      * Constructor
      *
      * @param ParserInterface                     $parser                 An output parser
-     * @param ProcessBuilderFactoryInterface      $inflatorProcessBuilder A process builder factory for the inflator binary
-     * @param ProcessBuilderFactoryInterface|null $deflatorProcessBuilder A process builder factory for the deflator binary
+     * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
+     * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $inflatorProcessBuilder, ProcessBuilderFactoryInterface $deflatorProcessBuilder = null)
+    public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
     {
         $this->parser = $parser;
-        $this->deflatorProcessBuilder = $deflatorProcessBuilder;
-        $this->inflatorProcessBuilder = $inflatorProcessBuilder;
+        $this->deflator = $deflator;
+        $this->inflator = $inflator;
     }
 
     /**
@@ -80,32 +80,32 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * @inheritdoc
      */
-    public function getDeflatorProcessBuilder()
+    public function getDeflator()
     {
-        return $this->deflatorProcessBuilder;
+        return $this->deflator;
     }
 
     /**
      * @inheritdoc
      */
-    public function getInflatorProcessBuilder()
+    public function getInflator()
     {
-        return $this->inflatorProcessBuilder;
+        return $this->inflator;
     }
 
     /**
      * @inheritdoc
      */
-    public function setDeflatorProcessBuilder(ProcessBuilderFactoryInterface $processBuilder)
+    public function setDeflator(ProcessBuilderFactoryInterface $processBuilder)
     {
-        $this->deflatorProcessBuilder = $processBuilder;
+        $this->deflator = $processBuilder;
 
         return $this;
     }
 
-    public function setInflatorProcessBuilder(ProcessBuilderFactoryInterface $processBuilder)
+    public function setInflator(ProcessBuilderFactoryInterface $processBuilder)
     {
-        $this->inflatorProcessBuilder = $processBuilder;
+        $this->inflator = $processBuilder;
 
         return $this;
     }
@@ -126,13 +126,13 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         $inflatorBinaryName = $inflatorBinaryName ?: static::getDefaultInflatorBinaryName();
 
-        $inflatorProcessBuilder = new ProcessBuilderFactory($finder->find($inflatorBinaryName));
+        $inflator = new ProcessBuilderFactory($finder->find($inflatorBinaryName));
 
-        $deflatorProcessBuilder = null;
+        $deflator = null;
 
         if (static::getDefaultInflatorBinaryName() !== static::getDefaultDeflatorBinaryName()) {
             $deflatorBinaryName = $deflatorBinaryName ?: static::getDefaultDeflatorBinaryName();
-            $deflatorProcessBuilder = new ProcessBuilderFactory($finder->find($deflatorBinaryName));
+            $deflator = new ProcessBuilderFactory($finder->find($deflatorBinaryName));
         }
 
         try {
@@ -144,7 +144,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
             );
         }
 
-        return new static($outputParser, $inflatorProcessBuilder, $deflatorProcessBuilder);
+        return new static($outputParser, $inflator, $deflator);
     }
 
     /**

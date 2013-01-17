@@ -30,7 +30,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         if (!$recursive) {
@@ -79,7 +79,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function isSupported()
     {
         $process = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create()
             ->add('-h')
             ->getProcess();
@@ -95,7 +95,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function listMembers($path)
     {
         $process = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create()
             ->add('--utc -tf')
             ->add($path)
@@ -122,7 +122,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         if (!$recursive) {
@@ -158,7 +158,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function getInflatorVersion()
     {
         $process = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create()
             ->add('--version')
             ->getProcess();
@@ -184,7 +184,7 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $files = (array) $files;
 
         $builder = $this
-            ->inflatorProcessBuilder
+            ->inflator
             ->create();
 
         $builder
