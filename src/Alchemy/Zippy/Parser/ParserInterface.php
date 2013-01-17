@@ -23,11 +23,20 @@ interface ParserInterface
     public function parseFileListing($output);
 
     /**
-     * Parses a version
+     * Parses the inflator binary version
      *
      * @param String $output
      *
      * @return String The version
      */
-    public function parseVersion($output);
+    public function parseInflatorVersion($output);
+
+    /**
+     * Parses the deflator binary version
+     *
+     * @param String $output
+     *
+     * @return String The version
+     */
+    public function parsedeflatorVersion($output);
 }

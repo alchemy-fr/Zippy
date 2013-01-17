@@ -15,12 +15,9 @@ use Alchemy\Zippy\Member;
 /**
  * This class is responsable of parsing GNUTar command line output
  */
-class GNUTarOutputParser implements ParserInterface
+class ZipOutputParser implements ParserInterface
 {
-    const PERMISSIONS   = "([ldrwx-]+)";
-    const OWNER         = "([a-z][-a-z0-9]*)";
-    const GROUP         = "([a-z][-a-z0-9]*)";
-    const FILESIZE      = "(\d*)";
+    const LENGTH        = "(\d*)";
     const ISO_DATE      = "([0-9]+-[0-9]+-[0-9]+\s+[0-9]+:[0-9]+)";
     const FILENAME      = "(.*)";
 
@@ -35,14 +32,11 @@ class GNUTarOutputParser implements ParserInterface
         foreach ($lines as $line) {
             $matches = array();
 
-            // -rw-r--r-- gray/staff    62373 2006-06-09 12:06 apple
+            // 785  2012-10-24 10:39  file
             if (!preg_match_all("#".
-                self::PERMISSIONS       . "\s+" . // match (-rw-r--r--)
-                self::OWNER             . "/"   . // match (gray)
-                self::GROUP             . "\s+" . // match (staff)
-                self::FILESIZE          . "\s+" . // match (62373)
-                self::ISO_DATE          . "\s+" . // match (2006-06-09 12:06)
-                self::FILENAME          .         // match (apple)
+                self::LENGTH    . "\s+" . // match (785)
+                self::ISO_DATE  . "\s+" . // match (2012-10-24 10:39)
+                self::FILENAME  .         // match (file)
                 "#",
                 $line, $matches, PREG_SET_ORDER
             )) {
@@ -51,27 +45,29 @@ class GNUTarOutputParser implements ParserInterface
 
             $chunks = array_shift($matches);
 
-            if (7 !== count($chunks)) {
+            if (4 !== count($chunks)) {
                 continue;
             }
 
             $members[] = new Member(
-                $chunks[6],
-                $chunks[4],
-                \DateTime::createFromFormat("Y-m-d H:i", $chunks[5]),
-                'd' === $chunks[1][0]
+                $chunks[3],
+                $chunks[1],
+                \DateTime::createFromFormat("Y-m-d H:i", $chunks[2]),
+                '/' === substr($chunks[3], -1)
             );
         }
 
         return $members;
     }
 
-    /**
+      /**
      * @inheritdoc
      */
     public function parseInflatorVersion($output)
     {
-        $chuncks = explode(' ', $output, 3);
+        $lines = array_values(array_filter(explode("\n", $output, 3)));
+
+        $chuncks = explode(' ', $lines[1], 3);
 
         if (2 > count($chuncks)) {
             return null;
@@ -87,6 +83,16 @@ class GNUTarOutputParser implements ParserInterface
      */
     public function parseDeflatorVersion($output)
     {
-        return $this->parseInflatoVersion($output);
+        $lines = array_values(array_filter(explode("\n", $output, 2)));
+        $firstLine = array_shift($lines);
+        $chuncks = explode(' ', $firstLine, 3);
+
+        if (2 > count($chuncks)) {
+            return null;
+        }
+
+        list($name, $version) = $chuncks;
+
+        return $version;
     }
 }
