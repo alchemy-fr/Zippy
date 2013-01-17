@@ -11,16 +11,16 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Archive;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Archive;
 
 /**
  * GNUTarAdapter allows you to create and extract files from archives using GNU tar
  *
  * @see http://www.gnu.org/software/tar/manual/tar.html
  */
-class GNUTarAdapter extends AbstractBinaryAdapter
+class ZipAdapter extends AbstractBinaryAdapter
 {
     /**
      * @inheritdoc
@@ -33,25 +33,15 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ->inflator
             ->create();
 
-        if (!$recursive) {
-           $builder->add('--no-recursion');
-        }
-
-        $builder->add('-cf');
-
         if (0 === count($files)) {
-            $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
-
-            $builder->add('-');
-            $builder->add(sprintf('--files-from %s', $nullFile));
-            $builder->add(sprintf('> %s', $path));
+           throw new NotSupportedException('Can not create empty zip archive');
         } else {
 
-            $builder->add($path);
-
-            if (!$recursive) {
-               $builder->add('--no-recursion');
+            if ($recursive) {
+                $builder->add('-R');
             }
+
+            $builder->add($path);
 
             if (!$this->addBuilderFileArgument($files, $builder)) {
                 throw new InvalidArgumentException('Invalid files');
@@ -78,15 +68,23 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public function isSupported()
     {
-        $process = $this
+        $processDeflate = $this
+            ->deflator
+            ->create()
+            ->add('-h')
+            ->getProcess();
+
+        $processDeflate->run();
+
+        $processInflate = $this
             ->inflator
             ->create()
             ->add('-h')
             ->getProcess();
 
-        $process->run();
+        $processInflate->run();
 
-        return $process->isSuccessful();
+        return $processInflate->isSuccessful() && $processDeflate->isSuccessful();
     }
 
     /**
@@ -95,9 +93,9 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     public function listMembers($path)
     {
         $process = $this
-            ->inflator
+            ->deflator
             ->create()
-            ->add('--utc -tf')
+            ->add('-l')
             ->add($path)
             ->getProcess();
 
@@ -125,12 +123,92 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ->inflator
             ->create();
 
-        if (!$recursive) {
-           $builder->add('--no-recursion');
+        if ($recursive) {
+            $builder->add('-R');
         }
 
         $builder
-            ->add('-rf')
+            ->add('-u')
+            ->add($path);
+
+        if (!$this->addBuilderFileArgument($files, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDeflatorVersion()
+    {
+        $process = $this
+            ->deflator
+            ->create()
+            ->add('-h')
+            ->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $this->parser->parseDeflatorVersion($process->getOutput() ?: '');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getInflatorVersion()
+    {
+        $process = $this
+            ->inflator
+            ->create()
+            ->add('-h')
+            ->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function remove($path, $files)
+    {
+         $files = (array) $files;
+
+        $builder = $this
+            ->inflator
+            ->create();
+
+        $builder
+            ->add('-d')
             ->add($path);
 
         if (!$this->addBuilderFileArgument($files, $builder)) {
@@ -155,83 +233,16 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function getInflatorVersion()
-    {
-        $process = $this
-            ->inflator
-            ->create()
-            ->add('--version')
-            ->getProcess();
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf(
-                'Unable to execute the following command %s {output: %s}',
-                $process->getCommandLine(),
-                $process->getErrorOutput()
-            ));
-        }
-
-        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function remove($path, $files)
-    {
-        $files = (array) $files;
-
-        $builder = $this
-            ->inflator
-            ->create();
-
-        $builder
-            ->add('--delete')
-            ->add(sprintf('--file=%s', $path));
-
-        if (!$this->addBuilderFileArgument($files, $builder)) {
-            throw new InvalidArgumentException('Invalid files');
-        }
-
-        $process = $builder->getProcess();
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf(
-                'Unable to execute the following command %s {output: %s}',
-                $process->getCommandLine(),
-                $process->getErrorOutput()
-            ));
-        }
-
-        return $files;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDeflatorVersion()
-    {
-        return $this->getInflatorVersion();
-    }
-
-    /**
-     * @inheritdoc
-     */
     public static function getName()
     {
-        return 'gnu-tar';
+        return 'zip';
     }
-
-    /**
+        /**
      * @inheritdoc
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'tar';
+        return 'unzip';
     }
 
     /**
@@ -239,6 +250,6 @@ class GNUTarAdapter extends AbstractBinaryAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'tar';
+        return 'zip';
     }
 }

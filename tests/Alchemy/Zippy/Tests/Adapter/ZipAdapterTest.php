@@ -2,81 +2,49 @@
 
 namespace Alchemy\Zippy\Tests\Adapter;
 
-use Alchemy\Zippy\Adapter\GNUTarAdapter;
+use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Tests\AbstractTestFramework;
 
-class GNUTarAdapterTest extends AbstractTestFramework
+class ZipAdapterTest extends AbstractTestFramework
 {
-    protected static $tarFile;
+    protected static $zipFile;
 
     /**
-     * @var GNUTarAdapter
+     * @var ZipAdapter
      */
     protected $adapter;
 
     public static function setUpBeforeClass()
     {
-        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), GNUTarAdapter::getName());
+        self::$zipFile = sprintf('%s/%s.zip', self::getResourcesPath(), ZipAdapter::getName());
 
-        if (file_exists(self::$tarFile)) {
-            unlink(self::$tarFile);
+        if (file_exists(self::$zipFile)) {
+            unlink(self::$zipFile);
         }
     }
 
     public static function tearDownAfterClass()
     {
-        if (file_exists(self::$tarFile)) {
-            unlink(self::$tarFile);
+        if (file_exists(self::$zipFile)) {
+            unlink(self::$zipFile);
         }
     }
 
     public function setUp()
     {
-        $this->adapter = GNUTarAdapter::newInstance();
+        $this->adapter = ZipAdapter::newInstance();
 
         if (!$this->adapter->isSupported()) {
-            $this->markTestSkipped(sprintf('`%s` is not supported', GNUTarAdapter::getName()));
+            $this->markTestSkipped(sprintf('`%s` is not supported', ZipAdapter::getName()));
         }
     }
 
+    /**
+     * @expectedException Alchemy\Zippy\Exception\NotSupportedException
+     */
     public function testCreateNoFiles()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-cf'))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('-'))
-            ->will($this->returnSelf());
-
-        $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
-
-        $mockProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
-        $this->adapter->create(self::$tarFile, array());
+        $this->adapter->create(self::$zipFile, array());
     }
 
     public function testCreate()
@@ -86,13 +54,13 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-cf'))
+            ->with($this->equalTo('-R'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(self::$tarFile))
+            ->with($this->equalTo(self::$zipFile))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -108,17 +76,17 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->adapter->create(self::$tarFile, array(__FILE__));
+        $this->adapter->create(self::$zipFile, array(__FILE__));
 
-        return self::$tarFile;
+        return self::$zipFile;
     }
 
     /**
      * @depends testCreate
      */
-    public function testOpen($tarFile)
+    public function testOpen($zipFile)
     {
-        $archive = $this->adapter->open($tarFile);
+        $archive = $this->adapter->open($zipFile);
         $this->assertInstanceOf('Alchemy\Zippy\ArchiveInterface', $archive);
 
         return $archive;
@@ -134,7 +102,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--utc -tf'))
+            ->with($this->equalTo('-l'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -148,7 +116,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->listMembers($archive->getLocation());
     }
@@ -163,11 +131,17 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-rf'))
+            ->with($this->equalTo('-R'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
+            ->method('add')
+            ->with($this->equalTo('-u'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo($archive->getLocation()))
             ->will($this->returnSelf());
@@ -182,14 +156,14 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
     }
 
-    public function testgetVersion()
+    public function testgetInflatorVersion()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--version'))
+            ->with($this->equalTo('-h'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -197,9 +171,31 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
+        $this->adapter->setParser($this->getMock('Alchemy\Zippy\Parser\ParserInterface'));
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->getInflatorVersion();
+    }
+
+    public function testgetDeflatorVersion()
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo('-h'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $this->adapter->setParser($this->getMock('Alchemy\Zippy\Parser\ParserInterface'));
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $this->adapter->getDeflatorVersion();
     }
 
     /**
@@ -212,13 +208,13 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--delete'))
+            ->with($this->equalTo('-d'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--file='.$archive->getLocation()))
+            ->with($this->equalTo($archive->getLocation()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -255,17 +251,17 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
     public function testGetName()
     {
-        $this->assertEquals('gnu-tar', GNUTarAdapter::getName());
+        $this->assertEquals('zip', ZipAdapter::getName());
     }
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('tar', GNUTarAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals('zip', ZipAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('tar', GNUTarAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals('unzip', ZipAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()

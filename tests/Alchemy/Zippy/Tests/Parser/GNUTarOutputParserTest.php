@@ -61,6 +61,6 @@ class GNUTarOutputParserTest extends AbstractTestFramework
      */
     public function testParseVersion($parser)
     {
-        $this->assertEquals('2.8.3', $parser->parseVersion("bsdtar 2.8.3 - libarchive 2.8.3"));
+        $this->assertEquals('2.8.3', $parser->parseInflatorVersion("bsdtar 2.8.3 - libarchive 2.8.3"));
     }
 }
