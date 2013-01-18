@@ -245,7 +245,6 @@ class ZipAdapterTest extends TestCase
         ));
     }
 
-
     /**
      * @depends testOpen
      */
@@ -271,7 +270,6 @@ class ZipAdapterTest extends TestCase
         $this->assertEquals($pathinfo['dirname'], $dir);
     }
 
-
     /**
      * @depends testOpen
      */
@@ -296,7 +294,6 @@ class ZipAdapterTest extends TestCase
             ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
-
 
         $mockProcessBuilder
             ->expects($this->at(3))
