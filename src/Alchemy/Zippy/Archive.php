@@ -16,7 +16,7 @@ use Alchemy\Zippy\Adapter\AdapterInterface;
 /**
  * Represents an archive
  */
-class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
+class Archive implements ArchiveInterface
 {
     /**
      * The path to the archive

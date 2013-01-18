@@ -14,7 +14,7 @@ namespace Alchemy\Zippy;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
-interface ArchiveInterface
+interface ArchiveInterface extends \IteratorAggregate, \Countable
 {
     /**
      * Gets the location of the archive
