@@ -18,7 +18,7 @@ interface ParserInterface
      *
      * @param String $output The string to parse
      *
-     * @return Array An array of Member property containing (location, mtime, size & is_dir)
+     * @return Array An array of Member properties (location, mtime, size & is_dir)
      */
     public function parseFileListing($output);
 
