@@ -11,7 +11,7 @@
 
 namespace Alchemy\Zippy\FileStrategy;
 
-use Alchemy\Zippy\AdapterContainer;
+use Alchemy\Zippy\Adapter\AdapterContainer;
 
 class TarFileStrategy implements FileStrategyInterface
 {

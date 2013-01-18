@@ -2,7 +2,7 @@
 
 namespace Alchemy\Zippy\Tests\FileStrategy;
 
-use Alchemy\Zippy\AdapterContainer;
+use Alchemy\Zippy\Adapter\AdapterContainer;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\FileStrategy\FileStrategyInterface;
 

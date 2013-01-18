@@ -1,8 +1,9 @@
 <?php
 
-namespace Alchemy\Zippy\Tests;
+namespace Alchemy\Zippy\Tests\Adapter;
 
-use Alchemy\Zippy\AdapterContainer;
+use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Adapter\AdapterContainer;
 
 class AdapterContainerTests extends TestCase
 {

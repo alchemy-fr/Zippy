@@ -12,6 +12,7 @@
 namespace Alchemy\Zippy;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
+use Alchemy\Zippy\Adapter\AdapterContainer;
 use Alchemy\Zippy\Archive\ArchiveInterface;
 use Alchemy\Zippy\Exception\ExceptionInterface;
 use Alchemy\Zippy\Exception\FormatNotSupportedException;

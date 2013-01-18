@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Alchemy\Zippy;
+namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Adapter\GNUTarAdapter;

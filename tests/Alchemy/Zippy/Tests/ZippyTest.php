@@ -250,6 +250,6 @@ class ZippyTest extends TestCase
 
     private function getContainer()
     {
-        return $this->getMock('Alchemy\Zippy\AdapterContainer');
+        return $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
     }
 }
