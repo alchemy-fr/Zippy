@@ -81,12 +81,18 @@ class GNUTarAdapter extends AbstractBinaryAdapter
         $process = $this
             ->inflator
             ->create()
-            ->add('-h')
+            ->add('--version')
             ->getProcess();
 
         $process->run();
 
-        return $process->isSuccessful();
+        if (!$process->isSuccessful()) {
+            return false;
+        }
+
+        $lines = explode("\n", $process->getOutput(), 2);
+
+        return false !== stripos($lines[0], '(gnu tar)');
     }
 
     /**
