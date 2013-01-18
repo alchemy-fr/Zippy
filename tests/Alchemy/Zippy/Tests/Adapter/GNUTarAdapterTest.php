@@ -3,9 +3,9 @@
 namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\GNUTarAdapter;
-use Alchemy\Zippy\Tests\AbstractTestFramework;
+use Alchemy\Zippy\Tests\TestCase;
 
-class GNUTarAdapterTest extends AbstractTestFramework
+class GNUTarAdapterTest extends TestCase
 {
     protected static $tarFile;
 
@@ -175,7 +175,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
+        $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../TestCase.php'));
     }
 
     public function testgetVersion()
@@ -220,7 +220,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(__DIR__ . '/../AbstractTestFramework.php'))
+            ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -244,7 +244,7 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->remove($archive->getLocation(), array(
-            __DIR__ . '/../AbstractTestFramework.php',
+            __DIR__ . '/../TestCase.php',
             $archiveFileMock
         ));
     }
