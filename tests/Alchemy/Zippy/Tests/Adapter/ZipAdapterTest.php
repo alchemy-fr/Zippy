@@ -245,6 +245,75 @@ class ZipAdapterTest extends TestCase
         ));
     }
 
+
+    /**
+     * @depends testOpen
+     */
+    public function testExtract($archive)
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo($archive->getLocation()))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $dir = $this->adapter->extract($archive->getLocation());
+        $pathinfo = pathinfo(self::$zipFile);
+        $this->assertEquals($pathinfo['dirname'], $dir);
+    }
+
+
+    /**
+     * @depends testOpen
+     */
+    public function testExtractWithExtractDirPrecised($archive)
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->at(0))
+            ->method('add')
+            ->with($this->equalTo($archive->getLocation()))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(1))
+            ->method('add')
+            ->with($this->equalTo('-d'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo(__DIR__))
+            ->will($this->returnSelf());
+
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo(__FILE__))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($this->getSuccessFullMockProcess()));
+
+        $this->adapter->setDeflator($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $this->adapter->extractMembers($archive->getLocation(), array(__FILE__), __DIR__);
+    }
+
     public function testGetName()
     {
         $this->assertEquals('zip', ZipAdapter::getName());

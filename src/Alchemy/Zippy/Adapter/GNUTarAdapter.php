@@ -219,6 +219,90 @@ class GNUTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
+    public function extract($path, $to = null)
+    {
+        if (null !== $to && !is_dir($to)) {
+            throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
+        }
+
+        $archiveFile = new \SplFileInfo($path);
+
+        $builder = $this
+            ->inflator
+            ->create();
+
+        $builder
+            ->add('-xf')
+            ->add($path);
+
+        if (null !== $to) {
+            $builder
+                ->add('-C')
+                ->add($to);
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return null === $to ? $archiveFile->getPathInfo() : new \SplFileInfo($to);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function extractMembers($path, $members, $to = null)
+    {
+        if (null !== $to && !is_dir($to)) {
+            throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
+        }
+
+        $members = (array) $members;
+
+        $builder = $this
+            ->inflator
+            ->create();
+
+        $builder
+            ->add('--extract')
+            ->add(sprintf('--file=%s', $path));
+
+        if (null !== $to) {
+            $builder
+                ->add('-C')
+                ->add($to);
+        }
+
+        if (!$this->addBuilderFileArgument($members, $builder)) {
+            throw new InvalidArgumentException('Invalid files');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        return $members;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getDeflatorVersion()
     {
         return $this->getInflatorVersion();
