@@ -33,10 +33,6 @@ class GNUTarAdapterTest extends AbstractTestFramework
     public function setUp()
     {
         $this->adapter = GNUTarAdapter::newInstance();
-
-        if (!$this->adapter->isSupported()) {
-            $this->markTestSkipped(sprintf('`%s` is not supported', GNUTarAdapter::getName()));
-        }
     }
 
     public function testCreateNoFiles()
@@ -251,6 +247,65 @@ class GNUTarAdapterTest extends AbstractTestFramework
             __DIR__ . '/../AbstractTestFramework.php',
             $archiveFileMock
         ));
+    }
+
+    public function testThatGnuTarIsMarkedAsSupported()
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->any())
+            ->method('add')
+            ->will($this->returnSelf());
+
+        $process = $this->getSuccessFullMockProcess();
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($process));
+
+        $process
+            ->expects($this->once())
+            ->method('getOutput')
+            ->will($this->returnValue('tar (GNU tar) 1.17
+Copyright (C) 2007 Free Software Foundation, Inc.
+License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Modified to support extended attributes.
+Written by John Gilmore and Jay Fenlason.'));
+
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $this->assertTrue($this->adapter->isSupported());
+    }
+
+    public function testThatBsdTarIsMarkedAsSupported()
+    {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $mockProcessBuilder
+            ->expects($this->any())
+            ->method('add')
+            ->will($this->returnSelf());
+
+        $process = $this->getSuccessFullMockProcess();
+
+        $mockProcessBuilder
+            ->expects($this->once())
+            ->method('getProcess')
+            ->will($this->returnValue($process));
+
+        $process
+            ->expects($this->once())
+            ->method('getOutput')
+            ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
+
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+
+        $this->assertFalse($this->adapter->isSupported());
     }
 
     public function testGetName()
