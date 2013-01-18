@@ -2,11 +2,11 @@
 
 namespace Alchemy\Zippy\Tests\Parser;
 
-use Alchemy\Zippy\Tests\AbstractTestFramework;
+use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Member;
 use Alchemy\Zippy\MemberInterface;
 
-class MemberTest extends AbstractTestFramework
+class MemberTest extends TestCase
 {
     public function testNewInstance()
     {
