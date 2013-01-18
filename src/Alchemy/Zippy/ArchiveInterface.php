@@ -57,6 +57,28 @@ interface ArchiveInterface
     public function getMembers();
 
     /**
+     * Extract current archive to the given directory
+     *
+     * @param String    $to The path the extracted archive
+     *
+     * @return ArchiveInterface
+     *
+     * @throws RuntimeException In case archive could not be extracted
+     */
+    public function extract($to);
+
+    /**
+     * Extract specific members from the archive
+     *
+     * @param String|Array $members An array of members path
+     *
+     * @return ArchiveInterface
+     *
+     * @throws RuntimeException In case member could not be extracted
+     */
+    public function extractMembers($members);
+
+    /**
      * @inheritdoc
      */
     public function count();

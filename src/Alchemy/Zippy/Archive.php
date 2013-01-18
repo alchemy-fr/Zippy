@@ -106,4 +106,24 @@ class Archive implements ArchiveInterface, \IteratorAggregate, \Countable
     {
         return $this->location;
     }
+
+    /**
+     * @inheritdoc
+     */
+     public function extract($to)
+     {
+        $this->adapter->extract($this->location, $to);
+
+        return $this;
+     }
+
+    /**
+     * @inheritdoc
+     */
+    public function extractMembers($members)
+    {
+        $this->adapter->extractMembers($this->location, $members);
+
+        return $this;
+    }
 }
