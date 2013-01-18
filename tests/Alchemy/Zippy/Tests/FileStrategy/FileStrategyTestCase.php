@@ -6,7 +6,7 @@ use Alchemy\Zippy\AdapterContainer;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\FileStrategy\FileStrategyInterface;
 
-abstract class FileStrategyTestcase extends TestCase
+abstract class FileStrategyTestCase extends TestCase
 {
     /** @test */
     public function getFileExtensionShouldReturnAnString()
