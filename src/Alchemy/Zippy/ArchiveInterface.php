@@ -57,7 +57,7 @@ interface ArchiveInterface
     public function getMembers();
 
     /**
-     * Extract current archive to the given directory
+     * Extracts current archive to the given directory
      *
      * @param String $to The path the extracted archive
      *
@@ -68,7 +68,7 @@ interface ArchiveInterface
     public function extract($to);
 
     /**
-     * Extract specific members from the archive
+     * Extracts specific members from the archive
      *
      * @param String|Array $members An array of members path
      *
