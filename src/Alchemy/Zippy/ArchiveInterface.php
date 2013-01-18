@@ -55,9 +55,4 @@ interface ArchiveInterface extends \IteratorAggregate, \Countable
      * @throws RuntimeException In case archive could not be read
      */
     public function getMembers();
-
-    /**
-     * @inheritdoc
-     */
-    public function count();
 }
