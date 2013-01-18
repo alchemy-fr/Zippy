@@ -48,7 +48,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Constructor
      *
-     * @param ParserInterface                     $parser                 An output parser
+     * @param ParserInterface                     $parser   An output parser
      * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */

@@ -59,7 +59,7 @@ interface ArchiveInterface
     /**
      * Extract current archive to the given directory
      *
-     * @param String    $to The path the extracted archive
+     * @param String $to The path the extracted archive
      *
      * @return ArchiveInterface
      *

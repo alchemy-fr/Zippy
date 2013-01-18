@@ -229,7 +229,6 @@ class GNUTarAdapterTest extends AbstractTestFramework
         $this->assertEquals($pathinfo['dirname'], $dir);
     }
 
-
     /**
      * @depends testOpen
      */
@@ -261,7 +260,6 @@ class GNUTarAdapterTest extends AbstractTestFramework
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
-
         $mockProcessBuilder
             ->expects($this->at(4))
             ->method('add')
@@ -277,7 +275,6 @@ class GNUTarAdapterTest extends AbstractTestFramework
 
         $this->adapter->extractMembers($archive->getLocation(), array(__FILE__), __DIR__);
     }
-
 
     /**
      * @depends testOpen

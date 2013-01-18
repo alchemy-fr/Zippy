@@ -119,10 +119,10 @@ Interface AdapterInterface
     /**
      * Extract an entire archive
      *
-     * @param String                    $path   The path to the archive
-     * @param String|null               $to     The path where to extract the archive
+     * @param String      $path The path to the archive
+     * @param String|null $to   The path where to extract the archive
      *
-     * @return \SplFileInfo  The extracted archive
+     * @return \SplFileInfo The extracted archive
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case the provided path where to extract the archive is not valid
@@ -136,7 +136,7 @@ Interface AdapterInterface
      * @param String|Array|\Traversable $members A filename, an array of members, or a \Traversable instance
      * @param String|null               $to      The path where to extract the members
      *
-     * @return \SplFileInfo  The extracted archive
+     * @return \SplFileInfo The extracted archive
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no members could be removed or provide extract target direcotry is not valid
