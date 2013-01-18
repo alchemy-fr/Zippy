@@ -13,35 +13,9 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive;
-use Alchemy\Zippy\Options;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
-    /**
-     * A set of options
-     *
-     * @var Options
-     */
-    protected $options;
-
-    /**
-     * @inheritdoc
-     */
-    public function setOptions(Options $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getOptions()
-    {
-        return $this->options;
-    }
-
     /**
      * @inheritdoc
      */

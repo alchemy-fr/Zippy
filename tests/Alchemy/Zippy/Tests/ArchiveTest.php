@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Parser;
 use Alchemy\Zippy\Tests\AbstractTestFramework;
 use Alchemy\Zippy\Archive;
 use Alchemy\Zippy\ArchiveInterface;
+use Alchemy\Zippy\Options;
 
 class ArchiveTest extends AbstractTestFramework
 {
@@ -37,6 +38,18 @@ class ArchiveTest extends AbstractTestFramework
         $archive = new Archive('location', $mockAdapter);
 
         $this->assertEquals(2, count($archive));
+    }
+
+    public function testGetSetOptions()
+    {
+        $archive = new Archive('location', $this->getAdapterMock());
+
+        $this->assertEquals(null, $archive->getOptions());
+
+        $options = new Options();
+        $archive->setOptions($options);
+
+        $this->assertEquals($options, $archive->getOptions());
     }
 
     public function testGetMembers()

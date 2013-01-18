@@ -14,26 +14,9 @@ namespace Alchemy\Zippy\Adapter;
 use Alchemy\Zippy\ArchiveInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Options;
 
 Interface AdapterInterface
 {
-    /**
-     * Returns the adapter options
-     *
-     * @return Options
-     */
-    public function getOptions();
-
-    /**
-     * Sets adapter options
-     *
-     * @param Options $option
-     *
-     * @return AdapterInterface
-     */
-    public function setOptions(Options $option);
-
     /**
      * Opens an archive
      *
