@@ -1,10 +1,10 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Parser;
+namespace Alchemy\Zippy\Tests\Archive;
 
 use Alchemy\Zippy\Tests\TestCase;
-use Alchemy\Zippy\Member;
-use Alchemy\Zippy\MemberInterface;
+use Alchemy\Zippy\Archive\Member;
+use Alchemy\Zippy\Archive\MemberInterface;
 
 class MemberTest extends TestCase
 {

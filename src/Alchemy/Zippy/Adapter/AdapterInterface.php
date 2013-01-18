@@ -11,7 +11,7 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\ArchiveInterface;
+use Alchemy\Zippy\Archive\ArchiveInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 

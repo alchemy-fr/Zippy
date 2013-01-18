@@ -10,8 +10,6 @@
  */
 namespace Alchemy\Zippy\Parser;
 
-use Alchemy\Zippy\Member;
-
 /**
  * This class is responsable of parsing GNUTar command line output
  */

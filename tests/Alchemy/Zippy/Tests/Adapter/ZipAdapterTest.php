@@ -83,7 +83,7 @@ class ZipAdapterTest extends TestCase
     public function testOpen($zipFile)
     {
         $archive = $this->adapter->open($zipFile);
-        $this->assertInstanceOf('Alchemy\Zippy\ArchiveInterface', $archive);
+        $this->assertInstanceOf('Alchemy\Zippy\Archive\ArchiveInterface', $archive);
 
         return $archive;
     }
@@ -230,7 +230,7 @@ class ZipAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $archiveFileMock = $this->getMock('Alchemy\Zippy\MemberInterface');
+        $archiveFileMock = $this->getMock('Alchemy\Zippy\Archive\MemberInterface');
 
         $archiveFileMock
             ->expects($this->any())

@@ -12,7 +12,7 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Archive;
+use Alchemy\Zippy\Archive\Archive;
 
 abstract class AbstractAdapter implements AdapterInterface
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Parser;
+namespace Alchemy\Zippy\Tests\Archive;
 
 use Alchemy\Zippy\Tests\TestCase;
-use Alchemy\Zippy\Archive;
-use Alchemy\Zippy\ArchiveInterface;
-use Alchemy\Zippy\Options;
+use Alchemy\Zippy\Archive\ArchiveInterface;
+use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Archive\Options;
 
 class ArchiveTest extends TestCase
 {

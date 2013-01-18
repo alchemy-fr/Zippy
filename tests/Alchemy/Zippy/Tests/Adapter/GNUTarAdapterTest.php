@@ -115,7 +115,7 @@ class GNUTarAdapterTest extends TestCase
     public function testOpen($tarFile)
     {
         $archive = $this->adapter->open($tarFile);
-        $this->assertInstanceOf('Alchemy\Zippy\ArchiveInterface', $archive);
+        $this->assertInstanceOf('Alchemy\Zippy\Archive\ArchiveInterface', $archive);
 
         return $archive;
     }
@@ -312,7 +312,7 @@ class GNUTarAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $archiveFileMock = $this->getMock('Alchemy\Zippy\MemberInterface');
+        $archiveFileMock = $this->getMock('Alchemy\Zippy\Archive\MemberInterface');
 
         $archiveFileMock
             ->expects($this->any())
