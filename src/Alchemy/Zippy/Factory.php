@@ -9,7 +9,13 @@ use Alchemy\Zippy\Strategy\ZipFileStrategy;
 
 class Factory
 {
+    public $adapters;
     private $strategies = array();
+
+    public function __construct(AdapterContainer $adapters)
+    {
+        $this->adapters = $adapters;
+    }
 
     public function addStrategy(FileStrategyInterface $strategy)
     {
@@ -27,13 +33,12 @@ class Factory
 
     public static function create()
     {
-        $factory = new static();
+        $adapters = AdapterContainer::load();
+        $factory = new static($adapters);
 
-        $container = AdapterContainer::load();
-
-        $factory->addStrategy(new ZipFileStrategy($container));
-        $factory->addStrategy(new TarFileStrategy($container));
-        $factory->addStrategy(new TarGzFileStrategy($container));
+        $factory->addStrategy(new ZipFileStrategy($adapters));
+        $factory->addStrategy(new TarFileStrategy($adapters));
+        $factory->addStrategy(new TarGzFileStrategy($adapters));
 
         return $factory;
     }
