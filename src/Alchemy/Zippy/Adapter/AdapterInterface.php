@@ -115,4 +115,31 @@ Interface AdapterInterface
      * @throws InvalidArgumentException In case no files could be removed
      */
     public function remove($path, $files);
+
+    /**
+     * Extracts an entire archive
+     *
+     * @param String      $path The path to the archive
+     * @param String|null $to   The path where to extract the archive
+     *
+     * @return \SplFileInfo The extracted archive
+     *
+     * @throws RuntimeException         In case of failure
+     * @throws InvalidArgumentException In case the provided path where to extract the archive is not valid
+     */
+    public function extract($path, $to = null);
+
+    /**
+     * Extracts specific members of the archive
+     *
+     * @param String                    $path    The path to the archive
+     * @param Array                     $members An array of members
+     * @param String|null               $to      The path where to extract the members
+     *
+     * @return \SplFileInfo The extracted archive
+     *
+     * @throws RuntimeException         In case of failure
+     * @throws InvalidArgumentException In case no members could be removed or provide extract target direcotry is not valid
+     */
+    public function extractMembers($path, $members, $to = null);
 }

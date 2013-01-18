@@ -49,11 +49,11 @@ class ZipOutputParser implements ParserInterface
                 continue;
             }
 
-            $members[] = new Member(
-                $chunks[3],
-                $chunks[1],
-                \DateTime::createFromFormat("Y-m-d H:i", $chunks[2]),
-                '/' === substr($chunks[3], -1)
+            $members[] = array(
+                'location'  => $chunks[3],
+                'size'      => $chunks[1],
+                'mtime'     => \DateTime::createFromFormat("Y-m-d H:i", $chunks[2]),
+                'is_dir'    => '/' === substr($chunks[3], -1)
             );
         }
 

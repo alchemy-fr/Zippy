@@ -32,24 +32,24 @@ class GNUTarOutputParserTest extends AbstractTestFramework
         $this->assertEquals(5, count($members));
 
         foreach ($members as $member) {
-            $this->assertTrue($member instanceof MemberInterface);
+            $this->assertTrue(is_array($member));
         }
 
         $memberDirectory = array_shift($members);
 
-        $this->assertTrue($memberDirectory->isDir());
-        $this->assertEquals('practice/', $memberDirectory->getLocation());
-        $this->assertEquals(0, $memberDirectory->getSize());
-        $date = $memberDirectory->getLastModifiedDate();
+        $this->assertTrue($memberDirectory['is_dir']);
+        $this->assertEquals('practice/', $memberDirectory['location']);
+        $this->assertEquals(0, $memberDirectory['size']);
+        $date = $memberDirectory['mtime'];
         $this->assertTrue($date instanceof \DateTime);
         $this->assertEquals('1149854760', $date->format("U"));
 
         $memberFile = array_pop($members);
 
-        $this->assertFalse($memberFile->isDir());
-        $this->assertEquals('practice/records', $memberFile->getLocation());
-        $this->assertEquals(10240, $memberFile->getSize());
-        $date = $memberFile->getLastModifiedDate();
+        $this->assertFalse($memberFile['is_dir']);
+        $this->assertEquals('practice/records', $memberFile['location']);
+        $this->assertEquals(10240, $memberFile['size']);
+        $date = $memberFile['mtime'];
         $this->assertTrue($date instanceof \DateTime);
         $this->assertEquals('1149854760', $date->format("U"));
 
