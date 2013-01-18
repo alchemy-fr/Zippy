@@ -13,6 +13,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
+        "pimple/pimple": "~1",
         "symfony/process": ">=2.0, <=2.2.x-dev"
     },
     "autoload": {

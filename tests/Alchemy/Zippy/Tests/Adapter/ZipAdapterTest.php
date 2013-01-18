@@ -3,9 +3,9 @@
 namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipAdapter;
-use Alchemy\Zippy\Tests\AbstractTestFramework;
+use Alchemy\Zippy\Tests\TestCase;
 
-class ZipAdapterTest extends AbstractTestFramework
+class ZipAdapterTest extends TestCase
 {
     protected static $zipFile;
 
@@ -149,7 +149,7 @@ class ZipAdapterTest extends AbstractTestFramework
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../AbstractTestFramework.php'));
+        $this->adapter->add($archive->getLocation(), array(__DIR__ . '/../TestCase.php'));
     }
 
     public function testgetInflatorVersion()
@@ -216,7 +216,7 @@ class ZipAdapterTest extends AbstractTestFramework
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(__DIR__ . '/../AbstractTestFramework.php'))
+            ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -240,7 +240,7 @@ class ZipAdapterTest extends AbstractTestFramework
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->remove($archive->getLocation(), array(
-            __DIR__ . '/../AbstractTestFramework.php',
+            __DIR__ . '/../TestCase.php',
             $archiveFileMock
         ));
     }

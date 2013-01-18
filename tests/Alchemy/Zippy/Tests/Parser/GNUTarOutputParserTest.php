@@ -3,10 +3,10 @@
 namespace Alchemy\Zippy\Tests\Parser;
 
 use Alchemy\Zippy\Parser\GNUTarOutputParser;
-use Alchemy\Zippy\Tests\AbstractTestFramework;
+use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\MemberInterface;
 
-class GNUTarOutputParserTest extends AbstractTestFramework
+class GNUTarOutputParserTest extends TestCase
 {
     public function testNewParser()
     {
