@@ -11,5 +11,5 @@ php:
   - 5.5
 
 script:
-  - phpunit
+  - phpunit -v --coverage-text
   - sh -c "cd docs && make clean && make html"
