@@ -133,7 +133,7 @@ Interface AdapterInterface
      * Extracts specific members of the archive
      *
      * @param String                    $path    The path to the archive
-     * @param String|Array|\Traversable $members A filename, an array of members, or a \Traversable instance
+     * @param Array                     $members An array of members
      * @param String|null               $to      The path where to extract the members
      *
      * @return \SplFileInfo The extracted archive
