@@ -55,11 +55,11 @@ class GNUTarOutputParser implements ParserInterface
                 continue;
             }
 
-            $members[] = new Member(
-                $chunks[6],
-                $chunks[4],
-                \DateTime::createFromFormat("Y-m-d H:i", $chunks[5]),
-                'd' === $chunks[1][0]
+            $members[] = array(
+                'location'  => $chunks[6],
+                'size'      => $chunks[4],
+                'mtime'     => \DateTime::createFromFormat("Y-m-d H:i", $chunks[5]),
+                'is_dir'    => 'd' === $chunks[1][0]
             );
         }
 

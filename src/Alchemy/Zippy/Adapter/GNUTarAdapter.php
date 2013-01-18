@@ -117,7 +117,20 @@ class GNUTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseFileListing($process->getOutput() ?: '');
+        $members = array();
+
+        foreach($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
+               $members[] = new Member(
+                $path,
+                $this,
+                $member['location'],
+                $member['size'],
+                $member['mtime'],
+                $member['is_dir']
+            );
+        }
+
+        return $members;
     }
 
     /**

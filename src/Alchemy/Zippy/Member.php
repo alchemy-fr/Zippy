@@ -11,6 +11,8 @@
 
 namespace Alchemy\Zippy;
 
+use Alchemy\Zippy\Adapter\AdapterInterface;
+
 /**
  * Represents a member of an archive.
  */
@@ -45,15 +47,33 @@ class Member implements MemberInterface
     private $lastModifiedDate;
 
     /**
+     * The path to the archive that contains the member
+     *
+     * @var String
+     */
+    private $archivePath;
+
+    /**
+     * An adapter interface
+     *
+     * @var AdapterInterface
+     */
+    private $adapter;
+
+    /**
      * Constructor
      *
+     * @param String    $archivePath      The path of the archive which contain the member
+     * @param String    AdapterInterface  The archive adapter interface
      * @param String    $location         The path of the archive member
      * @param Integer   $fileSize         The uncompressed file size
      * @param \DateTime $lastModifiedDate The last modifed date of the member
      * @param Boolean   $isDir            Tells wheteher the member is a directory or not
      */
-    public function __construct($location, $fileSize, \DateTime $lastModifiedDate, $isDir)
+    public function __construct($archivePath, AdapterInterface $adapter, $location, $fileSize, \DateTime $lastModifiedDate, $isDir)
     {
+        $this->archivePath = $archivePath;
+        $this->adapter = $adapter;
         $this->location = $location;
         $this->isDir = $isDir;
         $this->size = $fileSize;
@@ -98,5 +118,25 @@ class Member implements MemberInterface
     public function __toString()
     {
         return $this->location;
+    }
+
+    /**
+     * Extract the member from its archive
+     *
+     * Be carefull using this method in a loop
+     * This will execute one extraction process for each file
+     *
+     * @param String|null $to   The path where to extract the member, if no path is not provided the member is extracted in the same direcoty of its archive
+     *
+     * @return \SplFileInfo The extracted file
+     *
+     * @throws RuntimeException         In case of failure
+     * @throws InvalidArgumentException In case no members could be removed or provide extract target direcotry is not valid
+     */
+    public function extract($to = null)
+    {
+        $this->adapter->extractMembers($this->archivePath, $this->location, $to);
+
+        return new \SplFileInfo(sprintf('%s%s', rtrim(null === $to ? $this->archivePath : $to, '/'), $this->location));
     }
 }

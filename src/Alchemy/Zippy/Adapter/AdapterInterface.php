@@ -100,7 +100,7 @@ Interface AdapterInterface
     public function remove($path, $files);
 
     /**
-     * Extract an entire archive
+     * Extracts an entire archive
      *
      * @param String      $path The path to the archive
      * @param String|null $to   The path where to extract the archive
@@ -113,7 +113,7 @@ Interface AdapterInterface
     public function extract($path, $to = null);
 
     /**
-     * Extract specific members of the archive
+     * Extracts specific members of the archive
      *
      * @param String                    $path    The path to the archive
      * @param String|Array|\Traversable $members A filename, an array of members, or a \Traversable instance
