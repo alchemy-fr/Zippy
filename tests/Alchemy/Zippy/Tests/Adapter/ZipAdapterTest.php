@@ -33,10 +33,6 @@ class ZipAdapterTest extends AbstractTestFramework
     public function setUp()
     {
         $this->adapter = ZipAdapter::newInstance();
-
-        if (!$this->adapter->isSupported()) {
-            $this->markTestSkipped(sprintf('`%s` is not supported', ZipAdapter::getName()));
-        }
     }
 
     /**
