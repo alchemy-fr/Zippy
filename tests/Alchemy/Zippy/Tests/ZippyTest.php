@@ -9,7 +9,6 @@ use Alchemy\Zippy\Exception\RuntimeException;
 
 class ZippyTest extends TestCase
 {
-
     /** @test */
     public function itShouldCreateAnArchive()
     {
