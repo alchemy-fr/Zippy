@@ -108,7 +108,8 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(), $process->getErrorOutput()
             ));
         }
 
@@ -190,7 +191,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
@@ -215,7 +218,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
@@ -256,8 +261,8 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             $builder->add((string) $option);
         }
 
-//        --add-file=FILE        add given FILE to the archive (useful if its name
-//                             starts with a dash)
+        // there will be an issue if the file starts with a dash
+        // see --add-file=FILE
         if (!$this->addBuilderFileArgument($files, $builder)) {
             throw new InvalidArgumentException('Invalid files');
         }
@@ -268,7 +273,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
@@ -301,7 +308,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                    'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
@@ -340,7 +349,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
@@ -383,7 +394,9 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}', $process->getCommandLine(), $process->getErrorOutput()
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
             ));
         }
 
