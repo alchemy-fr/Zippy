@@ -20,6 +20,8 @@ use Alchemy\Zippy\Exception\NoAdapterOnPlatformException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\FileStrategy\FileStrategyInterface;
 use Alchemy\Zippy\FileStrategy\TarFileStrategy;
+use Alchemy\Zippy\FileStrategy\TarGzFileStrategy;
+use Alchemy\Zippy\FileStrategy\TarBz2FileStrategy;
 use Alchemy\Zippy\FileStrategy\ZipFileStrategy;
 
 class Zippy
@@ -160,6 +162,8 @@ class Zippy
 
         $factory->addStrategy(new ZipFileStrategy($adapters));
         $factory->addStrategy(new TarFileStrategy($adapters));
+        $factory->addStrategy(new TarGzFileStrategy($adapters));
+        $factory->addStrategy(new TarBz2FileStrategy($adapters));
 
         return $factory;
     }

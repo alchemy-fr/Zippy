@@ -207,10 +207,12 @@ class ZippyTest extends TestCase
     {
         $zippy = Zippy::load();
 
-        $this->assertCount(2, $zippy->getStrategies());
+        $this->assertCount(4, $zippy->getStrategies());
 
         $this->assertArrayHasKey('zip', $zippy->getStrategies());
         $this->assertArrayHasKey('tar', $zippy->getStrategies());
+        $this->assertArrayHasKey('tar.gz', $zippy->getStrategies());
+        $this->assertArrayHasKey('tar.bz2', $zippy->getStrategies());
     }
 
     private function getStrategy($extension, $adapters)
