@@ -12,7 +12,9 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipAdapter;
-use Alchemy\Zippy\Adapter\GNUTarAdapter;
+use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
+use Alchemy\Zippy\Adapter\GNUTar\TarGzGNUTarAdapter;
+use Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter;
 
 class AdapterContainer extends \Pimple
 {
@@ -35,8 +37,16 @@ class AdapterContainer extends \Pimple
         $container['gnu-tar.inflator'] = null;
         $container['gnu-tar.deflator'] = null;
 
-        $container['Alchemy\\Zippy\\Adapter\\GNUTarAdapter'] = $container->share(function ($container) {
-            return GNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+        $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter'] = $container->share(function ($container) {
+            return TarGNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+        });
+
+        $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGzGNUTarAdapter'] = $container->share(function ($container) {
+            return TarGzGNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+        });
+
+        $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarBz2GNUTarAdapter'] = $container->share(function ($container) {
+            return TarBz2GNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         return $container;

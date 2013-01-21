@@ -1,22 +1,22 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Adapter;
+namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 
-use Alchemy\Zippy\Adapter\GNUTarAdapter;
+use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 
-class GNUTarAdapterTest extends TestCase
+class TarGNUTarAdapterTest extends TestCase
 {
     protected static $tarFile;
 
     /**
-     * @var GNUTarAdapter
+     * @var TarGNUTarAdapter
      */
     protected $adapter;
 
     public static function setUpBeforeClass()
     {
-        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), GNUTarAdapter::getName());
+        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), TarGNUTarAdapter::getName());
 
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
@@ -32,7 +32,7 @@ class GNUTarAdapterTest extends TestCase
 
     public function setUp()
     {
-        $this->adapter = GNUTarAdapter::newInstance();
+        $this->adapter = TarGNUTarAdapter::newInstance();
     }
 
     public function testCreateNoFiles()
@@ -42,7 +42,7 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-cf'))
+            ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -82,13 +82,13 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-cf'))
+            ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(self::$tarFile))
+            ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -130,13 +130,19 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--utc -tf'))
+            ->with($this->equalTo('--utc'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo($archive->getLocation()))
+            ->with($this->equalTo('--list'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo(sprintf('--file=%s', $archive->getLocation())))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -159,13 +165,19 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-rf'))
+            ->with($this->equalTo('--delete'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo($archive->getLocation()))
+            ->with($this->equalTo('--append'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo(sprintf('--file=%s', $archive->getLocation())))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -208,13 +220,13 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-xf'))
+            ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo($archive->getLocation()))
+            ->with($this->equalTo(sprintf('--file=%s', $archive->getLocation())))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -251,7 +263,7 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('-C'))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -292,7 +304,7 @@ class GNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--file='.$archive->getLocation()))
+            ->with($this->equalTo('--file=' . $archive->getLocation()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -388,17 +400,17 @@ Written by John Gilmore and Jay Fenlason.'));
 
     public function testGetName()
     {
-        $this->assertEquals('gnu-tar', GNUTarAdapter::getName());
+        $this->assertEquals('gnu-tar', TarGNUTarAdapter::getName());
     }
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('tar', GNUTarAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals('tar', TarGNUTarAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('tar', GNUTarAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals('tar', TarGNUTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()
