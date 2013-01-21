@@ -2,7 +2,7 @@ language: php
 
 before_script:
   - sudo easy_install sphinx
-  - composer install --dev
+  - composer install --dev --prefer-source
 
 php:
   - 5.3.3
