@@ -160,7 +160,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             $builder->add('--no-recursion');
         }
 
-        $builder->add('-cf');
+        $builder->add('--create');
 
         foreach((array) $options as $option) {
             $builder->add((string) $option);
@@ -174,7 +174,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             $builder->add(sprintf('> %s', $path));
         } else {
 
-            $builder->add($path);
+            $builder->add(sprintf('--file=%s', $path));
 
             if (!$recursive) {
                 $builder->add('--no-recursion');
@@ -206,7 +206,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->inflator
             ->create()
             ->add('--utc')
-            ->add('-t')
+            ->add('--list')
             ->add(sprintf('--file=%s', $path));
 
         foreach((array) $options as $option) {
@@ -308,7 +308,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
-                    'Unable to execute the following command %s {output: %s}',
+                'Unable to execute the following command %s {output: %s}',
                 $process->getCommandLine(),
                 $process->getErrorOutput()
             ));

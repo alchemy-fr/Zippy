@@ -42,7 +42,7 @@ class TarGNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-cf'))
+            ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -82,13 +82,13 @@ class TarGNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-cf'))
+            ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(self::$tarFile))
+            ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -136,7 +136,7 @@ class TarGNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('-t'))
+            ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
