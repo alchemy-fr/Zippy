@@ -11,6 +11,7 @@ extensions depending on the environment your run it
 Zippy currently supports the following utilities :
 
 - `GNU TAR`_
+- `BSD TAR`_
 - `ZIP`_
 
 And deals with the following archive formats :
@@ -18,6 +19,7 @@ And deals with the following archive formats :
 - tar
 - zip
 - tbz2
+- tbz
 - tgz
 
 Installation
@@ -66,18 +68,7 @@ The Zippy library is very simple and consists of a collection of adapters that
 take over for you the most common (de)compression operations (create, list
 update, extract, delete) for the chosen format.
 
-Zippy comes with a strategy pattern to get the best adapter according to the
-platform you use and the availability of the utilities.
-
-You can define your on strategy to get a specific adapter that handle
-(de)compression for a specific archive format.
-
-The right adapter will be matched when you open or create a new archive.
-
-The discrimination factor for getting the right adapter is based upon the
-archive extension. So every time you will work with archive not
-handled by Zippy you have to declare a new strategy for this extension
-to match the proper adapter, see :ref:`add-custom-strategy`.
+**Example usage**
 
 .. code-block:: php
 
@@ -114,6 +105,58 @@ to match the proper adapter, see :ref:`add-custom-strategy`.
     // extracts
     $archiveZip->extract('/to/directory');
 
+Zippy comes with a strategy pattern to get the best adapter according to the
+platform you use and the availability of the utilities.
+
+The right adapter will be matched when you open or create a new archive.
+
+**Creates or opens one archive**
+
+.. code-block:: php
+
+    <?php
+
+    use Alchemy\Zippy;
+
+    $zippy = Zippy::load();
+
+    $archiveZip = $zippy->create('archive.zip');
+    $archiveTar = $zippy->open('/an/existing/archive.tar');
+
+However you may want sometimes gets the adapter for future reuse as the previous
+example is good for one shot only because it will create a new adapter object
+instance each time you create or open an archive.
+
+**Creates or opens a lot of archives**
+
+.. code-block:: php
+
+    <?php
+
+    use Alchemy\Zippy;
+
+    $zippy = Zippy::load();
+
+    $zipAdapter = $zippy->getAdapterFor('zip');
+
+    foreach(array('archive.zip', 'archive2.zip', 'archive3.zip') as $path) {
+        $archive = zipAdapter->open(path);
+    }
+
+Also sometimes you will face the problem where Zippy will not be able to handle
+a specific archive format because archive extension is not recognized or follow
+specific named rules.
+
+Luckily with Zippy You can easily define your strategy to get a specific adapter
+that handle (de)compression for a specific archive format.
+
+The discrimination factor for getting the right adapter is based upon the
+archive extension.
+
+So every time you will work with an archive format not
+handled by Zippy you must declare a new strategy for this extension
+to match the proper adapter, see :ref:`add-custom-strategy`.
+
 Recipes
 -------
 
@@ -131,14 +174,23 @@ the executable by its name;
     use Alchemy\Zippy;
 
     $zippy = Zippy::load();
+
     // customize GNU Tar inflator
     $zippy->adapters['gnu-tar.inflator'] = '/usr/local/bin/tar';
-    // customize GNU Tar deflator
-    $zippy->adapters['gnu-tar.deflator'] = '/usr/local/bin/tar';
-    // customize ZIP inflator
-    $zippy->adapters['zip.inflator'] = '/usr/local/bin/zip';
+
     // customize ZIP deflator
     $zippy->adapters['zip.deflator'] = '/usr/local/bin/unzip';
+
+The following binary are customable
+
+- gnu-tar.inflator
+- gnu-tar.deflator
+
+- bsd-tar.inflator
+- bsd-tar.deflator
+
+- zip.inflator
+- zip.deflator
 
 .. _add-custom-strategy:
 
@@ -161,12 +213,11 @@ Your custom adapter class must implements the
 
     <?php
 
-    namespace MyProject\Zippy\Adapter;
-
     use Alchemy\Zippy;
 
     class CustomAdapter implements Zippy\Adapter\AdapterInterface
     {
+        ...
     }
 
 **Define a new strategy**
@@ -259,6 +310,7 @@ Zippy is licensed under the `MIT License`_
 
 .. _composer: http://getcomposer.org/
 .. _GNU TAR: http://www.gnu.org/software/tar/manual/
+.. _BSD TAR: http://www.freebsd.org/cgi/man.cgi?query=tar&sektion=1
 .. _ZIP: http://www.info-zip.org/
 .. _issue tracker: https://github.com/alchemy-fr/Zippy/issues
 .. _Pull Request: http://help.github.com/send-pull-requests/
