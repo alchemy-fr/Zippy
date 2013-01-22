@@ -42,7 +42,7 @@ class ParserFactory
                 break;
 
             default:
-                throw new InvalidArgumentException();
+                throw new InvalidArgumentException(sprintf('No parser available for %s adapter', $adapterName));
                 break;
         }
     }
