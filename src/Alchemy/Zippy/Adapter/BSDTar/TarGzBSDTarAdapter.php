@@ -1,8 +1,8 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter\BSDTar;
 
-class TarGzGNUTarAdapter extends TarGNUTarAdapter
+class TarGzBSDTarAdapter extends TarBSDTarAdapter
 {
     protected function getLocalOptions()
     {

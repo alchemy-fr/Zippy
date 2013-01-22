@@ -1,22 +1,21 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter\BSDTar;
 
 use Alchemy\Zippy\Adapter\AbstractTarAdapter;
 
-class TarGNUTarAdapter extends AbstractTarAdapter
+class TarBSDTarAdapter extends AbstractTarAdapter
 {
     protected function getLocalOptions()
     {
         return array();
     }
-
     /**
      * @inheritdoc
      */
     public static function getName()
     {
-        return 'gnu-tar';
+        return 'bsd-tar';
     }
 
     /**
@@ -24,7 +23,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'tar';
+        return 'bsdtar';
     }
 
     /**
@@ -32,7 +31,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'tar';
+        return 'bsdtar';
     }
 
     /**
@@ -42,6 +41,6 @@ class TarGNUTarAdapter extends AbstractTarAdapter
     {
         $lines = explode("\n", $versionOutput, 2);
 
-        return false !== stripos($lines[0], '(gnu tar)');
+        return false !== stripos($lines[0], 'bsdtar');
     }
 }

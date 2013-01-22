@@ -9,19 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
-/**
- * GNUTarAdapter allows you to create and extract files from archives using GNU tar
- *
- * @see http://www.gnu.org/software/tar/manual/tar.html
- */
-abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
+abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
     /**
      * @inheritdoc
@@ -88,9 +83,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             return false;
         }
 
-        $lines = explode("\n", $process->getOutput(), 2);
-
-        return false !== stripos($lines[0], '(gnu tar)');
+        return $this->isProperImplementation($process->getOutput());
     }
 
     /**
@@ -122,30 +115,6 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
     public function getDeflatorVersion()
     {
         return $this->getInflatorVersion();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getName()
-    {
-        return 'gnu-tar';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getDefaultDeflatorBinaryName()
-    {
-        return 'tar';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getDefaultInflatorBinaryName()
-    {
-        return 'tar';
     }
 
     protected function doCreate($options, $path, $files = null, $recursive = true)
@@ -403,5 +372,13 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
         return $members;
     }
 
+    /**
+     *
+     */
     abstract protected function getLocalOptions();
+
+    /**
+     *
+     */
+    abstract protected function isProperImplementation($versionOutput);
 }

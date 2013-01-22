@@ -1,22 +1,22 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
+namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
+use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 
-abstract class GNUTarAdapterWithOptionsTest extends TestCase
+class TarBSDTarAdapterTest extends TestCase
 {
     protected static $tarFile;
 
     /**
-     * @var AbstractGNUTarAdapter
+     * @var TarBSDTarAdapter
      */
     protected $adapter;
 
     public static function setUpBeforeClass()
     {
-        $classname = static::getAdapterClassName();
-        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), $classname::getName());
+        self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), TarBSDTarAdapter::getName());
 
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
@@ -32,8 +32,7 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
 
     public function setUp()
     {
-        $classname = static::getAdapterClassName();
-        $this->adapter = $classname::newInstance();
+        $this->adapter = TarBSDTarAdapter::newInstance();
     }
 
     public function testCreateNoFiles()
@@ -49,25 +48,19 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
             ->with($this->equalTo('-'))
             ->will($this->returnSelf());
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
         $mockProcessBuilder
-            ->expects($this->at(3))
+            ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
-            ->expects($this->at(4))
+            ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
             ->will($this->returnSelf());
@@ -95,17 +88,11 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
-            ->expects($this->at(3))
+            ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
@@ -156,12 +143,6 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $archive->getLocation())))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -282,23 +263,17 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(4))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
-            ->expects($this->at(5))
+            ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
@@ -335,17 +310,11 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
             ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
-            ->expects($this->at(4))
+            ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('path-to-file'))
             ->will($this->returnSelf());
@@ -370,7 +339,7 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         ));
     }
 
-    public function testThatGnuTarIsMarkedAsSupported()
+    public function testThatGNUTarIsNotMarkedAsSupported()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
@@ -400,10 +369,10 @@ Written by John Gilmore and Jay Fenlason.'));
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->assertTrue($this->adapter->isSupported());
+        $this->assertFalse($this->adapter->isSupported());
     }
 
-    public function testThatBsdTarIsNotMarkedAsSupported()
+    public function testThatBsdTarIsMarkedAsSupported()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
@@ -426,32 +395,22 @@ Written by John Gilmore and Jay Fenlason.'));
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->assertFalse($this->adapter->isSupported());
+        $this->assertTrue($this->adapter->isSupported());
     }
 
     public function testGetName()
     {
-        $classname = static::getAdapterClassName();
-        $this->assertEquals('gnu-tar', $classname::getName());
+        $this->assertEquals('bsd-tar', TarBSDTarAdapter::getName());
     }
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $classname = static::getAdapterClassName();
-        $this->assertEquals('tar', $classname::getDefaultInflatorBinaryName());
+        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $classname = static::getAdapterClassName();
-        $this->assertEquals('tar', $classname::getDefaultDeflatorBinaryName());
-    }
-
-    abstract protected function getOptions();
-
-    protected static function getAdapterClassName()
-    {
-        $this->fail(sprintf('Method %s should be implemented', __METHOD__));
+        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()
