@@ -1,15 +1,15 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
+namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
 use Alchemy\Zippy\Tests\TestCase;
 
-abstract class GNUTarAdapterWithOptionsTest extends TestCase
+abstract class BSDTarAdapterWithOptionsTest extends TestCase
 {
     protected static $tarFile;
 
     /**
-     * @var AbstractGNUTarAdapter
+     * @var AbstractBSDTarAdapter
      */
     protected $adapter;
 
@@ -370,7 +370,7 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         ));
     }
 
-    public function testThatGnuTarIsMarkedAsSupported()
+    public function testThatGNUTarIsNotMarkedAsSupported()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
@@ -400,10 +400,10 @@ Written by John Gilmore and Jay Fenlason.'));
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->assertTrue($this->adapter->isSupported());
+        $this->assertFalse($this->adapter->isSupported());
     }
 
-    public function testThatBsdTarIsNotMarkedAsSupported()
+    public function testThatBsdTarIsMarkedAsSupported()
     {
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
@@ -426,25 +426,25 @@ Written by John Gilmore and Jay Fenlason.'));
 
         $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
 
-        $this->assertFalse($this->adapter->isSupported());
+        $this->assertTrue($this->adapter->isSupported());
     }
 
     public function testGetName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('gnu-tar', $classname::getName());
+        $this->assertEquals('bsd-tar', $classname::getName());
     }
 
     public function testGetDefaultInflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('tar', $classname::getDefaultInflatorBinaryName());
+        $this->assertEquals('bsdtar', $classname::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('tar', $classname::getDefaultDeflatorBinaryName());
+        $this->assertEquals('bsdtar', $classname::getDefaultDeflatorBinaryName());
     }
 
     abstract protected function getOptions();

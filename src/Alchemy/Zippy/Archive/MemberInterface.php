@@ -50,7 +50,7 @@ interface MemberInterface
      * This will execute one extraction process for each file
      * Prefer the use of ArchiveInterface::extractMembers in that use case
      *
-     * @param String|null $to   The path where to extract the member, if no path is not provided the member is extracted in the same direcoty of its archive
+     * @param String|null $to The path where to extract the member, if no path is not provided the member is extracted in the same direcoty of its archive
      *
      * @return \SplFileInfo The extracted file
      *

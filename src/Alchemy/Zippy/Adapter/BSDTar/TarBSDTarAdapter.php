@@ -1,15 +1,15 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter\BSDTar;
 
 use Alchemy\Zippy\Adapter\AbstractTarAdapter;
 
 /**
- * GNUTarAdapter allows you to create and extract files from archives using GNU tar
+ * BSDTAR allows you to create and extract files from archives using BSD tar
  *
- * @see http://www.gnu.org/software/tar/manual/tar.html
+ * @see http://people.freebsd.org/~kientzle/libarchive/man/bsdtar.1.txt
  */
-class TarGNUTarAdapter extends AbstractTarAdapter
+class TarBSDTarAdapter extends AbstractTarAdapter
 {
     /**
      * @inheritdoc
@@ -24,7 +24,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getName()
     {
-        return 'gnu-tar';
+        return 'bsd-tar';
     }
 
     /**
@@ -32,7 +32,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'tar';
+        return 'bsdtar';
     }
 
     /**
@@ -40,7 +40,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'tar';
+        return 'bsdtar';
     }
 
     /**
@@ -50,6 +50,6 @@ class TarGNUTarAdapter extends AbstractTarAdapter
     {
         $lines = explode("\n", $versionOutput, 2);
 
-        return false !== stripos($lines[0], '(gnu tar)');
+        return false !== stripos($lines[0], 'bsdtar');
     }
 }

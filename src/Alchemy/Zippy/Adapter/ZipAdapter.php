@@ -111,7 +111,7 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         $members = array();
 
-        foreach($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
+        foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
                $members[] = new Member(
                 $path,
                 $this,

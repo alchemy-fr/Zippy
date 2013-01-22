@@ -21,7 +21,7 @@ class Member implements MemberInterface
     /**
      * The location of the file
      *
-     * @var     String
+     * @var String
      */
     private $location;
 
@@ -63,12 +63,12 @@ class Member implements MemberInterface
     /**
      * Constructor
      *
-     * @param String    $archivePath      The path of the archive which contain the member
-     * @param String    AdapterInterface  The archive adapter interface
-     * @param String    $location         The path of the archive member
-     * @param Integer   $fileSize         The uncompressed file size
-     * @param \DateTime $lastModifiedDate The last modifed date of the member
-     * @param Boolean   $isDir            Tells wheteher the member is a directory or not
+     * @param String           $archivePath      The path of the archive which contain the member
+     * @param AdapterInterface $adapter          AdapterInterface    The archive adapter interface
+     * @param String           $location         The path of the archive member
+     * @param Integer          $fileSize         The uncompressed file size
+     * @param \DateTime        $lastModifiedDate The last modifed date of the member
+     * @param Boolean          $isDir            Tells wheteher the member is a directory or not
      */
     public function __construct($archivePath, AdapterInterface $adapter, $location, $fileSize, \DateTime $lastModifiedDate, $isDir)
     {

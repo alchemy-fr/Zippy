@@ -9,19 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
-/**
- * GNUTarAdapter allows you to create and extract files from archives using GNU tar
- *
- * @see http://www.gnu.org/software/tar/manual/tar.html
- */
-abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
+abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
     /**
      * @inheritdoc
@@ -88,9 +83,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             return false;
         }
 
-        $lines = explode("\n", $process->getOutput(), 2);
-
-        return false !== stripos($lines[0], '(gnu tar)');
+        return $this->isProperImplementation($process->getOutput());
     }
 
     /**
@@ -124,30 +117,6 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
         return $this->getInflatorVersion();
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function getName()
-    {
-        return 'gnu-tar';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getDefaultDeflatorBinaryName()
-    {
-        return 'tar';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public static function getDefaultInflatorBinaryName()
-    {
-        return 'tar';
-    }
-
     protected function doCreate($options, $path, $files = null, $recursive = true)
     {
         $files = (array) $files;
@@ -162,7 +131,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
 
         $builder->add('--create');
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -209,7 +178,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->add('--list')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -257,7 +226,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->add('--append')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -294,7 +263,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->add('--delete')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -333,7 +302,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->add('--extract')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -374,7 +343,7 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
             ->add('--extract')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -403,5 +372,20 @@ abstract class AbstractGNUTarAdapter extends AbstractBinaryAdapter
         return $members;
     }
 
+    /**
+     * Gets adapter specific additional options
+     *
+     * @return Array
+     */
     abstract protected function getLocalOptions();
+
+    /**
+     * Tells wether the current TAR binary comes from a specific implementation
+     * (GNU, BSD or Solaris etc ...)
+     *
+     * @param $versionOutput The ouptut from --version command
+     *
+     * @return Boolean
+     */
+    abstract protected function isProperImplementation($versionOutput);
 }
