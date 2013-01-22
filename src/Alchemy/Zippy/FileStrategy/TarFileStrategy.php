@@ -29,6 +29,7 @@ class TarFileStrategy implements FileStrategyInterface
     {
         return array(
             $this->container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter'],
+            $this->container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBSDTarAdapter'],
         );
     }
 

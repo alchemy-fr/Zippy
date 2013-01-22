@@ -29,6 +29,7 @@ class TarBz2FileStrategy implements FileStrategyInterface
     {
         return array(
             $this->container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarBz2GNUTarAdapter'],
+            $this->container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBz2BSDTarAdapter'],
         );
     }
 
@@ -37,6 +38,6 @@ class TarBz2FileStrategy implements FileStrategyInterface
      */
     public function getFileExtension()
     {
-        return 'tar.gz';
+        return 'tar.bz2';
     }
 }
