@@ -4,8 +4,16 @@ namespace Alchemy\Zippy\Adapter\GNUTar;
 
 use Alchemy\Zippy\Adapter\AbstractTarAdapter;
 
+/**
+ * GNUTarAdapter allows you to create and extract files from archives using GNU tar
+ *
+ * @see http://www.gnu.org/software/tar/manual/tar.html
+ */
 class TarGNUTarAdapter extends AbstractTarAdapter
 {
+    /**
+     * @inheritdoc
+     */
     protected function getLocalOptions()
     {
         return array();

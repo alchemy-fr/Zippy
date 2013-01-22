@@ -373,12 +373,19 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     }
 
     /**
+     * Gets adapter specific additional options
      *
+     * @return Array
      */
     abstract protected function getLocalOptions();
 
     /**
+     * Tells wether the current TAR binary comes from a specific implementation
+     * (GNU, BSD or Solaris etc ...)
      *
+     * @param $versionOutput The ouptut from --version command
+     *
+     * @return Boolean
      */
     abstract protected function isProperImplementation($versionOutput);
 }
