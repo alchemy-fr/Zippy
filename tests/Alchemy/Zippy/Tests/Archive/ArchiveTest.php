@@ -85,7 +85,15 @@ class ArchiveTest extends TestCase
 
     public function testRemoveMember()
     {
-        $this->marktestSkipped('Not yest implemented');
+        $mockAdapter = $this->getAdapterMock();
+
+        $mockAdapter
+            ->expects($this->once())
+            ->method('remove');
+
+        $archive = new Archive('location', $mockAdapter);
+
+        $this->assertEquals($archive, $archive->removeMembers('hello'));
     }
 
     private function getAdapterMock()

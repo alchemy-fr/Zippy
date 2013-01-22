@@ -11,6 +11,8 @@
 
 namespace Alchemy\Zippy\Parser;
 
+use Alchemy\Zippy\Exception\RuntimeException;
+
 interface ParserInterface
 {
     /**
@@ -19,6 +21,8 @@ interface ParserInterface
      * @param String $output The string to parse
      *
      * @return Array An array of Member properties (location, mtime, size & is_dir)
+     *
+     * @throws RuntimeException In case the parsing process failed
      */
     public function parseFileListing($output);
 

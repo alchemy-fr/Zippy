@@ -10,6 +10,8 @@
  */
 namespace Alchemy\Zippy\Parser;
 
+use Alchemy\Zippy\Exception\RuntimeException;
+
 /**
  * This class is responsable of parsing GNUTar command line output
  */
@@ -53,10 +55,16 @@ class GNUTarOutputParser implements ParserInterface
                 continue;
             }
 
+            $date = \DateTime::createFromFormat("Y-m-d H:i", $chunks[5]);
+
+            if (false === $date) {
+                throw new RuntimeException(sprintf('Failed to parse mtime date from %s', $line));
+            }
+
             $members[] = array(
                 'location'  => $chunks[6],
                 'size'      => $chunks[4],
-                'mtime'     => \DateTime::createFromFormat("Y-m-d H:i", $chunks[5]),
+                'mtime'     => $date,
                 'is_dir'    => 'd' === $chunks[1][0]
             );
         }

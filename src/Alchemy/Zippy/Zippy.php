@@ -20,8 +20,11 @@ use Alchemy\Zippy\Exception\NoAdapterOnPlatformException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\FileStrategy\FileStrategyInterface;
 use Alchemy\Zippy\FileStrategy\TarFileStrategy;
-use Alchemy\Zippy\FileStrategy\TarGzFileStrategy;
 use Alchemy\Zippy\FileStrategy\TarBz2FileStrategy;
+use Alchemy\Zippy\FileStrategy\TarGzFileStrategy;
+use Alchemy\Zippy\FileStrategy\TB2FileStrategy;
+use Alchemy\Zippy\FileStrategy\TBz2FileStrategy;
+use Alchemy\Zippy\FileStrategy\TGzFileStrategy;
 use Alchemy\Zippy\FileStrategy\ZipFileStrategy;
 
 class Zippy
@@ -37,14 +40,14 @@ class Zippy
     /**
      * Creates an archive
      *
-     * @param string $path
+     * @param string                         $path
      * @param String|Array|\Traversable|null $files
-     * @param Boolean $recursive
-     * @param string|null $type
+     * @param Boolean                        $recursive
+     * @param string|null                    $type
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException  In case of failure
+     * @throws RuntimeException In case of failure
      */
     public function create($path, $files = null, $recursive = true, $type = null)
     {
@@ -68,7 +71,7 @@ class Zippy
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException  In case of failure
+     * @throws RuntimeException In case of failure
      */
     public function open($path)
     {
@@ -164,6 +167,9 @@ class Zippy
         $factory->addStrategy(new TarFileStrategy($adapters));
         $factory->addStrategy(new TarGzFileStrategy($adapters));
         $factory->addStrategy(new TarBz2FileStrategy($adapters));
+        $factory->addStrategy(new TB2FileStrategy($adapters));
+        $factory->addStrategy(new TBz2FileStrategy($adapters));
+        $factory->addStrategy(new TGzFileStrategy($adapters));
 
         return $factory;
     }

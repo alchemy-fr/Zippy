@@ -13,7 +13,7 @@ namespace Alchemy\Zippy\FileStrategy;
 
 use Alchemy\Zippy\Adapter\AdapterContainer;
 
-class TarBz2FileStrategy implements FileStrategyInterface
+class TB2FileStrategy implements FileStrategyInterface
 {
     private $container;
 
@@ -38,6 +38,6 @@ class TarBz2FileStrategy implements FileStrategyInterface
      */
     public function getFileExtension()
     {
-        return 'tar.bz2';
+        return 'tb2';
     }
 }

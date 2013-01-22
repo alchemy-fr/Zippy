@@ -1,8 +1,8 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\GNUTar;
+namespace Alchemy\Zippy\Adapter\BSDTar;
 
-class TarBz2GNUTarAdapter extends TarGNUTarAdapter
+class TarBz2BSDTarAdapter extends TarBSDTarAdapter
 {
     /**
      * @inheritdoc

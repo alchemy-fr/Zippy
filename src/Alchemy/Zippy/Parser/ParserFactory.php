@@ -12,6 +12,7 @@
 namespace Alchemy\Zippy\Parser;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Parser\BSDTarOutputParser;
 use Alchemy\Zippy\Parser\GNUTarOutputParser;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ZipOutputParser;
@@ -33,12 +34,15 @@ class ParserFactory
             case 'gnu-tar':
                 return new GNUTarOutputParser();
                 break;
+            case 'bsd-tar':
+                return new BSDTarOutputParser();
+                break;
             case 'zip':
                 return new ZipOutputParser();
                 break;
 
             default:
-                throw InvalidArgumentException();
+                throw new InvalidArgumentException(sprintf('No parser available for %s adapter', $adapterName));
                 break;
         }
     }
