@@ -37,14 +37,14 @@ class Zippy
     /**
      * Creates an archive
      *
-     * @param string $path
+     * @param string                         $path
      * @param String|Array|\Traversable|null $files
-     * @param Boolean $recursive
-     * @param string|null $type
+     * @param Boolean                        $recursive
+     * @param string|null                    $type
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException  In case of failure
+     * @throws RuntimeException In case of failure
      */
     public function create($path, $files = null, $recursive = true, $type = null)
     {
@@ -68,7 +68,7 @@ class Zippy
      *
      * @return ArchiveInterface
      *
-     * @throws RuntimeException  In case of failure
+     * @throws RuntimeException In case of failure
      */
     public function open($path)
     {

@@ -63,7 +63,7 @@ class Member implements MemberInterface
     /**
      * Constructor
      *
-     * @param String    $archivePath      The path of the archive which contain the member
+     * @param String $archivePath The path of the archive which contain the member
      * @param String    AdapterInterface  The archive adapter interface
      * @param String    $location         The path of the archive member
      * @param Integer   $fileSize         The uncompressed file size

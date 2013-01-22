@@ -131,7 +131,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder->add('--create');
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -178,7 +178,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--list')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -226,7 +226,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--append')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -263,7 +263,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--delete')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -302,7 +302,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--extract')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 
@@ -343,7 +343,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--extract')
             ->add(sprintf('--file=%s', $path));
 
-        foreach((array) $options as $option) {
+        foreach ((array) $options as $option) {
             $builder->add((string) $option);
         }
 

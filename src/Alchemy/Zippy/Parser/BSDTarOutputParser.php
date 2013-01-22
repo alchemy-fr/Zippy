@@ -64,7 +64,7 @@ class BSDTarOutputParser implements ParserInterface
 
             $date = null;
 
-            foreach($dateFormats as $format) {
+            foreach ($dateFormats as $format) {
                 $date = \DateTime::createFromFormat($format,  $chunks[6]);
 
                 if (false === $date) {
