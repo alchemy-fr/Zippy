@@ -3,6 +3,7 @@
 namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
 use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Parser\ParserFactory;
 
 abstract class BSDTarAdapterWithOptionsTest extends TestCase
 {
@@ -33,7 +34,15 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
     public function setUp()
     {
         $classname = static::getAdapterClassName();
-        $this->adapter = $classname::newInstance();
+
+        $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+                ->disableOriginalConstructor()
+                ->setMethods(array('useBinary'))
+                ->getMock();
+
+        $outputParser = ParserFactory::create($classname::getName());
+
+        $this->adapter = new $classname($outputParser, $inflator);
     }
 
     public function testCreateNoFiles()

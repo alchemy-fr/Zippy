@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Parser\ParserFactory;
 
 class ZipAdapterTest extends TestCase
 {
@@ -32,7 +33,14 @@ class ZipAdapterTest extends TestCase
 
     public function setUp()
     {
-        $this->adapter = ZipAdapter::newInstance();
+        $inflator = $deflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+                                    ->disableOriginalConstructor()
+                                    ->setMethods(array('useBinary'))
+                                    ->getMock();
+
+        $outputParser = ParserFactory::create(ZipAdapter::getName());
+
+        $this->adapter = new ZipAdapter($outputParser, $inflator, $deflator);
     }
 
     /**
@@ -40,6 +48,10 @@ class ZipAdapterTest extends TestCase
      */
     public function testCreateNoFiles()
     {
+        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+
+        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+
         $this->adapter->create(self::$zipFile, array());
     }
 
