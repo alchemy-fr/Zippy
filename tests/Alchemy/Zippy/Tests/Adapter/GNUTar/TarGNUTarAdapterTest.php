@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Parser\ParserFactory;
 
 class TarGNUTarAdapterTest extends TestCase
 {
@@ -32,7 +33,14 @@ class TarGNUTarAdapterTest extends TestCase
 
     public function setUp()
     {
-        $this->adapter = TarGNUTarAdapter::newInstance();
+        $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+                ->disableOriginalConstructor()
+                ->setMethods(array('useBinary'))
+                ->getMock();
+
+        $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
+
+        $this->adapter = new TarGNUTarAdapter($outputParser, $inflator);
     }
 
     public function testCreateNoFiles()
