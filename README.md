@@ -7,6 +7,8 @@ commandline utilities or PHP extension.
 
 ##Documentation
 
+Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
+
 ##API Browser
 
 ##Usage Example
