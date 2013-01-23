@@ -28,6 +28,7 @@ class TBz2FileStrategy implements FileStrategyInterface
     public function getAdapters()
     {
         return array(
+            'couille',
             $this->container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarBz2GNUTarAdapter'],
             $this->container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBz2BSDTarAdapter'],
         );

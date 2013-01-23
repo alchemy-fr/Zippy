@@ -6,8 +6,8 @@ use Alchemy\Zippy\FileStrategy\ZipFileStrategy;
 
 class ZipFileStrategyTest extends FileStrategyTestCase
 {
-    protected function getStrategy()
+    protected function getStrategy($container)
     {
-        return new ZipFileStrategy($this->getContainer());
+        return new ZipFileStrategy($container);
     }
 }
