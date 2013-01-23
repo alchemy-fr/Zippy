@@ -7,3 +7,6 @@ html, body {
     background-color: #CE8B15;
 }
 
+a, a:visited {
+    color: #B01122;
+}
