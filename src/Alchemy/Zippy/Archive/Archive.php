@@ -101,6 +101,16 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
+    public function addStreamMembers($sources)
+    {
+        $this->adapter->addStream($this->location, $sources);
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function removeMembers($sources)
     {
         $this->adapter->remove($this->resource, $sources);

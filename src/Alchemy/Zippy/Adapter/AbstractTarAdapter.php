@@ -44,6 +44,15 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
+
+    /**
+     * @inheritdoc
+     */
+    public function addStream($path, $files)
+    {
+        return $this->doAdd($this->getLocalOptions(), $path, $files);
+    }
+
     /**
      * @inheritdoc
      */
@@ -253,7 +262,49 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doRemove($options, ResourceInterface $resource, $files)
+    protected function doAddStream($options, $path, $files)
+    {
+        $files = (array) $files;
+
+        $builder = $this
+            ->inflator
+            ->create();
+
+        $builder
+            ->add('--delete')
+            ->add('--append')
+            ->add(sprintf('--file=%s', $path));
+
+        foreach ((array) $options as $option) {
+            $builder->add((string) $option);
+        }
+
+        $tempFiles = $this->addBuilderResourceArgument($files, $builder);
+
+        if (0 === count($tempFiles)) {
+            throw new InvalidArgumentException('Invalid streams');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        foreach($tempFiles as $file) {
+            unlink($file->getPathname());
+        }
+
+        return $tempFiles;
+    }
+
+    protected function doRemove($options, $path, $files)
     {
         $files = (array) $files;
 

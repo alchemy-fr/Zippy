@@ -16,6 +16,8 @@ use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -40,7 +42,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         } else {
 
             if ($recursive) {
-                $builder->add('-R');
+                $builder->add('-r');
             }
 
             $builder->add($path);
@@ -139,7 +141,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         if ($recursive) {
-            $builder->add('-R');
+            $builder->add('-r');
         }
 
         $builder
@@ -161,6 +163,46 @@ class ZipAdapter extends AbstractBinaryAdapter
                 $process->getErrorOutput()
             ));
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function addStream($path, $files)
+    {
+        $files = (array) $files;
+
+        $builder = $this
+            ->inflator
+            ->create();
+
+        $builder
+            ->add('-u')
+            ->add($path);
+
+        $tempFiles = $this->addBuilderResourceArgument($files, $builder);
+
+        if (0 === count($tempFiles)) {
+            throw new InvalidArgumentException('Invalid streams');
+        }
+
+        $process = $builder->getProcess();
+
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            throw new RuntimeException(sprintf(
+                'Unable to execute the following command %s {output: %s}',
+                $process->getCommandLine(),
+                $process->getErrorOutput()
+            ));
+        }
+
+        foreach($tempFiles as $file) {
+            unlink($file->getPathname());
+        }
+
+        return $tempFiles;
     }
 
     /**

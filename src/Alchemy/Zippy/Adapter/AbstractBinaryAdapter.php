@@ -171,4 +171,45 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         return 0 !== $iterations;
     }
+
+     /**
+     * Adds a resource to argument list
+     *
+     * @param Array          $files   An array of resource or resource URI
+     * @param ProcessBuilder $builder A Builder instance
+     *
+     * @return Array    The added files
+     */
+    protected function addBuilderResourceArgument(array $files, ProcessBuilder $builder)
+    {
+        $temporaryCreatedFiles = array();
+
+        array_walk($files, function($resource, $location) use ($builder, &$temporaryCreatedFiles) {
+            $stream = null;
+
+            if (is_string($resource)) {
+                $stream = fopen($resource, 'r');
+            }
+
+            if (is_numeric($location)) {
+                $location = basename($resource);
+            }
+
+            if ($stream) {
+                $tempFileInfo = new \SplFileInfo(sprintf('%s/%s', getcwd(), $location));
+
+                $tempFile = $tempFileInfo->openFile('w');
+                $tempFile->fwrite(stream_get_contents($stream));
+                $tempFile->rewind();
+
+                $builder->add($tempFileInfo->getRealpath());
+
+                $temporaryCreatedFiles[] = $tempFileInfo;
+
+                fclose($stream);
+            }
+        });
+
+        return $temporaryCreatedFiles;
+    }
 }
