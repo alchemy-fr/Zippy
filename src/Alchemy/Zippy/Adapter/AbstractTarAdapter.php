@@ -44,7 +44,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
-
     /**
      * @inheritdoc
      */
@@ -297,7 +296,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        foreach($tempFiles as $file) {
+        foreach ($tempFiles as $file) {
             unlink($file->getPathname());
         }
 

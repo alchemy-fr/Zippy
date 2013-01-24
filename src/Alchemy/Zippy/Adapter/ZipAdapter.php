@@ -198,7 +198,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        foreach($tempFiles as $file) {
+        foreach ($tempFiles as $file) {
             unlink($file->getPathname());
         }
 
