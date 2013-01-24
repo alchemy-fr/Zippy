@@ -178,7 +178,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param Array          $files   An array of resource or resource URI
      * @param ProcessBuilder $builder A Builder instance
      *
-     * @return Array    The added files
+     * @return Array The added files
      */
     protected function addBuilderResourceArgument(array $files, ProcessBuilder $builder)
     {
