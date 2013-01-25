@@ -193,9 +193,11 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         chdir($tempDir);
 
-        if (!$this->addBuilderResourceArgument($files, $builder)) {
+        try {
+            $this->addBuilderResourceArgument($files, $builder);
+        } catch (ExceptionInterface $e) {
             chdir($savedWorkingDirectory);
-            throw new InvalidArgumentException('Invalid streams');
+            throw $e;
         }
 
         $process = $builder->getProcess();
