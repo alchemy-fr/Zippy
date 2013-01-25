@@ -11,7 +11,7 @@ class MemberTest extends TestCase
     public function testNewInstance()
     {
         $member = new Member(
-            'archive/located/here',
+            $this->getResource('archive/located/here'),
              $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface'),
             'location',
             1233456,
@@ -73,7 +73,7 @@ class MemberTest extends TestCase
             ->method('extractMembers');
 
         $member = new Member(
-           '/archive/located/here',
+           $this->getResource('archive/located/here'),
            $mockAdapter,
            '/member/located/here',
            1233456,
@@ -82,7 +82,7 @@ class MemberTest extends TestCase
         );
 
         $file = $member->extract();
-        $this->assertEquals('/archive/located/here/member/located/here', $file->getPathname());
+        $this->assertEquals(sprintf('%s%s', getcwd(), '/member/located/here'), $file->getPathname());
 
         $file = $member->extract('/custom/location');
         $this->assertEquals('/custom/location/member/located/here', $file->getPathname());

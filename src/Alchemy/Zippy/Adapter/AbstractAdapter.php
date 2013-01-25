@@ -13,6 +13,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Adapter\Resource\FileResource;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
@@ -21,6 +22,6 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function open($path)
     {
-        return new Archive($path, $this);
+        return new Archive($path, $this, new FileResource($path));
     }
 }

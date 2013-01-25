@@ -12,6 +12,7 @@
 namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 
 /**
  * Represents a member of an archive.
@@ -47,11 +48,11 @@ class Member implements MemberInterface
     private $lastModifiedDate;
 
     /**
-     * The path to the archive that contains the member
+     * The resource to the actual archive
      *
      * @var String
      */
-    private $archivePath;
+    private $resource;
 
     /**
      * An adapter
@@ -63,16 +64,16 @@ class Member implements MemberInterface
     /**
      * Constructor
      *
-     * @param String           $archivePath      The path of the archive which contain the member
-     * @param AdapterInterface $adapter          AdapterInterface    The archive adapter interface
-     * @param String           $location         The path of the archive member
-     * @param Integer          $fileSize         The uncompressed file size
-     * @param \DateTime        $lastModifiedDate The last modifed date of the member
-     * @param Boolean          $isDir            Tells wheteher the member is a directory or not
+     * @param ResourceInterface $resource         The path of the archive which contain the member
+     * @param AdapterInterface  $adapter          The archive adapter interface
+     * @param String            $location         The path of the archive member
+     * @param Integer           $fileSize         The uncompressed file size
+     * @param \DateTime         $lastModifiedDate The last modifed date of the member
+     * @param Boolean           $isDir            Tells wheteher the member is a directory or not
      */
-    public function __construct($archivePath, AdapterInterface $adapter, $location, $fileSize, \DateTime $lastModifiedDate, $isDir)
+    public function __construct(ResourceInterface $resource, AdapterInterface $adapter, $location, $fileSize, \DateTime $lastModifiedDate, $isDir)
     {
-        $this->archivePath = $archivePath;
+        $this->resource = $resource;
         $this->adapter = $adapter;
         $this->location = $location;
         $this->isDir = $isDir;
@@ -125,8 +126,8 @@ class Member implements MemberInterface
      */
     public function extract($to = null)
     {
-        $this->adapter->extractMembers($this->archivePath, $this->location, $to);
+        $this->adapter->extractMembers($this->resource, $this->location, $to);
 
-        return new \SplFileInfo(sprintf('%s%s', rtrim(null === $to ? $this->archivePath : $to, '/'), $this->location));
+        return new \SplFileInfo(sprintf('%s%s', rtrim(null === $to ? getcwd() : $to, '/'), $this->location));
     }
 }

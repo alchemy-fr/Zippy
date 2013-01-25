@@ -12,6 +12,8 @@
 namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
+use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 
 /**
  * Represents an archive
@@ -23,7 +25,7 @@ class Archive implements ArchiveInterface
      *
      * @var String
      */
-    protected $location;
+    protected $path;
 
     /**
      * The archive adapter
@@ -40,15 +42,22 @@ class Archive implements ArchiveInterface
     protected $members = array();
 
     /**
+     * @var ResourceInterface
+     */
+    protected $resource;
+
+    /**
      * Constructor
      *
-     * @param String           $location Path to the archive
-     * @param AdapterInterface $adapter  An archive adapter
+     * @param String            $path     Path to the archive
+     * @param AdapterInterface  $adapter  An archive adapter
+     * @param ResourceInterface $resource A resource
      */
-    public function __construct($location, AdapterInterface $adapter)
+    public function __construct($path, AdapterInterface $adapter, ResourceInterface $resource)
     {
         $this->adapter = $adapter;
-        $this->location = $location;
+        $this->path = $path;
+        $this->resource = $resource ?: new FileResource($resource);
     }
 
     /**
@@ -76,7 +85,7 @@ class Archive implements ArchiveInterface
      */
     public function getMembers()
     {
-        return $this->members = $this->adapter->listMembers($this->location);
+        return $this->members = $this->adapter->listMembers($this->resource);
     }
 
     /**
@@ -84,7 +93,7 @@ class Archive implements ArchiveInterface
      */
     public function addMembers($sources, $recursive = true)
     {
-        $this->adapter->add($this->location, $sources, $recursive);
+        $this->adapter->add($this->resource, $sources, $recursive);
 
         return $this;
     }
@@ -94,7 +103,7 @@ class Archive implements ArchiveInterface
      */
     public function removeMembers($sources)
     {
-        $this->adapter->remove($this->location, $sources);
+        $this->adapter->remove($this->resource, $sources);
 
         return $this;
     }
@@ -102,9 +111,9 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-    public function getLocation()
+    public function getPath()
     {
-        return $this->location;
+        return $this->path;
     }
 
     /**
@@ -112,7 +121,7 @@ class Archive implements ArchiveInterface
      */
      public function extract($to)
      {
-        $this->adapter->extract($this->location, $to);
+        $this->adapter->extract($this->resource, $to);
 
         return $this;
      }
@@ -122,7 +131,7 @@ class Archive implements ArchiveInterface
      */
     public function extractMembers($members)
     {
-        $this->adapter->extractMembers($this->location, $members);
+        $this->adapter->extractMembers($this->resource, $members);
 
         return $this;
     }
