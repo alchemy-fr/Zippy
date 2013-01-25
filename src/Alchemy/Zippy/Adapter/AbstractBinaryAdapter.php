@@ -161,19 +161,13 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         $iterations = 0;
 
         array_walk($files, function($file) use ($builder, &$iterations) {
-            $location = null;
+            $builder->add(
+                $file instanceof \SplFileInfo ?
+                $file->getRealpath() :
+                ($file instanceof MemberInterface ? $file->getLocation() : $file)
+            );
 
-            if ($file instanceof MemberInterface) {
-                $location = $file->getLocation();
-            } else {
-                $fileName = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
-                $location = ltrim(str_replace(getcwd(), '', $fileName),'/');
-            }
-
-            if ($location) {
-                $builder->add($location);
-                $iterations++;
-            }
+            $iterations++;
         });
 
         return 0 !== $iterations;
