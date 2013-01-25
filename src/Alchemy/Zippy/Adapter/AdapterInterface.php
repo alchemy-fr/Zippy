@@ -90,6 +90,7 @@ Interface AdapterInterface
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no files could be added
+     * @throws IOException In case no files could be written on disk
      */
     public function addStream($path, $files);
 

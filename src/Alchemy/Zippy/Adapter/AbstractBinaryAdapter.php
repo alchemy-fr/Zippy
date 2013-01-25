@@ -13,6 +13,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Parser\ParserInterface;
@@ -21,7 +22,6 @@ use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
-use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
@@ -173,19 +173,21 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         return 0 !== $iterations;
     }
 
-     /**
+    /**
      * Adds a resource to argument list
      *
      * @param Array          $files   An array of resource or resource URI
      * @param ProcessBuilder $builder A Builder instance
      *
-     * @return Boolean
+     * @return AbstractBinaryAdapter
+     *
+     * @throws RuntimeException In case resource could not be opened or readed
+     * @throws IOException In case Temporary direcory or fetched file could not be created
+     * @throws InvalidArgumentException In case the provided resource is invalid
      */
     protected function addBuilderResourceArgument(array $files, ProcessBuilder $builder)
     {
-        $iterations = 0;
-
-        array_walk($files, function($resource, $location) use ($builder, &$iterations) {
+        array_walk($files, function($resource, $location) use ($builder) {
             $stream = null;
             $location = ltrim($location, '/');
 
@@ -195,35 +197,48 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
                 $stream = fopen($resource, 'r');
             }
 
-            if ($stream) {
-                if (is_numeric($location)) {
-                    $meta = stream_get_meta_data($stream);
-                    $location = basename($meta['uri']);
-                }
-
-                $tempFileInfo = new \SplFileInfo(sprintf('%s/%s', getcwd(), $location));
-
-                if (!is_dir($tempFileInfo->getPath())) {
-                    mkdir($tempFileInfo->getPath(), 0777, true);
-                }
-
-                if (false !== $content = stream_get_contents($stream)) {
-                    try {
-                        $tempFile = $tempFileInfo->openFile('w');
-                        if (null !== $tempFile->fwrite($content)) {
-                            $builder->add($location);
-                            $iterations++;
-                        }
-                        unset($tempFile, $tempFileInfo);
-                    } catch (\RuntimeException $e) {
-
-                    }
-                }
-
-                fclose($stream);
+            if (null === $stream) {
+                throw new InvalidArgumentException('A resource must be either a resource or a path to the resource');
             }
+
+            if (false === $stream) {
+                throw new RuntimeException(sprintf('Fail to open stream %s', $resource));
+            }
+
+            if (is_numeric($location)) {
+                $meta = stream_get_meta_data($stream);
+                $location = basename($meta['uri']);
+            }
+
+            $tempFileInfo = new \SplFileInfo(sprintf('%s/%s', getcwd(), $location));
+
+            if (!is_dir($tempFileInfo->getPath()) && !mkdir($tempFileInfo->getPath(), 0777, true)) {
+                throw new IOException(sprintf('Fail to create directory %s', $tempFileInfo->getPath()));
+            }
+
+            if (false === $content = stream_get_contents($stream)) {
+                throw new RuntimeException(sprintf('Fail to fetch content from %s', $location));
+            }
+
+            try {
+                $tempFile = $tempFileInfo->openFile('w');
+                
+                if (null !== $tempFile->fwrite($content)) {
+                    $builder->add($location);
+                }
+
+                unset($tempFile, $tempFileInfo);
+            } catch (\RuntimeException $e) {
+                throw IOException(
+                    sprintf('failed to write %s', $tempFileInfo->getRealPath()),
+                    $e->getCode(),
+                    $e
+                );
+            }
+
+            fclose($stream);
         });
 
-        return 0 !== $iterations;
+        return $this;
     }
 }
