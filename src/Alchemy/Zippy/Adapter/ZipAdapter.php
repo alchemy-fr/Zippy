@@ -11,9 +11,11 @@
 
 namespace Alchemy\Zippy\Adapter;
 
+use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
-use Alchemy\Zippy\Archive\Archive;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -60,7 +62,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this);
+        return new Archive($path, $this, new FileResource($path));
     }
 
     /**
@@ -90,13 +92,13 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function listMembers($path)
+    public function listMembers(ResourceInterface $resource)
     {
         $process = $this
             ->deflator
             ->create()
             ->add('-l')
-            ->add($path)
+            ->add($resource->getResource())
             ->getProcess();
 
         $process->run();
@@ -113,7 +115,7 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
                $members[] = new Member(
-                $path,
+                $resource,
                 $this,
                 $member['location'],
                 $member['size'],
@@ -128,7 +130,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function add($path, $files, $recursive = true)
+    public function add(ResourceInterface $resource, $files, $recursive = true)
     {
         $files = (array) $files;
 
@@ -142,7 +144,7 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('-u')
-            ->add($path);
+            ->add($resource->getResource());
 
         if (!$this->addBuilderFileArgument($files, $builder)) {
             throw new InvalidArgumentException('Invalid files');
@@ -212,7 +214,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function remove($path, $files)
+    public function remove(ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
@@ -222,7 +224,7 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('-d')
-            ->add($path);
+            ->add($resource->getResource());
 
         if (!$this->addBuilderFileArgument($files, $builder)) {
             throw new InvalidArgumentException('Invalid files');
@@ -269,20 +271,18 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function extract($path, $to = null)
+    public function extract(ResourceInterface $resource, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
-
-        $archiveFile = new \SplFileInfo($path);
 
         $builder = $this
             ->deflator
             ->create();
 
         $builder
-            ->add($path);
+            ->add($resource->getResource());
 
         if (null !== $to) {
             $builder
@@ -302,13 +302,13 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return null === $to ? $archiveFile->getPathInfo() : new \SplFileInfo($to);
+        return new \SplFileInfo($to ?: $resource->getResource());
     }
 
     /**
      * @inheritdoc
      */
-    public function extractMembers($path, $members, $to = null)
+    public function extractMembers(ResourceInterface $resource, $members, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -321,7 +321,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         $builder
-            ->add($path);
+            ->add($resource->getResource());
 
         if (null !== $to) {
             $builder
