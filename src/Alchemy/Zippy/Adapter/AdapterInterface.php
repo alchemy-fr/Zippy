@@ -12,6 +12,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\ArchiveInterface;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
@@ -57,27 +58,27 @@ Interface AdapterInterface
     /**
      * Returns the list of all archive members
      *
-     * @param String $path The path to the archive
+     * @param ResourceInterface $resource The path to the archive
      *
      * @return Array
      *
      * @throws RuntimeException In case of failure
      */
-    public function listMembers($path);
+    public function listMembers(ResourceInterface $resource);
 
     /**
      * Adds a file to the archive
      *
-     * @param String                    $path  The path to the archive
-     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
-     * @param Boolean                   $files Whether or not to recurse in the provided directories
+     * @param ResourceInterface         $resource The path to the archive
+     * @param String|Array|\Traversable $files    A filename, an array of files, or a \Traversable instance
+     * @param Boolean                   $files    Whether or not to recurse in the provided directories
      *
      * @return Array
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no files could be added
      */
-    public function add($path, $files, $recursive = true);
+    public function add(ResourceInterface $resource, $files, $recursive = true);
 
     /**
      * Returns the adapter name
@@ -89,40 +90,40 @@ Interface AdapterInterface
     /**
      * Removes a member of the archive
      *
-     * @param String                    $path  The path to the archive
-     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     * @param ResourceInterface         $resource The path to the archive
+     * @param String|Array|\Traversable $files    A filename, an array of files, or a \Traversable instance
      *
      * @return Array
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no files could be removed
      */
-    public function remove($path, $files);
+    public function remove(ResourceInterface $resource, $files);
 
     /**
      * Extracts an entire archive
      *
-     * @param String      $path The path to the archive
-     * @param String|null $to   The path where to extract the archive
+     * @param ResourceInterface $resource The path to the archive
+     * @param String|null       $to       The path where to extract the archive
      *
      * @return \SplFileInfo The extracted archive
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case the provided path where to extract the archive is not valid
      */
-    public function extract($path, $to = null);
+    public function extract(ResourceInterface $resource, $to = null);
 
     /**
      * Extracts specific members of the archive
      *
-     * @param String      $path    The path to the archive
-     * @param Array       $members An array of members
-     * @param String|null $to      The path where to extract the members
+     * @param ResourceInterface $resource The path to the archive
+     * @param Array             $members  An array of members
+     * @param String|null       $to       The path where to extract the members
      *
      * @return \SplFileInfo The extracted archive
      *
      * @throws RuntimeException         In case of failure
      * @throws InvalidArgumentException In case no members could be removed or provide extract target direcotry is not valid
      */
-    public function extractMembers($path, $members, $to = null);
+    public function extractMembers(ResourceInterface $resource, $members, $to = null);
 }

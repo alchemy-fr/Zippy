@@ -11,6 +11,8 @@
 
 namespace Alchemy\Zippy\Adapter;
 
+use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
@@ -29,41 +31,41 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function listMembers($path)
+    public function listMembers(ResourceInterface $resource)
     {
-        return $this->doListMembers($this->getLocalOptions(), $path);
+        return $this->doListMembers($this->getLocalOptions(), $resource);
     }
 
     /**
      * @inheritdoc
      */
-    public function add($path, $files, $recursive = true)
+    public function add(ResourceInterface $resource, $files, $recursive = true)
     {
-        return $this->doAdd($this->getLocalOptions(), $path, $files, $recursive);
+        return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
     /**
      * @inheritdoc
      */
-    public function remove($path, $files)
+    public function remove(ResourceInterface $resource, $files)
     {
-        return $this->doRemove($this->getLocalOptions(), $path, $files);
+        return $this->doRemove($this->getLocalOptions(), $resource, $files);
     }
 
     /**
      * @inheritdoc
      */
-    public function extractMembers($path, $members, $to = null)
+    public function extractMembers(ResourceInterface $resource, $members, $to = null)
     {
-        return $this->doExtractMembers($this->getLocalOptions(), $path, $members, $to);
+        return $this->doExtractMembers($this->getLocalOptions(), $resource, $members, $to);
     }
 
     /**
      * @inheritdoc
      */
-    public function extract($path, $to = null)
+    public function extract(ResourceInterface $resource, $to = null)
     {
-        return $this->doExtract($this->getLocalOptions(), $path, $to);
+        return $this->doExtract($this->getLocalOptions(), $resource, $to);
     }
 
     /**
@@ -166,17 +168,17 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this);
+        return new Archive(new FileResource($path), $this);
     }
 
-    protected function doListMembers($options, $path)
+    protected function doListMembers($options, ResourceInterface $resource)
     {
         $builder = $this
             ->inflator
             ->create()
             ->add('--utc')
             ->add('--list')
-            ->add(sprintf('--file=%s', $path));
+            ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -197,7 +199,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         foreach ($this->parser->parseFileListing($process->getOutput() ? : '') as $member) {
             $members[] = new Member(
-                    $path,
+                    $resource,
                     $this,
                     $member['location'],
                     $member['size'],
@@ -209,7 +211,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $members;
     }
 
-    protected function doAdd($options, $path, $files, $recursive = true)
+    protected function doAdd($options, ResourceInterface $resource, $files, $recursive = true)
     {
         $files = (array) $files;
 
@@ -224,7 +226,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         $builder
             ->add('--delete')
             ->add('--append')
-            ->add(sprintf('--file=%s', $path));
+            ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -251,7 +253,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doRemove($options, $path, $files)
+    protected function doRemove($options, ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
@@ -261,7 +263,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--delete')
-            ->add(sprintf('--file=%s', $path));
+            ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -286,13 +288,11 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doExtract($options, $path, $to = null)
+    protected function doExtract($options, ResourceInterface $resource, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
-
-        $archiveFile = new \SplFileInfo($path);
 
         $builder = $this
             ->inflator
@@ -300,7 +300,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $path));
+            ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -324,10 +324,10 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return null === $to ? $archiveFile->getPathInfo() : new \SplFileInfo($to);
+        return new \SplFileInfo($to ? : $resource->getResource());
     }
 
-    protected function doExtractMembers($options, $path, $members, $to = null)
+    protected function doExtractMembers($options, ResourceInterface $resource, $members, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -341,7 +341,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $path));
+            ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);

@@ -21,7 +21,7 @@ interface ArchiveInterface extends \IteratorAggregate, \Countable
      *
      * @return String
      */
-    public function getLocation();
+    public function getPath();
 
     /**
      * Adds a file or a folder into the archive
