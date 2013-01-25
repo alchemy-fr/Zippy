@@ -49,10 +49,11 @@ class Archive implements ArchiveInterface
     /**
      * Constructor
      *
-     * @param String           $path    Path to the archive
-     * @param AdapterInterface $adapter An archive adapter
+     * @param String            $path     Path to the archive
+     * @param AdapterInterface  $adapter  An archive adapter
+     * @param ResourceInterface $resource A resource
      */
-    public function __construct($path, AdapterInterface $adapter, ResourceInterface $resource = null)
+    public function __construct($path, AdapterInterface $adapter, ResourceInterface $resource)
     {
         $this->adapter = $adapter;
         $this->path = $path;

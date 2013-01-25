@@ -148,7 +148,7 @@ class ZipAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(self::$zipFile))
+            ->with($this->equalTo($resource->getResource()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder

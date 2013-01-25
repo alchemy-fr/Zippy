@@ -168,7 +168,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive(new FileResource($path), $this);
+        return new Archive($path, $this, new FileResource($path));
     }
 
     protected function doListMembers($options, ResourceInterface $resource)

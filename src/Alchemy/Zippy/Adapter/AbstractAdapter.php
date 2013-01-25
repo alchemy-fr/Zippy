@@ -22,6 +22,6 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public function open($path)
     {
-        return new Archive(new FileResource($path), $this);
+        return new Archive($path, $this, new FileResource($path));
     }
 }
