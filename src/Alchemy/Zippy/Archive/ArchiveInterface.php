@@ -13,26 +13,9 @@ namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Archive\Options;
 
 interface ArchiveInterface extends \IteratorAggregate, \Countable
 {
-    /**
-     * Returns the archive options
-     *
-     * @return Options
-     */
-    public function getOptions();
-
-    /**
-     * Sets the archive options
-     *
-     * @param Options $option
-     *
-     * @return AdapterInterface
-     */
-    public function setOptions(Options $option);
-
     /**
      * Gets the location of the archive
      *

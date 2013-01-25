@@ -12,7 +12,6 @@
 namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
-use Alchemy\Zippy\Archive\Options;
 
 /**
  * Represents an archive
@@ -41,13 +40,6 @@ class Archive implements ArchiveInterface
     protected $members = array();
 
     /**
-     * A set of options
-     *
-     * @var Options
-     */
-    protected $options;
-
-    /**
      * Constructor
      *
      * @param String           $location Path to the archive
@@ -57,24 +49,6 @@ class Archive implements ArchiveInterface
     {
         $this->adapter = $adapter;
         $this->location = $location;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function setOptions(Options $options)
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 
     /**
