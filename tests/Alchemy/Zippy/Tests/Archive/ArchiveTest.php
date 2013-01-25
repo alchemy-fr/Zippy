@@ -5,7 +5,6 @@ namespace Alchemy\Zippy\Tests\Archive;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Archive\ArchiveInterface;
 use Alchemy\Zippy\Archive\Archive;
-use Alchemy\Zippy\Archive\Options;
 
 class ArchiveTest extends TestCase
 {
@@ -38,18 +37,6 @@ class ArchiveTest extends TestCase
         $archive = new Archive('location', $mockAdapter);
 
         $this->assertEquals(2, count($archive));
-    }
-
-    public function testGetSetOptions()
-    {
-        $archive = new Archive('location', $this->getAdapterMock());
-
-        $this->assertEquals(null, $archive->getOptions());
-
-        $options = new Options();
-        $archive->setOptions($options);
-
-        $this->assertEquals($options, $archive->getOptions());
     }
 
     public function testGetMembers()
