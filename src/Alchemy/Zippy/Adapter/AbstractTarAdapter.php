@@ -17,6 +17,8 @@ use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -49,7 +51,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
      */
     public function addStream($path, $files)
     {
-        return $this->doAdd($this->getLocalOptions(), $path, $files);
+        return $this->doAddStream($this->getLocalOptions(), $path, $files);
     }
 
     /**
@@ -270,23 +272,38 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->create();
 
         $builder
-            ->add('--delete')
             ->add('--append')
             ->add(sprintf('--file=%s', $path));
 
-        foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+        $savedWorkingDirectory = getcwd();
+
+        $tempDir = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
+
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir);
         }
 
-        $tempFiles = $this->addBuilderResourceArgument($files, $builder);
+        // change working directory
+        chdir($tempDir);
 
-        if (0 === count($tempFiles)) {
+        if (!$this->addBuilderResourceArgument($files, $builder)) {
+            chdir($savedWorkingDirectory);
             throw new InvalidArgumentException('Invalid streams');
         }
 
         $process = $builder->getProcess();
 
         $process->run();
+
+        chdir($savedWorkingDirectory);
+
+        $filesystem = new Filesystem();
+
+        try {
+            $filesystem->remove($tempDir);
+        } catch (IOException $e) {
+
+        }
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
@@ -295,12 +312,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $process->getErrorOutput()
             ));
         }
-
-        foreach ($tempFiles as $file) {
-            unlink($file->getPathname());
-        }
-
-        return $tempFiles;
     }
 
     protected function doRemove($options, $path, $files)
