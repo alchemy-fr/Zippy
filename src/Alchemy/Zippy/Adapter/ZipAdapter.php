@@ -18,6 +18,8 @@ use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -180,15 +182,35 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->add('-u')
             ->add($path);
 
-        $tempFiles = $this->addBuilderResourceArgument($files, $builder);
+        // use temporary folder as woking directory
+        $savedWorkingDirectory = getcwd();
 
-        if (0 === count($tempFiles)) {
+        $tempDir = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
+
+        if (!is_dir($tempDir)) {
+            mkdir($tempDir);
+        }
+
+        chdir($tempDir);
+
+        if (!$this->addBuilderResourceArgument($files, $builder)) {
+            chdir($savedWorkingDirectory);
             throw new InvalidArgumentException('Invalid streams');
         }
 
         $process = $builder->getProcess();
 
         $process->run();
+
+        chdir($savedWorkingDirectory);
+
+        $filesystem = new Filesystem();
+
+        try {
+            $filesystem->remove($tempDir);
+        } catch (IOException $e) {
+
+        }
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
@@ -197,12 +219,6 @@ class ZipAdapter extends AbstractBinaryAdapter
                 $process->getErrorOutput()
             ));
         }
-
-        foreach ($tempFiles as $file) {
-            unlink($file->getPathname());
-        }
-
-        return $tempFiles;
     }
 
     /**

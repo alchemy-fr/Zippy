@@ -21,6 +21,7 @@ use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
@@ -160,13 +161,19 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         $iterations = 0;
 
         array_walk($files, function($file) use ($builder, &$iterations) {
-            $builder->add(
-                $file instanceof \SplFileInfo ?
-                $file->getRealpath() :
-                ($file instanceof MemberInterface ? $file->getLocation() : $file)
-            );
+            $location = null;
 
-            $iterations++;
+            if ($file instanceof MemberInterface) {
+                $location = $file->getLocation();
+            } else {
+                $fileName = $file instanceof \SplFileInfo ? $file->getRealpath() : $file;
+                $location = ltrim(str_replace(getcwd(), '', $fileName),'/');
+            }
+
+            if ($location) {
+                $builder->add($location);
+                $iterations++;
+            }
         });
 
         return 0 !== $iterations;
@@ -178,38 +185,51 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param Array          $files   An array of resource or resource URI
      * @param ProcessBuilder $builder A Builder instance
      *
-     * @return Array The added files
+     * @return Boolean
      */
     protected function addBuilderResourceArgument(array $files, ProcessBuilder $builder)
     {
-        $temporaryCreatedFiles = array();
+        $iterations = 0;
 
-        array_walk($files, function($resource, $location) use ($builder, &$temporaryCreatedFiles) {
+        array_walk($files, function($resource, $location) use ($builder, &$iterations) {
             $stream = null;
+            $location = ltrim($location, '/');
 
-            if (is_string($resource)) {
+            if (is_resource($resource)) {
+                $stream = $resource;
+            } elseif (is_string($resource)) {
                 $stream = fopen($resource, 'r');
             }
 
-            if (is_numeric($location)) {
-                $location = basename($resource);
-            }
-
             if ($stream) {
+                if (is_numeric($location)) {
+                    $meta = stream_get_meta_data($stream);
+                    $location = basename($meta['uri']);
+                }
+
                 $tempFileInfo = new \SplFileInfo(sprintf('%s/%s', getcwd(), $location));
 
-                $tempFile = $tempFileInfo->openFile('w');
-                $tempFile->fwrite(stream_get_contents($stream));
-                $tempFile->rewind();
+                if (!is_dir($tempFileInfo->getPath())) {
+                    mkdir($tempFileInfo->getPath(), 0777, true);
+                }
 
-                $builder->add($tempFileInfo->getRealpath());
+                if (false !== $content = stream_get_contents($stream)) {
+                    try {
+                        $tempFile = $tempFileInfo->openFile('w');
+                        if (null !== $tempFile->fwrite($content)) {
+                            $builder->add($location);
+                            $iterations++;
+                        }
+                        unset($tempFile, $tempFileInfo);
+                    } catch (\RuntimeException $e) {
 
-                $temporaryCreatedFiles[] = $tempFileInfo;
+                    }
+                }
 
                 fclose($stream);
             }
         });
 
-        return $temporaryCreatedFiles;
+        return 0 !== $iterations;
     }
 }
