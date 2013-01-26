@@ -23,47 +23,19 @@ use Alchemy\Zippy\Resource\TeleporterFactory;
 class ResourceMapper
 {
     /**
-     * A folder as the reference context
-     *
-     * @var String
-     */
-    private $context;
-
-    /**
-     * A set of resources
-     *
-     * @var Array
-     */
-    private $resources;
-
-    /**
-     * A set of resource that live in the context
-     *
-     * @var Array
-     */
-    private $contextFiles = array();
-
-    /**
-     * A set of resource that do not live in the context
-
-     * @var Array
-     */
-    private $temporaryFiles = array();
-
-    public function __construct($context, array $resources)
-    {
-        $this->context = $context;
-        $this->resources = $resources;
-    }
-
-    /**
      * Maps resources to their appropriate ResourceTeleporter object
      *
      * @return An array of ResourceTeleporter objects
      */
-    public function map()
+    public function map($context, array $resources)
     {
-        foreach ($this->resources as $location => $resource) {
+        // A set of resource that live in the context
+        $contextFiles = array();
+        // A set of resource that do not live in the context
+        $temporaryFiles = array();
+
+
+        foreach ($resources as $location => $resource) {
             $location = ltrim($location, '/');
 
             // case resource is stream
@@ -73,11 +45,11 @@ class ResourceMapper
                 $url = parse_url($meta['uri']);
 
                 if ($this->isLocalFilesystem($meta['wrapper_type'])
-                        && $this->isFileInContext($url['path'])
+                        && $this->isFileInContext($url['path'], $context)
                             && !$this->isLocationCustomized($location)) {
-                    $target = $this->getRelativePathFromContext($url['path']);
+                    $target = $this->getRelativePathFromContext($url['path'], $context);
 
-                    $this->contextFiles[$target] = $this->getResourceTeleporter(
+                    $contextFiles[$target] = $this->getResourceTeleporter(
                         $meta['wrapper_type'],
                         $meta['uri'],
                         $target
@@ -92,7 +64,7 @@ class ResourceMapper
                     $target = $this->getCustomPath($location, $meta['uri']);
                 }
 
-                $this->temporaryFiles[$target] = $this->getResourceTeleporter(
+                $temporaryFiles[$target] = $this->getResourceTeleporter(
                     $meta['wrapper_type'],
                     $meta['uri'],
                     $target
@@ -110,11 +82,11 @@ class ResourceMapper
                 // resource is a resource URI
                 if (isset($url['scheme'])) {
                     if ($this->isLocalFilesystem($url['scheme'])
-                            && $this->isFileInContext($url['path'])
+                            && $this->isFileInContext($url['path'], $context)
                                 && !$this->isLocationCustomized($location)) {
-                        $target = $this->getRelativePathFromContext($url['path']);
+                        $target = $this->getRelativePathFromContext($url['path'], $context);
 
-                        $this->contextFiles[$target] = $this->getResourceTeleporter(
+                        $contextFiles[$target] = $this->getResourceTeleporter(
                             $url['scheme'],
                             $resource,
                             $target
@@ -129,7 +101,7 @@ class ResourceMapper
                         $target = $this->getCustomPath($location, $resource);
                     }
 
-                    $this->temporaryFiles[$target] = $this->getResourceTeleporter(
+                    $temporaryFiles[$target] = $this->getResourceTeleporter(
                         $url['scheme'],
                         $resource,
                         $target
@@ -139,16 +111,16 @@ class ResourceMapper
                 }
 
                 // resource is a local path
-                if ($this->isFileInContext($resource)) {
-                    $target = $this->getRelativePathFromContext($resource);
-                    $this->contextFiles[$target] = $this->getResourceTeleporter(
+                if ($this->isFileInContext($resource, $context)) {
+                    $target = $this->getRelativePathFromContext($resource, $context);
+                    $contextFiles[$target] = $this->getResourceTeleporter(
                         'local',
                         $resource,
                         $target
                     );
                 } else {
                     $target = $this->getBaseName($resource);
-                    $this->temporaryFiles[$target] = $this->getResourceTeleporter(
+                    $temporaryFiles[$target] = $this->getResourceTeleporter(
                         'local',
                         $resource,
                         $target
@@ -157,47 +129,7 @@ class ResourceMapper
             }
         }
 
-        return array_merge($this->contextFiles, $this->temporaryFiles);
-    }
-
-    public function getResources()
-    {
-        return $this->resources;
-    }
-
-    public function setResources($resources)
-    {
-        $this->resources = $resources;
-    }
-
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    public function setContext($context)
-    {
-        $this->context = $context;
-    }
-
-    public function getContextFiles()
-    {
-        return $this->contextFiles;
-    }
-
-    public function setContextFiles($contextFiles)
-    {
-        $this->contextFiles = $contextFiles;
-    }
-
-    public function getTemporaryFiles()
-    {
-        return $this->temporaryFiles;
-    }
-
-    public function setTemporaryFiles($temporaryFiles)
-    {
-        $this->temporaryFiles = $temporaryFiles;
+        return array_merge($contextFiles, $temporaryFiles);
     }
 
     /**
@@ -225,9 +157,9 @@ class ResourceMapper
      *
      * @return Boolean
      */
-    private function isFileInContext($path)
+    private function isFileInContext($path, $context)
     {
-        return false !== stripos($path, $this->context);
+        return false !== stripos($path, $context);
     }
 
     /**
@@ -237,9 +169,9 @@ class ResourceMapper
      *
      * @return String
      */
-    private function getRelativePathFromContext($path)
+    private function getRelativePathFromContext($path, $context)
     {
-        return ltrim(str_replace($this->context, '', $path), '/');
+        return ltrim(str_replace($context, '', $path), '/');
     }
 
     /**
