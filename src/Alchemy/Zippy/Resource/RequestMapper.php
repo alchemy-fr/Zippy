@@ -20,7 +20,7 @@ use Alchemy\Zippy\Resource\TeleporterFactory;
  * that do not and getting the appropriate ResourceTeleporter object for each
  * resource
  */
-class ResourceMapper
+class RequestMapper
 {
     private $locator;
 
@@ -30,9 +30,9 @@ class ResourceMapper
     }
 
     /**
-     * Maps resources to their appropriate ResourceTeleporter object
+     * Maps resources request to a ResourceCollection
      *
-     * @return An array of ResourceTeleporter objects
+     * @return ResourceRequest
      */
     public function map($context, array $resources)
     {
