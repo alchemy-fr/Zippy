@@ -14,7 +14,7 @@ namespace Alchemy\Zippy\Resource;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Resource\ResourceMapper;
+use Alchemy\Zippy\Resource\RequestMapper;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -26,7 +26,7 @@ class ResourceManager
     private $teleporter;
     private $filesystem;
 
-    public function __construct(ResourceMapper $mapper, ResourceTeleporter $teleporter, Filesystem $filesystem)
+    public function __construct(RequestMapper $mapper, ResourceTeleporter $teleporter, Filesystem $filesystem)
     {
         $this->mapper = $mapper;
         $this->filesystem = $filesystem;
