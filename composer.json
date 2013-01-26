@@ -15,7 +15,8 @@
         "php": ">=5.3.3",
         "pimple/pimple": "~1",
         "symfony/process": "~2",
-        "symfony/filesystem": "~2"
+        "symfony/filesystem": "~2",
+        "guzzle/guzzle": "~3"
     },
     "autoload": {
         "psr-0": {
