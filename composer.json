@@ -12,17 +12,18 @@
     }
     ],
     "require": {
-        "php"                : ">=5.3.3",
-        "pimple/pimple"      : "~1.0",
-        "symfony/process"    : "~2.0",
-        "symfony/filesystem" : "~2.0",
-        "guzzle/guzzle"      : "~3.0"
+        "php"                  : ">=5.3.3",
+        "doctrine/collections" : "~1",
+        "guzzle/guzzle"        : "~3.0",
+        "pimple/pimple"        : "~1.0",
+        "symfony/process"      : "~2.0",
+        "symfony/filesystem"   : "~2.0"
     },
     "require-dev": {
-        "ext-zip"         : "*"
+        "ext-zip"              : "*"
     },
     "suggest": {
-        "ext-zip" : "To use the ZipExtensionAdapter"
+        "ext-zip"              : "To use the ZipExtensionAdapter"
     },
     "autoload": {
         "psr-0": {
