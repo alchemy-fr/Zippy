@@ -11,6 +11,7 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
+use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 
@@ -22,8 +23,11 @@ class StreamTeleporter implements TeleporterInterface
     /**
      * {@inheritdoc}
      */
-    public function teleport($from, $to)
+    public function teleport(Resource $resource, $context)
     {
+        $from = $resource->getOriginal();
+        $to = $context . $resource->getTarget();
+
         if (is_resource($from)) {
             $stream = $from;
         } else {

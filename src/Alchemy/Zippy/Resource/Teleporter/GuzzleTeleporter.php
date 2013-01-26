@@ -11,6 +11,7 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
+use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\IOException;
 use Guzzle\Http\Client;
@@ -25,7 +26,7 @@ class GuzzleTeleporter implements TeleporterInterface
     /**
      * {@inheritdoc}
      */
-    public function teleport($from, $to)
+    public function teleport(Resource $resource, $context)
     {
         $client = new Client();
 
@@ -39,7 +40,7 @@ class GuzzleTeleporter implements TeleporterInterface
         // Add the backoff plugin to the client object
         $client->addSubscriber($backoffPlugin);
 
-        $response = $client->get($from)->send();
+        $response = $client->get($resource->getOriginal())->send();
 
         if (!$response->isSuccessful()) {
             throw new InvalidArgumentException('provided resource URI is not valid');
@@ -47,7 +48,7 @@ class GuzzleTeleporter implements TeleporterInterface
 
         $response->getBody()->seek(0);
 
-        if (false === file_put_contents($to, $response->getBody())) {
+        if (false === file_put_contents($context . $resource->getTarget(), $response->getBody())) {
             throw new IOException(sprintf('Could not write %s', $to));
         }
     }
