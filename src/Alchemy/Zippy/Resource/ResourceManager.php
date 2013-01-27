@@ -11,11 +11,10 @@
 
 namespace Alchemy\Zippy\Resource;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Resource\RequestMapper;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 
 /**
  * This class is responsible of handling resources retrievals mechanism

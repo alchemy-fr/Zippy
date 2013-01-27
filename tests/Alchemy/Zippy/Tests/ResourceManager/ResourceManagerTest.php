@@ -9,6 +9,7 @@ class ResourceManagerTest extends TestCase
 {
     public function testFetch()
     {
+        $this->markTestIncomplete('To rewrite when API will be stable');
         $wd = '/working/directory';
 
         $arguments = array(

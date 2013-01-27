@@ -17,8 +17,7 @@ use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -171,7 +170,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($path, $this, $this->manager);
     }
 
     protected function doListMembers($options, ResourceInterface $resource)

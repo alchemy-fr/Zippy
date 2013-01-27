@@ -9,13 +9,11 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         return __DIR__ . '/../../../resources';
     }
 
-    public function getResource($expectedResource)
+    protected function getResourceManagerMock()
     {
-        $resource = $this->getMock('Alchemy\Zippy\Adapter\Resource\ResourceInterface');
-        $resource->expects($this->any())
-            ->method('getResource')
-            ->will($this->returnValue($expectedResource));
-
-        return $resource;
+        return $this
+            ->getMockBuilder('Alchemy\Zippy\Resource\ResourceManager')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }
