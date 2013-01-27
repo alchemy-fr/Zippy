@@ -17,11 +17,18 @@ use Alchemy\Zippy\Adapter\Resource\FileResource;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
+    protected $manager;
+
+    public function __construct(ResourceManager $manager)
+    {
+        $this->manager = $manager;
+    }
+
     /**
      * @inheritdoc
      */
     public function open($path)
     {
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($path, $this, $this->manager);
     }
 }
