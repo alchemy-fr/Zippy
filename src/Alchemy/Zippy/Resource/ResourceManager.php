@@ -33,9 +33,9 @@ class ResourceManager
         $this->teleporter = $teleporter;
     }
 
-    public function handle($context, $resources)
+    public function handle($context, $request)
     {
-        $resources = $this->mapper->map($context, $resources);
+        $resources = $this->mapper->map($context, $request);
 
         if(!$resources->canBeProcessedInPlace()){
             $context = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
@@ -67,5 +67,10 @@ class ResourceManager
 
             }
         }
+    }
+
+    public static function create()
+    {
+        return new static(RequestMapper::create(), ResourceTeleporter::create(), new Filesystem());
     }
 }

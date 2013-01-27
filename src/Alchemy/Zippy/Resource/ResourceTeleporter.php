@@ -32,4 +32,8 @@ class ResourceTeleporter
         return $this;
     }
 
+    public static function create()
+    {
+        return new static(TeleporterContainer::load());
+    }
 }

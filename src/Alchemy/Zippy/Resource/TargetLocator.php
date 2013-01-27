@@ -2,16 +2,19 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Exception\InvalidResourceException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
+
 class TargetLocator
 {
     public function locate($context, $resource)
     {
         switch(true) {
             case is_resource($resource):
-                return $this->locateFromResource($resource);
+                return $this->locateResource($resource);
                 break;
             case is_string($resource):
-                return $this->locateFromString($context, $resource);
+                return $this->locateString($context, $resource);
                 break;
             default:
                 throw new InvalidArgumentException('Unknown resource format');
@@ -19,19 +22,23 @@ class TargetLocator
         }
     }
 
-    private function locateFromResource($resource)
+    private function locateResource($resource)
     {
         $meta = stream_get_meta_data($resource);
         $data = parse_url($meta['uri']);
 
+        if (!isset($data['path'])) {
+            throw new InvalidResourceException($resource, 'Unable to retrieve path from resource');
+        }
+
         return basename($data['path']);
     }
 
-    private function locateFromString($context, $resource)
+    private function locateString($context, $resource)
     {
         $url = parse_url($resource);
 
-        // resource is a resource URI
+        // resource is a URI
         if (isset($url['scheme'])) {
             if ($this->isLocalFilesystem($url['scheme']) && $this->isFileInContext($url['path'], $context)) {
                 return $this->getRelativePathFromContext($url['path'], $context);
@@ -57,7 +64,7 @@ class TargetLocator
      */
     private function isFileInContext($path, $context)
     {
-        return false !== stripos($path, $context);
+        return 0 === strpos($path, $context);
     }
 
     /**
@@ -69,7 +76,7 @@ class TargetLocator
      */
     private function getRelativePathFromContext($path, $context)
     {
-        return ltrim(str_replace($context, '', $path), '/');
+        return ltrim(str_replace($context, '', $path), '/\\');
     }
 
     /**
@@ -82,7 +89,7 @@ class TargetLocator
      */
     private function getCustomPath($location, $path)
     {
-        return sprintf('%s/%s', ltrim(rtrim($location, '/'), '/'), basename($path));
+        return sprintf('%s/%s', ltrim(rtrim($location, '/\\'), '/\\'), basename($path));
     }
 
     /**
