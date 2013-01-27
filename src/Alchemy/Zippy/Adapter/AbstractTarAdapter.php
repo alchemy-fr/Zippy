@@ -46,18 +46,11 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function addStream($path, $files)
-    {
-        return $this->doAddStream($this->getLocalOptions(), $path, $files);
-    }
 
     /**
      * @inheritdoc
      */
-    public function remove(ResourceInterface $resource, $files)
+    public function remove($path, $files)
     {
         return $this->doRemove($this->getLocalOptions(), $resource, $files);
     }
@@ -261,57 +254,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         }
 
         return $files;
-    }
-
-    protected function doAddStream($options, $path, $files)
-    {
-        $files = (array) $files;
-
-        $builder = $this
-            ->inflator
-            ->create();
-
-        $builder
-            ->add('--append')
-            ->add(sprintf('--file=%s', $path));
-
-        $savedWorkingDirectory = getcwd();
-
-        $tempDir = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
-
-        if (!is_dir($tempDir)) {
-            mkdir($tempDir);
-        }
-
-        // change working directory
-        chdir($tempDir);
-
-        if (!$this->addBuilderResourceArgument($files, $builder)) {
-            chdir($savedWorkingDirectory);
-            throw new InvalidArgumentException('Invalid streams');
-        }
-
-        $process = $builder->getProcess();
-
-        $process->run();
-
-        chdir($savedWorkingDirectory);
-
-        $filesystem = new Filesystem();
-
-        try {
-            $filesystem->remove($tempDir);
-        } catch (IOException $e) {
-
-        }
-
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf(
-                'Unable to execute the following command %s {output: %s}',
-                $process->getCommandLine(),
-                $process->getErrorOutput()
-            ));
-        }
     }
 
     protected function doRemove($options, $path, $files)

@@ -81,20 +81,6 @@ Interface AdapterInterface
     public function add(ResourceInterface $resource, $files, $recursive = true);
 
     /**
-     * Adds a file from stream resource into to the archive
-     *
-     * @param String       $path  The path to the archive
-     * @param String|Array $files An array of resources or resource URIs
-     *
-     * @return Array
-     *
-     * @throws RuntimeException         In case of failure
-     * @throws InvalidArgumentException In case no files could be added
-     * @throws IOException In case no files could be written on disk
-     */
-    public function addStream($path, $files);
-
-    /**
      * Returns the adapter name
      *
      * @return String
