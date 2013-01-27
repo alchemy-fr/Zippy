@@ -11,9 +11,6 @@
 
 namespace Alchemy\Zippy\Resource;
 
-use Alchemy\Zippy\Resource\ResourceTeleporter;
-use Alchemy\Zippy\Resource\TeleporterFactory;
-
 /**
  * This class is responsible of looping throught a set of provided
  * resource, separate the resources that belong to the reference context from them
@@ -47,5 +44,10 @@ class RequestMapper
         }
 
         return $collection;
+    }
+
+    public static function create()
+    {
+        return new static(new TargetLocator());
     }
 }

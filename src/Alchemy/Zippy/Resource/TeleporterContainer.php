@@ -2,6 +2,7 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\StreamTeleporter;
@@ -23,9 +24,6 @@ class TeleporterContainer extends \Pimple
                 } elseif (in_array($data['scheme'], array('http', 'https'))) {
                     $teleporter = 'guzzle-teleporter';
                 } else {
-                    // todo :
-                    // transform original resource in stream here instead to do
-                    // this inside the stream teleporter
                     $teleporter = 'stream-teleporter';
                 }
                 break;
