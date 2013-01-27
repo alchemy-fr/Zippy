@@ -20,25 +20,37 @@ use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 /**
  * This class transport an object using the local filesystem
  */
-class LocalTeleporter implements TeleporterInterface
+class LocalTeleporter extends AbstractTeleporter
 {
+    private $filesystem;
+
+    public function __construct(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function teleport(Resource $resource, $context)
     {
-        $filesytem = new Filesystem();
+        $target = $this->getTarget($context, $resource);
 
         try {
             if (is_file($resource->getOriginal())) {
-                $filesytem->copy($resource->getOriginal(), $context.$resource->getTarget());
+                $this->filesytem->copy($resource->getOriginal(), $target);
             } elseif (is_dir($resource->getOriginal())) {
-                $filesytem->mirror($resource->getOriginal(), $context.$resource->getTarget(), true);
+                $this->filesytem->mirror($resource->getOriginal(), $target, true);
+            } else {
+                throw new InvalidArgumentException('Resource must be a file or a directory');
             }
         } catch (SfIOException $e) {
-            throw new IOException(sprintf('Could not write %s', $context.$resource->getTarget()), $e->getCode(), $e);
+            throw new IOException(sprintf('Could not write %s', $target), $e->getCode(), $e);
         }
+    }
 
-        throw new InvalidArgumentException(sprintf('%s must be a file or a directory', $resource->getOriginal()));
+    public static function create()
+    {
+        return new static(new Filesystem());
     }
 }
