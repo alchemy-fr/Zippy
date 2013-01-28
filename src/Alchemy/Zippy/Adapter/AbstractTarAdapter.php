@@ -17,6 +17,7 @@ use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -44,10 +45,11 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
+
     /**
      * @inheritdoc
      */
-    public function remove(ResourceInterface $resource, $files)
+    public function remove($path, $files)
     {
         return $this->doRemove($this->getLocalOptions(), $resource, $files);
     }
@@ -168,7 +170,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($path, $this, $this->manager);
     }
 
     protected function doListMembers($options, ResourceInterface $resource)
@@ -253,7 +255,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doRemove($options, ResourceInterface $resource, $files)
+    protected function doRemove($options, $path, $files)
     {
         $files = (array) $files;
 

@@ -16,6 +16,10 @@ use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -40,7 +44,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         } else {
 
             if ($recursive) {
-                $builder->add('-R');
+                $builder->add('-r');
             }
 
             $builder->add($path);
@@ -62,7 +66,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($path, $this, $this->manager);
     }
 
     /**
@@ -139,7 +143,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         if ($recursive) {
-            $builder->add('-R');
+            $builder->add('-r');
         }
 
         $builder

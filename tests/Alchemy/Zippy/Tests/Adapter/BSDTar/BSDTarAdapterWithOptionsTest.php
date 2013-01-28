@@ -42,7 +42,7 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $outputParser = ParserFactory::create($classname::getName());
 
-        $this->adapter = new $classname($outputParser, $inflator);
+        $this->adapter = new $classname($outputParser, $this->getResourceManagerMock(), $inflator);
     }
 
     public function testCreateNoFiles()

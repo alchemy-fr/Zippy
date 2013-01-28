@@ -40,7 +40,7 @@ class TarBSDTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $inflator);
+        $this->adapter = new TarBSDTarAdapter($outputParser, $this->getResourceManagerMock(), $inflator);
     }
 
     public function testCreateNoFiles()
