@@ -40,7 +40,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         } else {
 
             if ($recursive) {
-                $builder->add('-R');
+                $builder->add('-r');
             }
 
             $builder->add($path);
@@ -139,7 +139,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         if ($recursive) {
-            $builder->add('-R');
+            $builder->add('-r');
         }
 
         $builder

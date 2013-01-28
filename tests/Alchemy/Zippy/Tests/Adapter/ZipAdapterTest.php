@@ -62,7 +62,7 @@ class ZipAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-R'))
+            ->with($this->equalTo('-r'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -136,7 +136,7 @@ class ZipAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('-R'))
+            ->with($this->equalTo('-r'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
