@@ -69,9 +69,9 @@ Interface AdapterInterface
     /**
      * Adds a file to the archive
      *
-     * @param ResourceInterface         $resource The path to the archive
-     * @param String|Array|\Traversable $files    A filename, an array of files, or a \Traversable instance
-     * @param Boolean                   $files    Whether or not to recurse in the provided directories
+     * @param String                    $path  The path to the archive
+     * @param String|Array|\Traversable $files An array of paths to add, relative to cwd
+     * @param Boolean                   $files Whether or not to recurse in the provided directories
      *
      * @return Array
      *
@@ -79,20 +79,6 @@ Interface AdapterInterface
      * @throws InvalidArgumentException In case no files could be added
      */
     public function add(ResourceInterface $resource, $files, $recursive = true);
-
-    /**
-     * Adds a file from stream resource into to the archive
-     *
-     * @param String       $path  The path to the archive
-     * @param String|Array $files An array of resources or resource URIs
-     *
-     * @return Array
-     *
-     * @throws RuntimeException         In case of failure
-     * @throws InvalidArgumentException In case no files could be added
-     * @throws IOException In case no files could be written on disk
-     */
-    public function addStream($path, $files);
 
     /**
      * Returns the adapter name

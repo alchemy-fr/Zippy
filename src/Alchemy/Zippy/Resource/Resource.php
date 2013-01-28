@@ -16,52 +16,48 @@ namespace Alchemy\Zippy\Resource;
  */
 class Resource
 {
+    private $original;
+    private $target;
+
+    public function __construct($original, $target)
+    {
+        $this->original = $original;
+        $this->target = $target;
+    }
+
+    public function getTarget()
+    {
+        return $this->target;
+    }
+
+    public function getOriginal()
+    {
+        return $this->original;
+    }
+
     /**
-     * A path to a folder as the context
+     * Returns wheter the resource can be processed in place given a context or not.
      *
-     * @var String
-     */
-    private $context;
-
-    /**
-     * A resource relative path according to the context
-     * @var String
-     */
-    private $relativepath;
-
-    public function __constuct($workingDirectory, $relativepath)
-    {
-        $this->context = $workingDirectory;
-        $this->relativepath = $relativepath;
-    }
-
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    public function setContext($workingDirectory)
-    {
-        $this->context = $workingDirectory;
-    }
-
-    public function getRelativepath()
-    {
-        return $this->relativepath;
-    }
-
-    public function setRelativepath($relativepath)
-    {
-        $this->relativepath = $relativepath;
-    }
-
-    /**
-     * Gets the full resource path
+     * For example :
+     *   - /path/to/file1 can be processed to file1 in /path/to context
+     *   - /path/to/subdir/file2 can be processed to subdir/file2 in /path/to context
      *
-     * @return String
+     * @param string $context
+     *
+     * @return Boolean
      */
-    public function getPath()
+    public function canBeProcessedInPlace($context)
     {
-         return sprintf('%s/%s', rtrim($this->context, '/'), $this->relativepath);
+        if (!is_string($this->original)) {
+            return false;
+        }
+
+        $data = parse_url($this->original);
+
+        if (!isset($data['path'])) {
+            return false;
+        }
+
+        return sprintf('%s/%s', rtrim($context, '/'), $this->target) === $data['path'];
     }
 }

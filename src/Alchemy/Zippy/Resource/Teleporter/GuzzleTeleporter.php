@@ -11,44 +11,54 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Exception\IOException;
+use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Exception\RuntimeException;
 use Guzzle\Http\Client;
 use Guzzle\Plugin\Backoff\BackoffPlugin;
 use Guzzle\Common\Event;
 
 /**
- * This class transport an object using the HTTP protocol
+ * Guzzle Teleporter implementation for HTTP resources
  */
-class GuzzleTeleporter implements TeleporterInterface
+class GuzzleTeleporter extends AbstractTeleporter
 {
+    private $client;
+
+    public function __construct(Client $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function teleport($from, $to)
+    public function teleport(Resource $resource, $context)
     {
-        $client = new Client();
-
-        $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
-            // override guzzle default behavior of throwing exceptions when 4xx & 5xx responses are encountered
-            $event->stopPropagation();
-        }, -254);
-
-        // Use a static factory method to get a backoff plugin using the exponential backoff strategy
-        $backoffPlugin = BackoffPlugin::getExponentialBackoff(3, array(500, 503, 408));
-        // Add the backoff plugin to the client object
-        $client->addSubscriber($backoffPlugin);
-
-        $response = $client->get($from)->send();
+        $response = $this->client->get($resource->getOriginal())->send();
 
         if (!$response->isSuccessful()) {
-            throw new InvalidArgumentException('provided resource URI is not valid');
+            throw new RuntimeException(sprintf('Unable to fetch %s', $resource->getOriginal()));
         }
 
         $response->getBody()->seek(0);
 
-        if (false === file_put_contents($to, $response->getBody())) {
-            throw new IOException(sprintf('Could not write %s', $to));
-        }
+        $this->writeTarget($response->getBody(true), $resource, $context);
+
+        return $this;
+    }
+
+    public static function create()
+    {
+        $client = new Client();
+
+        $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
+            // override guzzle default behavior of throwing exceptions
+            // when 4xx & 5xx responses are encountered
+            $event->stopPropagation();
+        }, -254);
+
+        $client->addSubscriber(BackoffPlugin::getExponentialBackoff(5, array(500, 502, 503, 408)));
+
+        return new static($client);
     }
 }

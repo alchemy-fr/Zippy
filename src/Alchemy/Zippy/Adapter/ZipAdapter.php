@@ -66,7 +66,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($path, $this, $this->manager);
     }
 
     /**
@@ -157,62 +157,6 @@ class ZipAdapter extends AbstractBinaryAdapter
         $process = $builder->getProcess();
 
         $process->run();
-
-        if (!$process->isSuccessful()) {
-            throw new RuntimeException(sprintf(
-                'Unable to execute the following command %s {output: %s}',
-                $process->getCommandLine(),
-                $process->getErrorOutput()
-            ));
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addStream($path, $files)
-    {
-        $files = (array) $files;
-
-        $builder = $this
-            ->inflator
-            ->create();
-
-        $builder
-            ->add('-u')
-            ->add($path);
-
-        // use temporary folder as woking directory
-        $savedWorkingDirectory = getcwd();
-
-        $tempDir = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
-
-        if (!is_dir($tempDir)) {
-            mkdir($tempDir);
-        }
-
-        chdir($tempDir);
-
-        try {
-            $this->addBuilderResourceArgument($files, $builder);
-        } catch (ExceptionInterface $e) {
-            chdir($savedWorkingDirectory);
-            throw $e;
-        }
-
-        $process = $builder->getProcess();
-
-        $process->run();
-
-        chdir($savedWorkingDirectory);
-
-        $filesystem = new Filesystem();
-
-        try {
-            $filesystem->remove($tempDir);
-        } catch (IOException $e) {
-
-        }
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(

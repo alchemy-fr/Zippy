@@ -40,7 +40,7 @@ class TarGNUTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
 
-        $this->adapter = new TarGNUTarAdapter($outputParser, $inflator);
+        $this->adapter = new TarGNUTarAdapter($outputParser, $this->getResourceManagerMock(), $inflator);
     }
 
     public function testCreateNoFiles()

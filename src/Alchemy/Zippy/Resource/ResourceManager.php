@@ -11,11 +11,10 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Exception\IOException;
+use Alchemy\Zippy\Resource\RequestMapper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
-use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Resource\ResourceMapper;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * This class is responsible of handling resources retrievals mechanism
@@ -23,93 +22,54 @@ use Symfony\Component\Filesystem\Filesystem;
 class ResourceManager
 {
     private $mapper;
-    private $context;
+    private $teleporter;
     private $filesystem;
 
-    public function __construct(ResourceMapper $mapper)
+    public function __construct(RequestMapper $mapper, ResourceTeleporter $teleporter, Filesystem $filesystem)
     {
         $this->mapper = $mapper;
-        $this->filesystem = new Filesystem();
+        $this->filesystem = $filesystem;
+        $this->teleporter = $teleporter;
     }
 
-    /**
-     * Loop throught the resource mapper and fetch resource to the approriate
-     * context
-     *
-     * @return Array an array of Resource object
-     *
-     * @throws IOException In case temporary directory could not be created
-     */
-    public function handle()
+    public function handle($context, $request)
     {
-        $resources = $this->mapper->map();
+        $resources = $this->mapper->map($context, $request);
 
-        // default context is mapper context
-        $this->context = $this->mapper->getContext();
-
-        if ($this->requireTemporaryDirectory()) {
-            // change context to temporary folder
-            $this->context = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
+        if(!$resources->canBeProcessedInPlace()){
+            $context = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
 
             try {
-                $this->filesystem->mkdir($this->context);
+                $this->filesystem->mkdir($context);
             } catch (SfIOException $e) {
-                throw new IOException(sprintf('Could not create temporary folder %s', $this->context), $e->getCode(), $e);
+                throw new IOException(sprintf('Could not create temporary folder %s', $context), $e->getCode(), $e);
             }
+
+            $resources->setContext($context);
+
+            foreach ($resources as $resource) {
+                $this->teleporter->teleport($context, $resource);
+            }
+
+            $resources->setTemporary(true);
         }
 
-        $resourceCollection = array();
-
-        // teleport all resource to the appropriate context
-        foreach ($resources as $resourceTeleporter) {
-            $resourceCollection[] = $resourceTeleporter->teleport($this->context);
-        }
-
-        return $resourceCollection;
+        return $resources;
     }
 
-    /**
-     * Remove temporary directory
-     */
-    public function deleteTemporaryFiles()
+    public function cleanup(ResourceCollection $collection)
     {
-        if ($this->requireTemporaryDirectory() && $this->context) {
+        if($collection->isTemporary()) {
             try {
-                $this->filesystem->remove($this->context);
+                $this->filesystem->remove($collection->getContext());
             } catch (IOException $e) {
 
             }
         }
     }
 
-    /**
-     * Tells whether if the fetched resources need the creation of a temporary
-     * folder
-     *
-     * @return Boolean
-     */
-    public function requireTemporaryDirectory()
+    public static function create()
     {
-        return count($this->mapper->getTemporaryFiles()) > 0;
-    }
-
-    public function getMapper()
-    {
-        return $this->mapper;
-    }
-
-    public function setMapper($mapper)
-    {
-        $this->mapper = $mapper;
-    }
-
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    public function setContext($context)
-    {
-        $this->context = $context;
+        return new static(RequestMapper::create(), ResourceTeleporter::create(), new Filesystem());
     }
 }

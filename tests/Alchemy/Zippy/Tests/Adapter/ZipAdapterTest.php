@@ -40,7 +40,7 @@ class ZipAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(ZipAdapter::getName());
 
-        $this->adapter = new ZipAdapter($outputParser, $inflator, $deflator);
+        $this->adapter = new ZipAdapter($outputParser, $this->getResourceManagerMock(), $inflator, $deflator);
     }
 
     /**

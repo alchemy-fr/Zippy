@@ -11,33 +11,46 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
+use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 
 /**
  * This class transport an object using the local filesystem
  */
-class LocalTeleporter implements TeleporterInterface
+class LocalTeleporter extends AbstractTeleporter
 {
+    private $filesystem;
+
+    public function __construct(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * {@inheritdoc}
      */
-    public function teleport($from, $to)
+    public function teleport(Resource $resource, $context)
     {
-        $filesytem = new Filesystem();
+        $target = $this->getTarget($context, $resource);
 
         try {
-            if (is_file($from)) {
-                $filesytem->copy($from, $to);
-            } elseif (is_dir($from)) {
-                $filesytem->mirror($from, $to, true);
+            if (is_file($resource->getOriginal())) {
+                $this->filesytem->copy($resource->getOriginal(), $target);
+            } elseif (is_dir($resource->getOriginal())) {
+                $this->filesytem->mirror($resource->getOriginal(), $target, true);
+            } else {
+                throw new InvalidArgumentException('Resource must be a file or a directory');
             }
         } catch (SfIOException $e) {
-            throw new IOException(sprintf('Could not write %s', $to), $e->getCode(), $e);
+            throw new IOException(sprintf('Could not write %s', $target), $e->getCode(), $e);
         }
+    }
 
-        throw new InvalidArgumentException(sprintf('%s must be a file or a directory', $from));
+    public static function create()
+    {
+        return new static(new Filesystem());
     }
 }

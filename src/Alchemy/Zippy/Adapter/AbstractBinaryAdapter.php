@@ -13,13 +13,13 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -50,12 +50,14 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * Constructor
      *
      * @param ParserInterface                     $parser   An output parser
+     * @param ResourceManager                     $manager  A resource manager
      * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
     {
         $this->parser = $parser;
+        $this->manager = $manager;
         $this->deflator = $deflator;
         $this->inflator = $inflator;
     }
@@ -121,7 +123,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @throws RuntimeException In case object could not be instanciated
      */
-    public static function newInstance($inflatorBinaryName = null, $deflatorBinaryName = null)
+    public static function newInstance(ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
     {
         $finder = new ExecutableFinder();
 
@@ -145,7 +147,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
             );
         }
 
-        return new static($outputParser, $inflator, $deflator);
+        return new static($outputParser, $manager, $inflator, $deflator);
     }
 
     /**
@@ -171,74 +173,5 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         });
 
         return 0 !== $iterations;
-    }
-
-    /**
-     * Adds a resource to argument list
-     *
-     * @param Array          $files   An array of resource or resource URI
-     * @param ProcessBuilder $builder A Builder instance
-     *
-     * @return AbstractBinaryAdapter
-     *
-     * @throws RuntimeException In case resource could not be opened or readed
-     * @throws IOException In case Temporary direcory or fetched file could not be created
-     * @throws InvalidArgumentException In case the provided resource is invalid
-     */
-    protected function addBuilderResourceArgument(array $files, ProcessBuilder $builder)
-    {
-        array_walk($files, function($resource, $location) use ($builder) {
-            $stream = null;
-            $location = ltrim($location, '/');
-
-            if (is_resource($resource)) {
-                $stream = $resource;
-            } elseif (is_string($resource)) {
-                $stream = fopen($resource, 'r');
-            }
-
-            if (null === $stream) {
-                throw new InvalidArgumentException('A resource must be either a resource or a path to the resource');
-            }
-
-            if (false === $stream) {
-                throw new RuntimeException(sprintf('Fail to open stream %s', $resource));
-            }
-
-            if (is_numeric($location)) {
-                $meta = stream_get_meta_data($stream);
-                $location = basename($meta['uri']);
-            }
-
-            $tempFileInfo = new \SplFileInfo(sprintf('%s/%s', getcwd(), $location));
-
-            if (!is_dir($tempFileInfo->getPath()) && !mkdir($tempFileInfo->getPath(), 0777, true)) {
-                throw new IOException(sprintf('Fail to create directory %s', $tempFileInfo->getPath()));
-            }
-
-            if (false === $content = stream_get_contents($stream)) {
-                throw new RuntimeException(sprintf('Fail to fetch content from %s', $location));
-            }
-
-            try {
-                $tempFile = $tempFileInfo->openFile('w');
-                
-                if (null !== $tempFile->fwrite($content)) {
-                    $builder->add($location);
-                }
-
-                unset($tempFile, $tempFileInfo);
-            } catch (\RuntimeException $e) {
-                throw IOException(
-                    sprintf('failed to write %s', $tempFileInfo->getRealPath()),
-                    $e->getCode(),
-                    $e
-                );
-            }
-
-            fclose($stream);
-        });
-
-        return $this;
     }
 }

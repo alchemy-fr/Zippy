@@ -12,8 +12,7 @@
 namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
-use Alchemy\Zippy\Adapter\Resource\FileResource;
-use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 /**
  * Represents an archive
@@ -47,17 +46,23 @@ class Archive implements ArchiveInterface
     protected $resource;
 
     /**
+     *
+     * @var ResourceManager
+     */
+    protected $manager;
+
+    /**
      * Constructor
      *
      * @param String            $path     Path to the archive
      * @param AdapterInterface  $adapter  An archive adapter
      * @param ResourceInterface $resource A resource
      */
-    public function __construct($path, AdapterInterface $adapter, ResourceInterface $resource)
+    public function __construct($location, AdapterInterface $adapter, ResourceManager $manager)
     {
         $this->adapter = $adapter;
-        $this->path = $path;
-        $this->resource = $resource ?: new FileResource($resource);
+        $this->location = $location;
+        $this->manager = $manager;
     }
 
     /**
@@ -93,17 +98,23 @@ class Archive implements ArchiveInterface
      */
     public function addMembers($sources, $recursive = true)
     {
-        $this->adapter->add($this->resource, $sources, $recursive);
+        $error = null;
+        $cwd = getcwd();
+        $resources = $this->manager->handle($cwd, $sources);
 
-        return $this;
-    }
+        chdir($resources->getContext());
+        try {
+            $this->adapter->add($this->location, $resources->map(function(Resource $resource){
+                return $resource->getTarget();
+            }), $recursive);
+        } catch (\Exception $e) {
+            $error = $e;
+        }
+        chdir($cwd);
 
-    /**
-     * @inheritdoc
-     */
-    public function addStreamMembers($sources)
-    {
-        $this->adapter->addStream($this->location, $sources);
+        if ($error) {
+            throw $error;
+        }
 
         return $this;
     }

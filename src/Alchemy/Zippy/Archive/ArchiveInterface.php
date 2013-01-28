@@ -37,18 +37,6 @@ interface ArchiveInterface extends \IteratorAggregate, \Countable
     public function addMembers($sources, $recursive = true);
 
     /**
-     * Adds a file from a stream resource into the archive
-     *
-     * @param String|Array|\SplFileInfo $sources The path to the resources
-     *
-     * @return ArchiveInterface
-     *
-     * @throws InvalidArgumentException In case the provided source path is not valid
-     * @throws RuntimeException         In case of failure
-     */
-    public function addStreamMembers($sources);
-
-    /**
      * Removes a file from the archive
      *
      * @param String|Array $sources The path to an archive or a folder member
