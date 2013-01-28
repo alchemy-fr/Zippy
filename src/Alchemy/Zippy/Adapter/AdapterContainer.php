@@ -18,6 +18,7 @@ use Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGzGNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter;
+use Alchemy\Zippy\Adapter\ZipEXtensionAdapter;
 
 class AdapterContainer extends \Pimple
 {
@@ -64,6 +65,10 @@ class AdapterContainer extends \Pimple
             return TarBz2BSDTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
+        $container['Alchemy\\Zippy\\Adapter\\ZipExtensionAdapter'] = $container->share(function () {
+            return ZipEXtensionAdapter::newInstance();
+        });
+        
         return $container;
     }
 }
