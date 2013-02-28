@@ -68,7 +68,7 @@ class AdapterContainer extends \Pimple
         $container['Alchemy\\Zippy\\Adapter\\ZipExtensionAdapter'] = $container->share(function () {
             return ZipEXtensionAdapter::newInstance();
         });
-        
+
         return $container;
     }
 }
