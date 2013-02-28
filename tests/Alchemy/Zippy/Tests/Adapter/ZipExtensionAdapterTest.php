@@ -12,7 +12,7 @@ class ZipExtensionAdapterTest extends TestCase
 
     public function setUp()
     {
-        $this->adapter = new ZipExtensionAdapter();
+        $this->adapter = new ZipExtensionAdapter($this->getResourceManagerMock());
     }
 
     public function testNewInstance()

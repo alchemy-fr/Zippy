@@ -12,9 +12,10 @@
 
 namespace Alchemy\Zippy\Adapter;
 
+use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
@@ -173,5 +174,10 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         });
 
         return 0 !== $iterations;
+    }
+
+    protected function createResource($path)
+    {
+        return new FileResource($path);
     }
 }

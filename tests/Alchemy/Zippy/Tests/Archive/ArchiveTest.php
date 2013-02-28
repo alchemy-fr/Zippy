@@ -10,19 +10,11 @@ class ArchiveTest extends TestCase
 {
     public function testNewInstance()
     {
-        $archive = new Archive('location', $this->getAdapterMock(), $this->getResourceManagerMock());
+        $archive = new Archive($this->getResource('location'), $this->getAdapterMock(), $this->getResourceManagerMock());
 
         $this->assertTrue($archive instanceof ArchiveInterface);
 
         return $archive;
-    }
-
-    /**
-     * @depends testNewInstance
-     */
-    public function testGetPath($archive)
-    {
-        $this->assertEquals('location', $archive->getPath());
     }
 
     public function testCount()
@@ -34,21 +26,9 @@ class ArchiveTest extends TestCase
             ->method('listMembers')
             ->will($this->returnValue(array('1', '2')));
 
-        $archive = new Archive('location', $mockAdapter, $this->getResourceManagerMock());
+        $archive = new Archive($this->getResource('location'), $mockAdapter, $this->getResourceManagerMock());
 
         $this->assertEquals(2, count($archive));
-    }
-
-    public function testGetSetOptions()
-    {
-        $archive = new Archive('location', $this->getAdapterMock(), $this->getResourceManagerMock());
-
-        $this->assertEquals(null, $archive->getOptions());
-
-        $options = new Options();
-        $archive->setOptions($options);
-
-        $this->assertEquals($options, $archive->getOptions());
     }
 
     public function testGetMembers()
@@ -63,7 +43,7 @@ class ArchiveTest extends TestCase
             ->with($this->equalTo($resource))
             ->will($this->returnValue(array('1', '2')));
 
-        $archive = new Archive('location', $mockAdapter, $this->getResourceManagerMock());
+        $archive = new Archive($this->getResource('location'), $mockAdapter, $this->getResourceManagerMock());
 
         $members = $archive->getMembers();
 
@@ -98,7 +78,7 @@ class ArchiveTest extends TestCase
             ->with($this->equalTo(getcwd()), $this->equalTo('hello'))
             ->will($this->returnValue($collection));
 
-        $archive = new Archive('location', $mockAdapter, $resourceManager);
+        $archive = new Archive($this->getResource('location'), $mockAdapter, $resourceManager);
 
         $this->assertEquals($archive, $archive->addMembers('hello'));
     }
@@ -111,7 +91,7 @@ class ArchiveTest extends TestCase
             ->expects($this->once())
             ->method('remove');
 
-        $archive = new Archive('location', $mockAdapter, $this->getResourceManagerMock());
+        $archive = new Archive($this->getResource('location'), $mockAdapter, $this->getResourceManagerMock());
 
         $this->assertEquals($archive, $archive->removeMembers('hello'));
     }

@@ -13,6 +13,7 @@ namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 
 /**
  * Represents an archive
@@ -26,7 +27,7 @@ class Archive implements ArchiveInterface
      */
     protected $path;
 
-    /**
+    /**-
      * The archive adapter
      *
      * @var AdapterInterface
@@ -54,14 +55,14 @@ class Archive implements ArchiveInterface
     /**
      * Constructor
      *
-     * @param String            $path     Path to the archive
+     * @param ResourceInterface $resource Path to the archive
      * @param AdapterInterface  $adapter  An archive adapter
      * @param ResourceInterface $resource A resource
      */
-    public function __construct($location, AdapterInterface $adapter, ResourceManager $manager)
+    public function __construct(ResourceInterface $resource, AdapterInterface $adapter, ResourceManager $manager)
     {
         $this->adapter = $adapter;
-        $this->location = $location;
+        $this->resource = $resource;
         $this->manager = $manager;
     }
 
@@ -104,7 +105,7 @@ class Archive implements ArchiveInterface
 
         chdir($resources->getContext());
         try {
-            $this->adapter->add($this->location, $resources->map(function(Resource $resource){
+            $this->adapter->add($this->resource, $resources->map(function(Resource $resource){
                 return $resource->getTarget();
             }), $recursive);
         } catch (\Exception $e) {
@@ -127,14 +128,6 @@ class Archive implements ArchiveInterface
         $this->adapter->remove($this->resource, $sources);
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**

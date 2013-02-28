@@ -16,7 +16,6 @@ use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
-use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -66,7 +65,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, $this->manager);
+        return new Archive($this->createResource($path), $this, $this->manager);
     }
 
     /**

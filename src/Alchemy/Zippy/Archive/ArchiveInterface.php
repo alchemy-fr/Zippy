@@ -17,13 +17,6 @@ use Alchemy\Zippy\Exception\RuntimeException;
 interface ArchiveInterface extends \IteratorAggregate, \Countable
 {
     /**
-     * Gets the location of the archive
-     *
-     * @return String
-     */
-    public function getPath();
-
-    /**
      * Adds a file or a folder into the archive
      *
      * @param String|Array|\SplFileInfo $sources   The path to the file or a folder

@@ -49,7 +49,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function remove($path, $files)
+    public function remove(ResourceInterface $resource, $files)
     {
         return $this->doRemove($this->getLocalOptions(), $resource, $files);
     }
@@ -170,7 +170,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, $this->manager);
+        return new Archive($this->createResource($path), $this, $this->manager);
     }
 
     protected function doListMembers($options, ResourceInterface $resource)
@@ -255,7 +255,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doRemove($options, $path, $files)
+    protected function doRemove($options, ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
