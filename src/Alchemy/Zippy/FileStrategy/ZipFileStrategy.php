@@ -28,6 +28,7 @@ class ZipFileStrategy implements FileStrategyInterface
     public function getAdapters()
     {
         return array(
+            $this->container['Alchemy\\Zippy\\Adapter\\ZipExtensionAdapter'],
             $this->container['Alchemy\\Zippy\\Adapter\\ZipAdapter'],
         );
     }
