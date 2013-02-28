@@ -62,7 +62,7 @@ class ZipExtensionAdapter extends AbstractAdapter
      */
     public function open($path)
     {
-        return new Archive($path, $this, new ZipArchiveResource($this->_open($path)));
+        return new Archive($path, $this, $this->createResource($path));
     }
 
     /**
@@ -214,14 +214,13 @@ class ZipExtensionAdapter extends AbstractAdapter
             throw new NotSupportedException("Cannot create an empty zip");
         }
 
-        $resource = new ZipArchiveResource($this->_open($path, \ZipArchive::CREATE));
+        $resource = $this->createResource($path, \ZipArchive::CREATE);
         $this->addEntries($resource, $files, $recursive);
 
         return new Archive($path, $this, $resource);
     }
 
-    // HELPER METHODS
-    private function _open($path, $mode = \ZipArchive::CHECKCONS)
+    private function createResource($path, $mode = \ZipArchive::CHECKCONS)
     {
         $zip = new \ZipArchive();
         $res = $zip->open($path, $mode);
@@ -230,7 +229,7 @@ class ZipExtensionAdapter extends AbstractAdapter
             throw new RuntimeException($this->errorCodesMapping[$res]);
         }
 
-        return $zip;
+        return new ZipArchiveResource($zip);
     }
 
     private function addEntries(ZipArchiveResource $resource, array $files, $recursive)
@@ -301,6 +300,11 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
+    /**
+     * Flushes changes to the archive
+     *
+     * @param \ZipArchive $zip
+     */
     private function flush(\ZipArchive $zip) // flush changes by reopening the file
     {
         $path = $zip->filename;
