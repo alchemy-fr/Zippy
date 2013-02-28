@@ -20,7 +20,8 @@ use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
 use Alchemy\Zippy\Archive\Archive;
 
 /**
- * ZipExtensionAdapter allows you to create and extract files from archives using PHP Zip extension
+ * ZipExtensionAdapter allows you to create and extract files from archives
+ * using PHP Zip extension
  *
  * @see http://www.php.net/manual/en/book.zip.php
  */
@@ -37,18 +38,6 @@ class ZipExtensionAdapter extends AbstractAdapter
         \ZipArchive::ER_READ   => "Read error",
         \ZipArchive::ER_SEEK   => "Seek error"
     );
-
-    /**
-     * Returns a new instance of the invoked adapter
-     *
-     * @return AbstractAdapter
-     *
-     * @throws RuntimeException In case object could not be instanciated
-     */
-    public static function newInstance()
-    {
-        return new ZipExtensionAdapter();
-    }
 
     public function __construct()
     {
@@ -152,7 +141,7 @@ class ZipExtensionAdapter extends AbstractAdapter
         if (!$resource->getResource()->extractTo($to, $members)) {
             $resource->getResource()->close();
 
-            throw new InvalidArgumentException($resource->getResource()->getStatusString());
+            throw new InvalidArgumentException(sprintf('Unable to extract archive : %s', $resource->getResource()->getStatusString()));
         }
 
         return new \SplFileInfo($to);
@@ -164,6 +153,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     public function remove(ResourceInterface $resource, $files)
     {
         $files = (array) $files;
+
         if (empty($files)) {
             throw new InvalidArgumentException("no files provided");
         }
@@ -174,13 +164,13 @@ class ZipExtensionAdapter extends AbstractAdapter
                 $resource->getResource()->unchangeAll();
                 $resource->getResource()->close();
 
-                throw new InvalidArgumentException(sprintf('%s is not on the zip file', $file));
+                throw new InvalidArgumentException(sprintf('%s is not in the zip file', $file));
             }
             if (!$resource->getResource()->deleteName($file)) {
                 $resource->getResource()->unchangeAll();
                 $resource->getResource()->close();
 
-                throw new RuntimeException(sprintf('unable to delete %s', $file));
+                throw new RuntimeException(sprintf('unable to remove %s', $file));
             }
         }
         $this->flush($resource->getResource());
@@ -220,6 +210,18 @@ class ZipExtensionAdapter extends AbstractAdapter
         return new Archive($path, $this, $resource);
     }
 
+    /**
+     * Returns a new instance of the invoked adapter
+     *
+     * @return AbstractAdapter
+     *
+     * @throws RuntimeException In case object could not be instanciated
+     */
+    public static function newInstance()
+    {
+        return new ZipExtensionAdapter();
+    }
+
     private function createResource($path, $mode = \ZipArchive::CHECKCONS)
     {
         $zip = new \ZipArchive();
@@ -236,6 +238,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     {
         $stack = new \SplStack();
 
+        // add files
         foreach ($files as $file) {
             $this->checkReadability($resource->getResource(), $file);
             if (is_dir($file)) {
@@ -249,6 +252,7 @@ class ZipExtensionAdapter extends AbstractAdapter
             }
         }
 
+        // recursively add dirs
         while (!$stack->isEmpty()) {
             $dir = $stack->pop();
             // removes . and ..
