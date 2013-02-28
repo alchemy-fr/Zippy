@@ -27,15 +27,15 @@ use Alchemy\Zippy\Archive\Archive;
 class ZipExtensionAdapter extends AbstractAdapter
 {
     private $errorCodesMapping=array(
-        \ZIPARCHIVE::ER_EXISTS =>"File already exists",
-        \ZIPARCHIVE::ER_INCONS =>"Zip archive inconsistent",
-        \ZIPARCHIVE::ER_INVAL =>"Invalid argument",
-        \ZIPARCHIVE::ER_MEMORY =>"Malloc failure",
-        \ZIPARCHIVE::ER_NOENT =>"No such file",
-        \ZIPARCHIVE::ER_NOZIP =>"Not a zip archive",
-        \ZIPARCHIVE::ER_OPEN =>"Can't open file",
-        \ZIPARCHIVE::ER_READ =>"Read error",
-        \ZIPARCHIVE::ER_SEEK =>"Seek error"
+        \ZipArchive::ER_EXISTS =>"File already exists",
+        \ZipArchive::ER_INCONS =>"Zip archive inconsistent",
+        \ZipArchive::ER_INVAL =>"Invalid argument",
+        \ZipArchive::ER_MEMORY =>"Malloc failure",
+        \ZipArchive::ER_NOENT =>"No such file",
+        \ZipArchive::ER_NOZIP =>"Not a zip archive",
+        \ZipArchive::ER_OPEN =>"Can't open file",
+        \ZipArchive::ER_READ =>"Read error",
+        \ZipArchive::ER_SEEK =>"Seek error"
     );
 
     /**
@@ -205,14 +205,14 @@ class ZipExtensionAdapter extends AbstractAdapter
         if (empty($files)) {
             throw new NotSupportedException("Cannot create an empty zip");
         }
-        $resource=new ZipArchiveResource($this->_open($path,\ZIPARCHIVE::CREATE));
+        $resource=new ZipArchiveResource($this->_open($path,\ZipArchive::CREATE));
         $this->addEntries($resource,$files,$recursive);
 
         return new Archive($path, $this,$resource);
     }
 
     // HELPER METHODS
-    private function _open($path,$mode=\ZIPARCHIVE::CHECKCONS)
+    private function _open($path,$mode=\ZipArchive::CHECKCONS)
     {
         $zip=new \ZipArchive();
         $res=$zip->open($path,$mode);
@@ -260,7 +260,7 @@ class ZipExtensionAdapter extends AbstractAdapter
         $this->flush($resource->getResource());
     }
 
-    private function checkReadability(\ZIPARCHIVE $zip,$file)
+    private function checkReadability(\ZipArchive $zip,$file)
     {
         if (!is_readable($file)) {
             $zip->unchangeAll();
@@ -269,7 +269,7 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addFileToZip(\ZIPARCHIVE $zip,$file)
+    private function addFileToZip(\ZipArchive $zip,$file)
     {
         if (!$zip->addFile($file)) {
             $zip->unchangeAll();
@@ -278,7 +278,7 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addEmptyDir(\ZIPARCHIVE $zip,$dir)
+    private function addEmptyDir(\ZipArchive $zip,$dir)
     {
         if (!$zip->addEmptyDir($dir)) {
             $zip->unchangeAll();
@@ -287,10 +287,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function flush(\ZIPARCHIVE $zip) // flush changes by reopening the file
+    private function flush(\ZipArchive $zip) // flush changes by reopening the file
     {
         $path=$zip->filename;
         $zip->close();
-        $zip->open($path,\ZIPARCHIVE::CHECKCONS);
+        $zip->open($path,\ZipArchive::CHECKCONS);
     }
 }
