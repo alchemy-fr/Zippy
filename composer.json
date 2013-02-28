@@ -12,9 +12,15 @@
     }
     ],
     "require": {
-        "php": ">=5.3.3",
-        "pimple/pimple": "~1",
-        "symfony/process": ">=2.0, <=2.2.x-dev"
+        "php"             : ">=5.3.3",
+        "pimple/pimple"   : "~1.0",
+        "symfony/process" : "~2.0"
+    },
+    "require-dev": {
+        "ext-zip"         : "*"
+    },
+    "suggest": {
+        "ext-zip" : "To use the ZipExtensionAdapter"
     },
     "autoload": {
         "psr-0": {
