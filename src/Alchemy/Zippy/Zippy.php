@@ -154,7 +154,7 @@ class Zippy
     }
 
     /**
-     * Creates Zippy with default strategies
+     * Creates Zippy and loads default strategies
      *
      * @return Zippy
      */

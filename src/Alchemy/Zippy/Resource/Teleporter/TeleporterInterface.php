@@ -18,8 +18,8 @@ interface TeleporterInterface
     /**
      * Teleport a file from a destination to an other
      *
-     * @param String|Resource $from A remote or local file or resource
-     * @param String          $to   A local path
+     * @param Resource $resource A Resource
+     * @param String   $context  The current context
      *
      * @throw IOException In case file could not be written on local
      * @throw InvalidArgumentException In case path to file is not valid

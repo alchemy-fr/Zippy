@@ -12,10 +12,23 @@
 namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\TargetLocatorException;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 class TargetLocator
 {
+
+    /**
+     * Locates the target for a resource in a context
+     *
+     * For example, adding /path/to/file where the context (current working
+     * directory) is /path/to will return `file` as target
+     *
+     * @param String          $context
+     * @param String|resource $resource
+     *
+     * @return String
+     *
+     * @throws TargetLocatorException In case the resource is invalid
+     */
     public function locate($context, $resource)
     {
         switch (true) {
@@ -24,10 +37,19 @@ class TargetLocator
             case is_string($resource):
                 return $this->locateString($context, $resource);
             default:
-                throw new InvalidArgumentException('Unknown resource format');
+                throw new TargetLocatorException($resource, 'Unknown resource format');
         }
     }
 
+    /**
+     * Locate the target for a resource.
+     *
+     * @param resource $resource
+     *
+     * @return String
+     *
+     * @throws TargetLocatorException
+     */
     private function locateResource($resource)
     {
         $meta = stream_get_meta_data($resource);
@@ -40,6 +62,15 @@ class TargetLocator
         return basename($data['path']);
     }
 
+    /**
+     * Locate the target for a string.
+     *
+     * @param String $resource
+     *
+     * @return String
+     *
+     * @throws TargetLocatorException
+     */
     private function locateString($context, $resource)
     {
         $url = parse_url($resource);
@@ -67,10 +98,19 @@ class TargetLocator
         }
     }
 
+    /**
+     * Removes backward path sequences (..)
+     *
+     * @param String $path
+     *
+     * @return String
+     *
+     * @throws TargetLocatorException In case the path is invalid
+     */
     private function cleanupPath($path)
     {
         if (false === $cleanPath = realpath($path)) {
-            throw new InvalidArgumentException(sprintf('%s is an invalid location', $path));
+            throw new TargetLocatorException($path, sprintf('%s is an invalid location', $path));
         }
 
         return $cleanPath;

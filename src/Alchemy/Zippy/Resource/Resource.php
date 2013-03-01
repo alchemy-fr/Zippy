@@ -11,25 +11,38 @@
 
 namespace Alchemy\Zippy\Resource;
 
-/**
- * This class represents a resource on a local filesystem
- */
 class Resource
 {
     private $original;
     private $target;
 
+    /**
+     * Constructor
+     *
+     * @param String $original
+     * @param String $target
+     */
     public function __construct($original, $target)
     {
         $this->original = $original;
         $this->target = $target;
     }
 
+    /**
+     * Returns the target
+     *
+     * @return String
+     */
     public function getTarget()
     {
         return $this->target;
     }
 
+    /**
+     * Returns the original path
+     *
+     * @return String
+     */
     public function getOriginal()
     {
         return $this->original;
@@ -42,7 +55,7 @@ class Resource
      *   - /path/to/file1 can be processed to file1 in /path/to context
      *   - /path/to/subdir/file2 can be processed to subdir/file2 in /path/to context
      *
-     * @param string $context
+     * @param String $context
      *
      * @return Boolean
      */

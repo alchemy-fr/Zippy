@@ -11,16 +11,15 @@
 
 namespace Alchemy\Zippy\Resource;
 
-/**
- * This class is responsible of looping throught a set of provided
- * resource, separate the resources that belong to the reference context from them
- * that do not and getting the appropriate ResourceTeleporter object for each
- * resource
- */
 class RequestMapper
 {
     private $locator;
 
+    /**
+     * Constructor
+     *
+     * @param TargetLocator $locator
+     */
     public function __construct(TargetLocator $locator)
     {
         $this->locator = $locator;
@@ -29,7 +28,7 @@ class RequestMapper
     /**
      * Maps resources request to a ResourceCollection
      *
-     * @return ResourceRequest
+     * @return ResourceCollection
      */
     public function map($context, array $resources)
     {
@@ -46,6 +45,11 @@ class RequestMapper
         return $collection;
     }
 
+    /**
+     * Creates the default RequestMapper
+     *
+     * @return RequestMapper
+     */
     public static function create()
     {
         return new static(new TargetLocator());

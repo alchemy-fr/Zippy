@@ -17,15 +17,19 @@ use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 
-/**
- * This class is responsible of handling resources retrievals mechanism
- */
 class ResourceManager
 {
     private $mapper;
     private $teleporter;
     private $filesystem;
 
+    /**
+     * Constructor
+     *
+     * @param RequestMapper      $mapper
+     * @param ResourceTeleporter $teleporter
+     * @param Filesystem         $filesystem
+     */
     public function __construct(RequestMapper $mapper, ResourceTeleporter $teleporter, Filesystem $filesystem)
     {
         $this->mapper = $mapper;
@@ -33,7 +37,22 @@ class ResourceManager
         $this->teleporter = $teleporter;
     }
 
-    public function handle($context, $request)
+    /**
+     * Handles an archival request.
+     *
+     * The request is an array of string|streams to compute in a context (current
+     * working directory most of the time)
+     * Some keys can be associative. In these cases, the key is used a target
+     * for the file.
+     *
+     * @param String $context
+     * @param Array  $request
+     *
+     * @return ResourceCollection
+     *
+     * @throws IOException In case of write failure
+     */
+    public function handle($context, array $request)
     {
         $collection = $this->mapper->map($context, $request);
 
@@ -58,6 +77,15 @@ class ResourceManager
         return $collection;
     }
 
+    /**
+     * This method must be called once the ResourceCollection has been processed.
+     *
+     * It will remove temporary files
+     *
+     * @todo this should be done in the __destruct method of ResourceCollection
+     *
+     * @param ResourceCollection $collection
+     */
     public function cleanup(ResourceCollection $collection)
     {
         if ($collection->isTemporary()) {
@@ -70,6 +98,8 @@ class ResourceManager
     }
 
     /**
+     * Creates a default ResourceManager
+     *
      * @return ResourceManager
      */
     public static function create()

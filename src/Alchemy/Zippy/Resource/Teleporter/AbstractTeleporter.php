@@ -16,6 +16,17 @@ use Alchemy\Zippy\Exception\IOException;
 
 abstract class AbstractTeleporter implements TeleporterInterface
 {
+    /**
+     * Writes the target
+     *
+     * @param String   $data
+     * @param Resource $resource
+     * @param String   $context
+     *
+     * @return TeleporterInterface
+     *
+     * @throws IOException
+     */
     protected function writeTarget($data, Resource $resource, $context)
     {
         $target = $this->getTarget($context, $resource);
@@ -27,6 +38,14 @@ abstract class AbstractTeleporter implements TeleporterInterface
         return $this;
     }
 
+    /**
+     * Returns the relative target of a Resource
+     *
+     * @param String   $context
+     * @param Resource $resource
+     *
+     * @return String
+     */
     protected function getTarget($context, Resource $resource)
     {
         return sprintf('%s/%s', rtrim($context, '/'), $resource->getTarget());

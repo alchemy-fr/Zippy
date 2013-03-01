@@ -11,19 +11,28 @@
 
 namespace Alchemy\Zippy\Resource;
 
-/**
- * This object is responsible of teleporting a resource from an URI to a
- * local filesystem destination
- */
 class ResourceTeleporter
 {
     private $container;
 
+    /**
+     * Constructor
+     *
+     * @param TeleporterContainer $container
+     */
     public function __construct(TeleporterContainer $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * Teleports a Resource to its target in the context
+     *
+     * @param String   $context
+     * @param Resource $resource
+     *
+     * @return ResourceTeleporter
+     */
     public function teleport($context, Resource $resource)
     {
         $this
@@ -34,6 +43,11 @@ class ResourceTeleporter
         return $this;
     }
 
+    /**
+     * Creates the ResourceTeleporter with the default TeleporterContainer
+     *
+     * @return ResourceTeleporter
+     */
     public static function create()
     {
         return new static(TeleporterContainer::load());

@@ -24,6 +24,11 @@ class GuzzleTeleporter extends AbstractTeleporter
 {
     private $client;
 
+    /**
+     * Constructor
+     *
+     * @param Client $client
+     */
     public function __construct(Client $client)
     {
         $this->client = $client;

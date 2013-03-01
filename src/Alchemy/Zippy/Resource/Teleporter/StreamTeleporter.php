@@ -49,6 +49,11 @@ class StreamTeleporter extends AbstractTeleporter
         $this->writeTarget($content, $resource, $context);
     }
 
+    /**
+     * Creates the StreamTeleporter
+     *
+     * @return StreamTeleporter
+     */
     public static function create()
     {
         return new static();

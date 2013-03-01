@@ -15,9 +15,22 @@ use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\StreamTeleporter;
+use Alchemy\Zippy\Resource\Teleporter\TeleporterInterface;
 
+/**
+ * A container of TeleporterInterface
+ */
 class TeleporterContainer extends \Pimple
 {
+    /**
+     * Returns the appropriate TeleporterInterface given a Resource
+     *
+     * @param Resource $resource
+     *
+     * @return TeleporterInterface
+     *
+     * @throws InvalidArgumentException
+     */
     public function fromResource(Resource $resource)
     {
         switch (true) {
@@ -42,6 +55,11 @@ class TeleporterContainer extends \Pimple
         return $this[$teleporter];
     }
 
+    /**
+     * Instantiates TeleporterContainer and register default teleporters
+     *
+     * @return TeleporterContainer
+     */
     public static function load()
     {
         $container = new static();

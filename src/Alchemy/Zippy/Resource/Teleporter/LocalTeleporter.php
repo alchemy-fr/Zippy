@@ -24,6 +24,11 @@ class LocalTeleporter extends AbstractTeleporter
 {
     private $filesystem;
 
+    /**
+     * Constructor
+     *
+     * @param Filesystem $filesystem
+     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
@@ -54,6 +59,11 @@ class LocalTeleporter extends AbstractTeleporter
         }
     }
 
+    /**
+     * Creates the LocalTeleporter
+     *
+     * @return LocalTeleporter
+     */
     public static function create()
     {
         return new static(new Filesystem());
