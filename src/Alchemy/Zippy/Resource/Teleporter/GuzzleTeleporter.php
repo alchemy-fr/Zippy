@@ -47,6 +47,11 @@ class GuzzleTeleporter extends AbstractTeleporter
         return $this;
     }
 
+    /**
+     * Creates the GuzzleTeleporter
+     *
+     * @return GuzzleTeleporter
+     */
     public static function create()
     {
         $client = new Client();
