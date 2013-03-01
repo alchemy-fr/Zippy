@@ -47,6 +47,10 @@ class TargetLocator
     {
         $url = parse_url($resource);
 
+        if (isset($url['scheme']) && $this->isLocalFilesystem($url['scheme'])) {
+            $resource = $url['path'] = $this->cleanupPath($url['path']);;
+        }
+
         // resource is a URI
         if (isset($url['scheme'])) {
             if ($this->isLocalFilesystem($url['scheme']) && $this->isFileInContext($url['path'], $context)) {
@@ -58,10 +62,21 @@ class TargetLocator
 
         // resource is a local path
         if ($this->isFileInContext($resource, $context)) {
+            $resource = $this->cleanupPath($resource);
+
             return $this->getRelativePathFromContext($resource, $context);
         } else {
             return basename($resource);
         }
+    }
+
+    private function cleanupPath($path)
+    {
+        if (false === $cleanPath = realpath($path)) {
+            throw new InvalidArgumentException(sprintf('%s is an invalid location', $path));
+        }
+
+        return $cleanPath;
     }
 
     /**

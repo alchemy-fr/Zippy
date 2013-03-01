@@ -34,12 +34,23 @@ class TargetLocatorTest extends TestCase
         $locator->locate("some-context", fopen('file://', 'rb'));
     }
 
+    /**
+     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     */
+    public function testLocateThatShouldFail3()
+    {
+        $locator = new TargetLocator();
+        $locator->locate(__DIR__, __DIR__ . '/input/path/to/a/../local/file-non-existent.ext');
+    }
+
     public function provideLocationData()
     {
         $updir = dirname(__DIR__) . '/';
 
         return array(
             array(basename(__FILE__), __DIR__, __FILE__),
+            array('input/path/to/local/file.ext', __DIR__ , __DIR__ . '/input/path/to/a/../local/file.ext'),
+            array('file.ext', __DIR__ , fopen(__DIR__ . '/input/path/to/a/../local/file.ext', 'rb')),
             array(basename(__FILE__), __DIR__, 'file://' . __FILE__),
             array(basename(__FILE__), __DIR__, fopen(__FILE__, 'rb')),
             array('temporary-file.jpg', __DIR__, '/tmp/temporary-file.jpg'),
