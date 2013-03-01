@@ -39,9 +39,14 @@ class ResourceTest extends TestCase
     {
         return array(
             array(true, '/path/to', '/path/to/file1', 'file1'),
+            array(true, __DIR__, __FILE__, basename(__FILE__)),
+            array(false, __DIR__, fopen(__FILE__, 'rb'), basename(__FILE__)),
+            array(false, '/path/to', 'ftp:///path/to/file1', 'file1'),
             array(false, '/path/to', '/path/file1', 'file1'),
+            array(false, '/path/to', 'file:///path/file1', 'file1'),
             array(true, '/path', '/path/to/file1', 'to/file1'),
             array(true, '/path/to', '/path/to/subdir/file2', 'subdir/file2'),
+            array(true, '/path/to', 'file:///path/to/subdir/file2', 'subdir/file2'),
         );
     }
 }
