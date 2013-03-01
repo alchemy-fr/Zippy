@@ -28,7 +28,51 @@ class LocalTeleporterTest extends TeleporterTestCase
         $this->assertfileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
-    
+
+    /**
+     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
+     * @dataProvider provideContexts
+     */
+    public function testTeleportAStream($context)
+    {
+        $teleporter = LocalTeleporter::create();
+
+        $target = 'plop-badge.php';
+        $resource = new Resource('file://' . __FILE__, $target);
+
+        if (is_file($target)) {
+            unlink($context . '/' . $target);
+        }
+
+        $teleporter->teleport($resource, $context);
+
+        $this->assertfileExists($context . '/' . $target);
+        unlink($context . '/' . $target);
+    }
+
+    /**
+     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
+     * @dataProvider provideInvalidSources
+     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     */
+    public function testTeleportOnNonExistentFile($source)
+    {
+        $teleporter = LocalTeleporter::create();
+
+        $target = 'plop-badge.php';
+        $resource = new Resource($source, $target);
+
+        $teleporter->teleport($resource, __DIR__);
+    }
+
+    public function provideInvalidSources()
+    {
+        return array(
+            array('file://path/to/nonexistent/file'),
+            array('/path/to/nonexistent/file'),
+        );
+    }
+
     /**
      * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideContexts
