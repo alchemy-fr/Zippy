@@ -38,9 +38,9 @@ class LocalTeleporter extends AbstractTeleporter
 
         try {
             if (is_file($resource->getOriginal())) {
-                $this->filesytem->copy($resource->getOriginal(), $target);
+                $this->filesystem->copy($resource->getOriginal(), $target);
             } elseif (is_dir($resource->getOriginal())) {
-                $this->filesytem->mirror($resource->getOriginal(), $target, true);
+                $this->filesystem->mirror($resource->getOriginal(), $target);
             } else {
                 throw new InvalidArgumentException('Resource must be a file or a directory');
             }
