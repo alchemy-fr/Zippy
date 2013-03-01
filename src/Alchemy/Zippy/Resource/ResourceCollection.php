@@ -48,8 +48,8 @@ class ResourceCollection extends ArrayCollection
 
     public function canBeProcessedInPlace()
     {
-        foreach($this as $resource) {
-            if(!$resource->canBeProcessedInPlace($this->context)) {
+        foreach ($this as $resource) {
+            if (!$resource->canBeProcessedInPlace($this->context)) {
                 return false;
             }
         }

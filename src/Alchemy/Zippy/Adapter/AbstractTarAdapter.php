@@ -11,13 +11,11 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -44,7 +42,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     {
         return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
-
 
     /**
      * @inheritdoc

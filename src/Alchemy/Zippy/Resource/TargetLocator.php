@@ -11,14 +11,14 @@
 
 namespace Alchemy\Zippy\Resource;
 
-use Alchemy\Zippy\Exception\InvalidResourceException;
+use Alchemy\Zippy\Exception\TargetLocatorException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 class TargetLocator
 {
     public function locate($context, $resource)
     {
-        switch(true) {
+        switch (true) {
             case is_resource($resource):
                 return $this->locateResource($resource);
                 break;
@@ -37,7 +37,7 @@ class TargetLocator
         $data = parse_url($meta['uri']);
 
         if (!isset($data['path'])) {
-            throw new InvalidResourceException($resource, 'Unable to retrieve path from resource');
+            throw new TargetLocatorException($resource, 'Unable to retrieve path from resource');
         }
 
         return basename($data['path']);

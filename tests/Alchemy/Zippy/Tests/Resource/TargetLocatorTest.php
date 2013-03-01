@@ -26,7 +26,7 @@ class TargetLocatorTest extends TestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidResourceException
+     * @expectedException Alchemy\Zippy\Exception\TargetLocatorException
      */
     public function testLocateThatShouldFail2()
     {

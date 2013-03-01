@@ -13,7 +13,6 @@ namespace Alchemy\Zippy\Resource\Teleporter;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Exception\InvalidResourceException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
@@ -48,7 +47,7 @@ class LocalTeleporter extends AbstractTeleporter
             } elseif (is_dir($path)) {
                 $this->filesystem->mirror($path, $target);
             } else {
-                throw new InvalidResourceException($resource, 'Resource must be valid file or a directory');
+                throw new InvalidArgumentException(sprintf('Invalid file or directory %s', $path));
             }
         } catch (SfIOException $e) {
             throw new IOException(sprintf('Could not write %s', $target), $e->getCode(), $e);

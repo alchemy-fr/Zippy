@@ -37,7 +37,7 @@ class ResourceManager
     {
         $collection = $this->mapper->map($context, $request);
 
-        if(!$collection->canBeProcessedInPlace()){
+        if (!$collection->canBeProcessedInPlace()) {
             $context = sprintf('%s/%s', sys_get_temp_dir(), uniqid('zippy_'));
 
             try {
@@ -60,7 +60,7 @@ class ResourceManager
 
     public function cleanup(ResourceCollection $collection)
     {
-        if($collection->isTemporary()) {
+        if ($collection->isTemporary()) {
             try {
                 $this->filesystem->remove($collection->getContext());
             } catch (IOException $e) {
