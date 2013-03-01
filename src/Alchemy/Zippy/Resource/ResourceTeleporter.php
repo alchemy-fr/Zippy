@@ -26,7 +26,9 @@ class ResourceTeleporter
 
     public function teleport($context, Resource $resource)
     {
-        $this->container->fromResource($resource)
+        $this
+            ->container
+            ->fromResource($resource)
             ->teleport($resource, $context);
 
         return $this;
