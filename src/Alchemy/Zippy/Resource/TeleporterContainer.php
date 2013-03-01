@@ -37,7 +37,6 @@ class TeleporterContainer extends \Pimple
                 break;
             default:
                 throw new InvalidArgumentException('No teleporter found');
-                break;
         }
 
         return $this[$teleporter];

@@ -21,13 +21,10 @@ class TargetLocator
         switch (true) {
             case is_resource($resource):
                 return $this->locateResource($resource);
-                break;
             case is_string($resource):
                 return $this->locateString($context, $resource);
-                break;
             default:
                 throw new InvalidArgumentException('Unknown resource format');
-                break;
         }
     }
 

@@ -64,7 +64,7 @@ class ResourceManager
             try {
                 $this->filesystem->remove($collection->getContext());
             } catch (IOException $e) {
-
+                // log this ?
             }
         }
     }
