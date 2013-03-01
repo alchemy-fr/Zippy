@@ -89,19 +89,6 @@ class TargetLocator
     }
 
     /**
-     * Gets the full path for a given location and a given resource path
-     *
-     * @param String $location A path to the desired resource destination
-     * @param String $path     A path to a resource
-     *
-     * @return String
-     */
-    private function getCustomPath($location, $path)
-    {
-        return sprintf('%s/%s', ltrim(rtrim($location, '/\\'), '/\\'), basename($path));
-    }
-
-    /**
      * Checks if a scheme reffers to a local filesystem
      *
      * @param String $scheme
@@ -111,17 +98,5 @@ class TargetLocator
     private function isLocalFilesystem($scheme)
     {
         return 'plainfile' === $scheme || 'file' === $scheme;
-    }
-
-    /**
-     * Checks whether the given location is customized location
-     *
-     * @param String $location A desired location
-     *
-     * @return Boolean
-     */
-    private function isLocationCustomized($location)
-    {
-        return false === is_numeric($location);
     }
 }
