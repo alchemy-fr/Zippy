@@ -12,13 +12,15 @@
 
 namespace Alchemy\Zippy\Adapter;
 
+use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
 
@@ -49,12 +51,14 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * Constructor
      *
      * @param ParserInterface                     $parser   An output parser
+     * @param ResourceManager                     $manager  A resource manager
      * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
     {
         $this->parser = $parser;
+        $this->manager = $manager;
         $this->deflator = $deflator;
         $this->inflator = $inflator;
     }
@@ -120,7 +124,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @throws RuntimeException In case object could not be instanciated
      */
-    public static function newInstance($inflatorBinaryName = null, $deflatorBinaryName = null)
+    public static function newInstance(ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
     {
         $finder = new ExecutableFinder();
 
@@ -144,7 +148,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
             );
         }
 
-        return new static($outputParser, $inflator, $deflator);
+        return new static($outputParser, $manager, $inflator, $deflator);
     }
 
     /**
@@ -170,5 +174,10 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         });
 
         return 0 !== $iterations;
+    }
+
+    protected function createResource($path)
+    {
+        return new FileResource($path);
     }
 }

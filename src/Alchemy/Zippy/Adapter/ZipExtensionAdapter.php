@@ -18,6 +18,7 @@ use Alchemy\Zippy\Archive\Member;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
 use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 /**
  * ZipExtensionAdapter allows you to create and extract files from archives
@@ -39,19 +40,13 @@ class ZipExtensionAdapter extends AbstractAdapter
         \ZipArchive::ER_SEEK   => "Seek error"
     );
 
-    public function __construct()
+    public function __construct(ResourceManager $manager)
     {
         if (!$this->isSupported()) {
             throw new RuntimeException("Zip Extension is not available");
         }
-    }
 
-    /**
-     * @inheritdoc
-     */
-    public function open($path)
-    {
-        return new Archive($path, $this, $this->createResource($path));
+        parent::__construct($manager);
     }
 
     /**
@@ -204,10 +199,10 @@ class ZipExtensionAdapter extends AbstractAdapter
             throw new NotSupportedException("Cannot create an empty zip");
         }
 
-        $resource = $this->createResource($path, \ZipArchive::CREATE);
+        $resource = $this->getResource($path, \ZipArchive::CREATE);
         $this->addEntries($resource, $files, $recursive);
 
-        return new Archive($path, $this, $resource);
+        return new Archive($resource, $this, $this->manager);
     }
 
     /**
@@ -219,10 +214,15 @@ class ZipExtensionAdapter extends AbstractAdapter
      */
     public static function newInstance()
     {
-        return new ZipExtensionAdapter();
+        return new ZipExtensionAdapter(ResourceManager::create());
     }
 
-    private function createResource($path, $mode = \ZipArchive::CHECKCONS)
+    protected function createResource($path)
+    {
+        return $this->getResource($path, \ZipArchive::CHECKCONS);
+    }
+
+    private function getResource($path, $mode)
     {
         $zip = new \ZipArchive();
         $res = $zip->open($path, $mode);

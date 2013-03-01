@@ -69,9 +69,9 @@ Interface AdapterInterface
     /**
      * Adds a file to the archive
      *
-     * @param ResourceInterface         $resource The path to the archive
-     * @param String|Array|\Traversable $files    A filename, an array of files, or a \Traversable instance
-     * @param Boolean                   $files    Whether or not to recurse in the provided directories
+     * @param ResourceInterface         $resource  The path to the archive
+     * @param String|Array|\Traversable $files     An array of paths to add, relative to cwd
+     * @param Boolean                   $recursive Whether or not to recurse in the provided directories
      *
      * @return Array
      *

@@ -42,7 +42,7 @@ interface BinaryAdapterInterface
     /**
      * Sets the inflator process builder
      *
-     * @param ParserInterface $parser The parser to use
+     * @param ProcessBuilderFactoryInterface $processBuilder The parser to use
      *
      * @return AbstractBinaryAdapter
      */
@@ -58,7 +58,7 @@ interface BinaryAdapterInterface
     /**
      * Sets the deflator process builder
      *
-     * @param ParserInterface $parser The parser to use
+     * @param ProcessBuilderFactoryInterface $processBuilder The parser to use
      *
      * @return AbstractBinaryAdapter
      */
