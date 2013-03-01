@@ -12,8 +12,6 @@
 namespace Alchemy\Zippy\Resource\Teleporter;
 
 use Alchemy\Zippy\Resource\Resource;
-use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 interface TeleporterInterface
 {
