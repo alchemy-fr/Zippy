@@ -42,7 +42,7 @@ class ResourceManager
      *
      * The request is an array of string|streams to compute in a context (current
      * working directory most of the time)
-     * Some keys can be associative. In these cases, the key is used a target
+     * Some keys can be associative. In these cases, the key is used the target
      * for the file.
      *
      * @param String $context

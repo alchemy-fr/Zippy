@@ -27,7 +27,7 @@ class Archive implements ArchiveInterface
      */
     protected $path;
 
-    /**-
+    /**
      * The archive adapter
      *
      * @var AdapterInterface
@@ -101,16 +101,19 @@ class Archive implements ArchiveInterface
     {
         $error = null;
         $cwd = getcwd();
-        $resources = $this->manager->handle($cwd, $sources);
+        $collection = $this->manager->handle($cwd, $sources);
 
-        chdir($resources->getContext());
+        chdir($collection->getContext());
         try {
-            $this->adapter->add($this->resource, $resources->map(function(Resource $resource){
+            $this->adapter->add($this->resource, $collection->map(function (Resource $resource) {
                 return $resource->getTarget();
             }), $recursive);
+
+            $this->manager->cleanup($collection);
         } catch (\Exception $e) {
             $error = $e;
         }
+
         chdir($cwd);
 
         if ($error) {

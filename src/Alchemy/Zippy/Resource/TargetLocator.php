@@ -15,7 +15,6 @@ use Alchemy\Zippy\Exception\TargetLocatorException;
 
 class TargetLocator
 {
-
     /**
      * Locates the target for a resource in a context
      *
