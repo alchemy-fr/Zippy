@@ -16,7 +16,6 @@ use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip

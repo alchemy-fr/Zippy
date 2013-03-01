@@ -57,7 +57,7 @@ class Archive implements ArchiveInterface
      *
      * @param ResourceInterface $resource Path to the archive
      * @param AdapterInterface  $adapter  An archive adapter
-     * @param ResourceInterface $resource A resource
+     * @param ResourceManager   $manager  The resource manager
      */
     public function __construct(ResourceInterface $resource, AdapterInterface $adapter, ResourceManager $manager)
     {
