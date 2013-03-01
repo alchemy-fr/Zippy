@@ -45,7 +45,6 @@ class ResourceTeleporterTest extends TestCase
             ->with($this->equalTo($resource))
             ->will($this->returnValue($teleporter));
 
-
         $resourceTeleporter = new ResourceTeleporter($container);
         $resourceTeleporter->teleport($context, $resource);
     }

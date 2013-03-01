@@ -18,4 +18,3 @@ class TeleporterTestCase extends TestCase
         );
     }
 }
-

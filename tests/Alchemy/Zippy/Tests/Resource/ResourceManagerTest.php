@@ -166,7 +166,7 @@ class ResourceManagerTest extends TestCase
         $this->assertCount(10, $collection);
 
         $n = 0;
-        foreach($collection as $resource) {
+        foreach ($collection as $resource) {
             $this->assertEquals($expected[$n], $resource->getTarget());
             $this->assertEquals($expectedSource[$n], $resource->getOriginal());
             $n++;

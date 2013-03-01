@@ -26,7 +26,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
                 ->method('getResource')
                 ->will($this->returnValue($data));
         }
-        
+
         return $resource;
     }
 }

@@ -4,7 +4,6 @@ namespace Alchemy\Zippy\Tests\Resource\Teleporter;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
-use Symfony\Component\Filesystem\Filesystem;
 
 class LocalTeleporterTest extends TeleporterTestCase
 {
