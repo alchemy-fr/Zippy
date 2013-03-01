@@ -36,7 +36,7 @@ class RequestMapper
         $collection = new ResourceCollection($context);
 
         foreach ($resources as $location => $resource) {
-            if (!is_int($location)) {
+            if (is_int($location)) {
                 $collection->add(new Resource($resource, $this->locator->locate($context, $resource)));
             } else {
                 $collection->add(new Resource($resource, ltrim($location, '/')));
