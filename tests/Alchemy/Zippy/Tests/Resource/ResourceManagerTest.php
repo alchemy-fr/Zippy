@@ -115,7 +115,7 @@ class ResourceManagerTest extends TestCase
         $filesystem = new \Symfony\Component\Filesystem\Filesystem();
         $filesystem->mkdir($tmpdir . '/path/to/local/');
         $filesystem->mkdir($tmpdir . '/to/');
-        $filesystem->mkdir($tmpdir . '/to/a');
+        $filesystem->mkdir($tmpdir . '/path/to/a');
 
         touch($tmpdir . '/path/to/local/file.ext');
         touch($tmpdir . '/path/to/local/file2.ext');
