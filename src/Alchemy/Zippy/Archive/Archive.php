@@ -12,7 +12,7 @@
 namespace Alchemy\Zippy\Archive;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
-use Alchemy\Zippy\Adapter\Resource\FileResource;
+use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 
 /**
@@ -47,17 +47,23 @@ class Archive implements ArchiveInterface
     protected $resource;
 
     /**
+     *
+     * @var ResourceManager
+     */
+    protected $manager;
+
+    /**
      * Constructor
      *
-     * @param String            $path     Path to the archive
+     * @param ResourceInterface $resource Path to the archive
      * @param AdapterInterface  $adapter  An archive adapter
-     * @param ResourceInterface $resource A resource
+     * @param ResourceManager   $manager  The resource manager
      */
-    public function __construct($path, AdapterInterface $adapter, ResourceInterface $resource)
+    public function __construct(ResourceInterface $resource, AdapterInterface $adapter, ResourceManager $manager)
     {
         $this->adapter = $adapter;
-        $this->path = $path;
-        $this->resource = $resource ?: new FileResource($resource);
+        $this->resource = $resource;
+        $this->manager = $manager;
     }
 
     /**
@@ -93,7 +99,26 @@ class Archive implements ArchiveInterface
      */
     public function addMembers($sources, $recursive = true)
     {
-        $this->adapter->add($this->resource, $sources, $recursive);
+        $error = null;
+        $cwd = getcwd();
+        $collection = $this->manager->handle($cwd, $sources);
+
+        chdir($collection->getContext());
+        try {
+            $this->adapter->add($this->resource, $collection->map(function (Resource $resource) {
+                return $resource->getTarget();
+            }), $recursive);
+
+            $this->manager->cleanup($collection);
+        } catch (\Exception $e) {
+            $error = $e;
+        }
+
+        chdir($cwd);
+
+        if ($error) {
+            throw $error;
+        }
 
         return $this;
     }
@@ -106,14 +131,6 @@ class Archive implements ArchiveInterface
         $this->adapter->remove($this->resource, $sources);
 
         return $this;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getPath()
-    {
-        return $this->path;
     }
 
     /**

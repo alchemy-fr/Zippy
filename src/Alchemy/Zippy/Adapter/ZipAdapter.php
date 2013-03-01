@@ -12,10 +12,10 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\Archive;
-use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -62,7 +62,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($this->createResource($path), $this, $this->manager);
     }
 
     /**

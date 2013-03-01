@@ -18,6 +18,12 @@ use Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGzGNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter;
+use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\Resource\RequestMapper;
+use Alchemy\Zippy\Resource\TeleporterContainer;
+use Alchemy\Zippy\Resource\ResourceTeleporter;
+use Alchemy\Zippy\Resource\TargetLocator;
+use Symfony\Component\Filesystem\Filesystem;
 use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
 
 class AdapterContainer extends \Pimple
@@ -33,6 +39,30 @@ class AdapterContainer extends \Pimple
 
         $container['zip.inflator'] = null;
         $container['zip.deflator'] = null;
+
+        $container['resource-manager'] = $container->share(function ($container) {
+            return new ResourceManager($container['request-mapper'], $container['resource-teleporter'], $container['filesystem']);
+        });
+
+        $container['request-mapper'] = $container->share(function ($container) {
+            return new RequestMapper($container['target-locator']);
+        });
+
+        $container['target-locator'] = $container->share(function () {
+            return new TargetLocator();
+        });
+
+        $container['teleporter-container'] = $container->share(function ($container) {
+            return TeleporterContainer::load();
+        });
+
+        $container['resource-teleporter'] = $container->share(function ($container) {
+            return new ResourceTeleporter($container['teleporter-container']);
+        });
+
+        $container['filesystem'] = $container->share(function () {
+            return new Filesystem();
+        });
 
         $container['Alchemy\\Zippy\\Adapter\\ZipAdapter'] = $container->share(function ($container) {
             return ZipAdapter::newInstance($container['zip.inflator'], $container['zip.deflator']);

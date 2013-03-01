@@ -11,7 +11,6 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
@@ -168,7 +167,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new Archive($path, $this, new FileResource($path));
+        return new Archive($this->createResource($path), $this, $this->manager);
     }
 
     protected function doListMembers($options, ResourceInterface $resource)
