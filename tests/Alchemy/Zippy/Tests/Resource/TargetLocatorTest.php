@@ -17,7 +17,7 @@ class TargetLocatorTest extends TestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException Alchemy\Zippy\Exception\TargetLocatorException
      */
     public function testLocateThatShouldFail()
     {
@@ -35,7 +35,7 @@ class TargetLocatorTest extends TestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException Alchemy\Zippy\Exception\TargetLocatorException
      */
     public function testLocateThatShouldFail3()
     {
