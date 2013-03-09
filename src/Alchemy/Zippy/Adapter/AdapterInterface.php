@@ -103,6 +103,8 @@ Interface AdapterInterface
     /**
      * Extracts an entire archive
      *
+     * Note that any existing files will be overwritten by the adapter
+     *
      * @param ResourceInterface $resource The path to the archive
      * @param String|null       $to       The path where to extract the archive
      *
