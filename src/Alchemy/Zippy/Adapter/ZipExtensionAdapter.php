@@ -127,7 +127,7 @@ class ZipExtensionAdapter extends AbstractAdapter
                 if ($resource->getResource()->locateName($member) === false) {
                     $resource->getResource()->close();
 
-                    throw new InvalidArgumentException(sprintf('%s is not on the zip file', $member));
+                    throw new InvalidArgumentException(sprintf('%s is not in the zip file', $member));
                 }
                 $members[] = $member;
             }
