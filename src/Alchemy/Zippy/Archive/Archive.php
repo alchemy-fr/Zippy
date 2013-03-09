@@ -99,26 +99,7 @@ class Archive implements ArchiveInterface
      */
     public function addMembers($sources, $recursive = true)
     {
-        $error = null;
-        $cwd = getcwd();
-        $collection = $this->manager->handle($cwd, $sources);
-
-        chdir($collection->getContext());
-        try {
-            $this->adapter->add($this->resource, $collection->map(function (Resource $resource) {
-                return $resource->getTarget();
-            }), $recursive);
-
-            $this->manager->cleanup($collection);
-        } catch (\Exception $e) {
-            $error = $e;
-        }
-
-        chdir($cwd);
-
-        if ($error) {
-            throw $error;
-        }
+        $this->adapter->add($this->resource, $sources, $recursive);
 
         return $this;
     }

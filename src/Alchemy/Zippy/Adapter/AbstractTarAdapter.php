@@ -16,6 +16,8 @@ use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Archive\Member;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -142,6 +144,10 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $builder->add('-');
             $builder->add(sprintf('--files-from %s', $nullFile));
             $builder->add(sprintf('> %s', $path));
+
+            $process = $builder->getProcess();
+            $process->run();
+
         } else {
 
             $builder->add(sprintf('--file=%s', $path));
@@ -150,14 +156,30 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $builder->add('--no-recursion');
             }
 
-            if (!$this->addBuilderFileArgument($files, $builder)) {
-                throw new InvalidArgumentException('Invalid files');
+            $error = null;
+            $cwd = getcwd();
+            $collection = $this->manager->handle($cwd, $files);
+
+            chdir($collection->getContext());
+            try {
+                $collection->forAll(function ($i, Resource $resource) use ($builder) {
+                    return $builder->add($resource->getTarget());
+                });
+
+                $process = $builder->getProcess();
+                $process->run();
+
+                $this->manager->cleanup($collection);
+            } catch (\Exception $e) {
+                $error = $e;
+            }
+
+            chdir($cwd);
+
+            if ($error) {
+                throw $error;
             }
         }
-
-        $process = $builder->getProcess();
-
-        $process->run();
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
@@ -233,13 +255,29 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         // there will be an issue if the file starts with a dash
         // see --add-file=FILE
-        if (!$this->addBuilderFileArgument($files, $builder)) {
-            throw new InvalidArgumentException('Invalid files');
+        $error = null;
+        $cwd = getcwd();
+        $collection = $this->manager->handle($cwd, $files);
+
+        chdir($collection->getContext());
+        try {
+            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+                return $builder->add($resource->getTarget());
+            });
+
+            $process = $builder->getProcess();
+            $process->run();
+
+            $this->manager->cleanup($collection);
+        } catch (\Exception $e) {
+            $error = $e;
         }
 
-        $process = $builder->getProcess();
+        chdir($cwd);
 
-        $process->run();
+        if ($error) {
+            throw $error;
+        }
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(

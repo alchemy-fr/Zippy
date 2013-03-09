@@ -4,26 +4,28 @@ namespace Alchemy\Zippy\Functional;
 
 use Symfony\Component\Finder\Finder;
 
-class ExtractArchiveTest extends FunctionalTestCase
+class CreateArchiveTest extends FunctionalTestCase
 {
-    public function testOpen()
+    public function testCreate()
     {
         $adapter = $this->getAdapter();
-        $archiveFile = $this->getArchiveFileForAdapter($adapter);
+        $extension = $this->getArchiveExtensionForAdapter($adapter);
 
-        $archive = $adapter->open($archiveFile);
+        $archive = $adapter->create(__DIR__ . '/samples/create-archive.' . $extension, array(
+            'directory' => __DIR__ . '/samples/directory',
+        ), true);
 
         return $archive;
     }
 
     /**
-     * @depends testOpen
+     * @depends testCreate
      */
     public function testExtract($archive)
     {
         $target = __DIR__ . '/samples/tmp';
         $archive->extract($target);
-
+        
         $finder = new Finder();
         $finder
             ->files()
@@ -45,7 +47,7 @@ class ExtractArchiveTest extends FunctionalTestCase
     }
 
     /**
-     * @depends testOpen
+     * @depends testCreate
      */
     public function testExtractOnExistingFilesCanOverwrite($archive)
     {

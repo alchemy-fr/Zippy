@@ -4,9 +4,18 @@ namespace Alchemy\Zippy\Functional;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Adapter\AdapterContainer;
+use Symfony\Component\Filesystem\Filesystem;
 
 abstract class FunctionalTestCase extends \PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        $filesystem = new Filesystem();
+        $filesystem->remove(__DIR__ . '/samples/tmp');
+
+        mkdir(__DIR__ . '/samples/tmp');
+    }
+
     /**
      * @return AdapterInterface
      */
@@ -51,6 +60,32 @@ abstract class FunctionalTestCase extends \PHPUnit_Framework_TestCase
             case 'Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter':
             case 'Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter':
                 return __DIR__ . '/samples/archive.tar';
+                break;
+            default:
+                throw new \InvalidArgumentException(sprintf('Unable to find an archive file for %s', get_class($adapter)));
+                break;
+        }
+    }
+
+    protected function getArchiveExtensionForAdapter($adapter)
+    {
+        switch (get_class($adapter))
+        {
+            case 'Alchemy\Zippy\Adapter\ZipAdapter':
+            case 'Alchemy\Zippy\Adapter\ZipExtensionAdapter':
+                return 'zip';
+                break;
+            case 'Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter':
+            case 'Alchemy\Zippy\Adapter\GNUTar\TarGzGNUTarAdapter':
+                return 'tar.gz';
+                break;
+            case 'Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter':
+            case 'Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter':
+                return 'tar.bz2';
+                break;
+            case 'Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter':
+            case 'Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter':
+                return 'tar';
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Unable to find an archive file for %s', get_class($adapter)));
