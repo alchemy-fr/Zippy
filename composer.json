@@ -20,7 +20,8 @@
         "symfony/filesystem"   : "~2.0"
     },
     "require-dev": {
-        "ext-zip"              : "*"
+        "ext-zip"              : "*",
+        "symfony/finder"       : "~2.0"
     },
     "suggest": {
         "ext-zip"              : "To use the ZipExtensionAdapter"
