@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class GNUTarAdapterWithOptionsTest extends TestCase
 {
@@ -42,7 +43,20 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
 
         $outputParser = ParserFactory::create($classname::getName());
 
-        $this->adapter = new $classname($outputParser, $this->getResourceManagerMock(), $inflator);
+        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collection->expects($this->any())
+            ->method('getContext')
+            ->will($this->returnValue(__DIR__));
+
+        $manager = $this->getResourceManagerMock();
+        $manager->expects($this->any())
+            ->method('handle')
+            ->will($this->returnValue($collection));
+
+        $this->adapter = new $classname($outputParser, $manager, $inflator);
     }
 
     public function testCreateNoFiles()
@@ -116,7 +130,7 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -124,7 +138,11 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $classname = static::getAdapterClassName();
+        $outputParser = ParserFactory::create($classname::getName());
+        $manager = ResourceManager::create();
+
+        $this->adapter = new $classname($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
     }

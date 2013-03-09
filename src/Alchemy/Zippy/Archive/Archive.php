@@ -61,8 +61,8 @@ class Archive implements ArchiveInterface
      */
     public function __construct(ResourceInterface $resource, AdapterInterface $adapter, ResourceManager $manager)
     {
-        $this->adapter = $adapter;
         $this->resource = $resource;
+        $this->adapter = $adapter;
         $this->manager = $manager;
     }
 

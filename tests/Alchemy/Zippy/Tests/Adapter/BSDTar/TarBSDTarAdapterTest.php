@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 class TarBSDTarAdapterTest extends TestCase
 {
@@ -40,7 +41,20 @@ class TarBSDTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $this->getResourceManagerMock(), $inflator);
+        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collection->expects($this->any())
+            ->method('getContext')
+            ->will($this->returnValue(__DIR__));
+
+        $manager = $this->getResourceManagerMock();
+        $manager->expects($this->any())
+            ->method('handle')
+            ->will($this->returnValue($collection));
+
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $inflator);
     }
 
     public function testCreateNoFiles()
@@ -85,6 +99,8 @@ class TarBSDTarAdapterTest extends TestCase
 
     public function testCreate()
     {
+        $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
+        $manager = ResourceManager::create();
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
         $mockProcessBuilder
@@ -102,7 +118,7 @@ class TarBSDTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -110,8 +126,7 @@ class TarBSDTarAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
         return self::$tarFile;
