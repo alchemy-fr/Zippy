@@ -6,12 +6,27 @@ use Symfony\Component\Finder\Finder;
 
 class CreateArchiveTest extends FunctionalTestCase
 {
+    private static $file;
+
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+
+        if (file_exists(self::$file)) {
+            unlink(self::$file);
+            self::$file = null;
+        }
+    }
+
+
     public function testCreate()
     {
         $adapter = $this->getAdapter();
         $extension = $this->getArchiveExtensionForAdapter($adapter);
 
-        $archive = $adapter->create(__DIR__ . '/samples/create-archive.' . $extension, array(
+        self::$file = __DIR__ . '/samples/create-archive.' . $extension;
+
+        $archive = $adapter->create(self::$file, array(
             'directory' => __DIR__ . '/samples/directory',
         ), true);
 
@@ -25,7 +40,7 @@ class CreateArchiveTest extends FunctionalTestCase
     {
         $target = __DIR__ . '/samples/tmp';
         $archive->extract($target);
-        
+
         $finder = new Finder();
         $finder
             ->files()
