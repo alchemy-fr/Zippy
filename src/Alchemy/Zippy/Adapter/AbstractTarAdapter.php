@@ -299,7 +299,9 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $resource->getResource()));
+            ->add(sprintf('--file=%s', $resource->getResource()))
+            ->add('--overwrite-dir')
+            ->add('--overwrite');
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -340,7 +342,9 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $resource->getResource()));
+            ->add(sprintf('--file=%s', $resource->getResource()))
+            ->add('--overwrite-dir')
+            ->add('--overwrite');
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);

@@ -282,6 +282,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         $builder
+            ->add('-o')
             ->add($resource->getResource());
 
         if (null !== $to) {
