@@ -461,13 +461,13 @@ Written by John Gilmore and Jay Fenlason.'));
     public function testGetDefaultInflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('gnutar', $classname::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('gnutar', 'tar'), $classname::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('gnutar', $classname::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('gnutar', 'tar'), $classname::getDefaultDeflatorBinaryName());
     }
 
     abstract protected function getOptions();

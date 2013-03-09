@@ -32,7 +32,7 @@ class TarBSDTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'bsdtar';
+        return array('bsdtar', 'tar');
     }
 
     /**
@@ -40,7 +40,7 @@ class TarBSDTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'bsdtar';
+        return array('bsdtar', 'tar');
     }
 
     /**

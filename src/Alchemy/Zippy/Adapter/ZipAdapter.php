@@ -252,12 +252,13 @@ class ZipAdapter extends AbstractBinaryAdapter
     {
         return 'zip';
     }
-        /**
+
+    /**
      * @inheritdoc
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'unzip';
+        return array('unzip');
     }
 
     /**
@@ -265,7 +266,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'zip';
+        return array('zip');
     }
 
     /**

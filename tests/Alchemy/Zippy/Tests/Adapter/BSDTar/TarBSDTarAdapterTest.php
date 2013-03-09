@@ -432,12 +432,12 @@ Written by John Gilmore and Jay Fenlason.'));
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), TarBSDTarAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), TarBSDTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()

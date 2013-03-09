@@ -128,15 +128,40 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         $finder = new ExecutableFinder();
 
-        $inflatorBinaryName = $inflatorBinaryName ?: static::getDefaultInflatorBinaryName();
+        $deflator = $inflator = null;
 
-        $inflator = new ProcessBuilderFactory($finder->find($inflatorBinaryName));
+        $inflatorBinaryName = $inflatorBinaryName ? (array) $inflatorBinaryName : static::getDefaultInflatorBinaryName();
 
-        $deflator = null;
+        foreach ($inflatorBinaryName as $possible) {
+            if (null !== $found = $finder->find($possible)) {
+                $inflator = new ProcessBuilderFactory($found);
+                break;
+            }
+        }
 
-        if (static::getDefaultInflatorBinaryName() !== static::getDefaultDeflatorBinaryName()) {
-            $deflatorBinaryName = $deflatorBinaryName ?: static::getDefaultDeflatorBinaryName();
-            $deflator = new ProcessBuilderFactory($finder->find($deflatorBinaryName));
+        if (!$inflator) {
+            throw new RuntimeException(sprintf(
+                'Failed to get a valid inflator for %s', get_called_class()
+            ));
+        }
+
+        $deflatorBinaryName = $deflatorBinaryName ? (array) $deflatorBinaryName : static::getDefaultDeflatorBinaryName();
+
+        if ($inflatorBinaryName !== $deflatorBinaryName) {
+            foreach ($deflatorBinaryName as $possible) {
+                if (null !== $found = $finder->find($possible)) {
+                    $deflator = new ProcessBuilderFactory($found);
+                    break;
+                }
+            }
+        } else {
+            $deflator = $inflator;
+        }
+
+        if (!$deflator) {
+            throw new RuntimeException(sprintf(
+                'Failed to get a valid deflator for %s', get_called_class()
+            ));
         }
 
         try {

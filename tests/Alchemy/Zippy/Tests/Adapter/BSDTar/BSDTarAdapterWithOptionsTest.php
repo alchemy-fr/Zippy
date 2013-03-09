@@ -465,13 +465,13 @@ Written by John Gilmore and Jay Fenlason.'));
     public function testGetDefaultInflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('bsdtar', $classname::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), $classname::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('bsdtar', $classname::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), $classname::getDefaultDeflatorBinaryName());
     }
 
     abstract protected function getOptions();

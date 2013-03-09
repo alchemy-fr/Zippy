@@ -32,7 +32,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'gnutar';
+        return array('gnutar', 'tar');
     }
 
     /**
@@ -40,7 +40,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'gnutar';
+        return array('gnutar', 'tar');
     }
 
     /**

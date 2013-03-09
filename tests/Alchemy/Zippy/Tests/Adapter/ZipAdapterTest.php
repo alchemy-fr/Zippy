@@ -330,12 +330,12 @@ class ZipAdapterTest extends TestCase
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('zip', ZipAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('zip'), ZipAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('unzip', ZipAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('unzip'), ZipAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()
