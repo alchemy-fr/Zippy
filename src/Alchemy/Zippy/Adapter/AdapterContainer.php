@@ -65,34 +65,34 @@ class AdapterContainer extends \Pimple
         });
 
         $container['Alchemy\\Zippy\\Adapter\\ZipAdapter'] = $container->share(function ($container) {
-            return ZipAdapter::newInstance($container['zip.inflator'], $container['zip.deflator']);
+            return ZipAdapter::newInstance($container['resource-manager'], $container['zip.inflator'], $container['zip.deflator']);
         });
 
         $container['gnu-tar.inflator'] = null;
         $container['gnu-tar.deflator'] = null;
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter'] = $container->share(function ($container) {
-            return TarGNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarGNUTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGzGNUTarAdapter'] = $container->share(function ($container) {
-            return TarGzGNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarGzGNUTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarBz2GNUTarAdapter'] = $container->share(function ($container) {
-            return TarBz2GNUTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarBz2GNUTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBSDTarAdapter'] = $container->share(function ($container) {
-            return TarBSDTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarBSDTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarGzBSDTarAdapter'] = $container->share(function ($container) {
-            return TarGzBSDTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarGzBSDTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBz2BSDTarAdapter'] = $container->share(function ($container) {
-            return TarBz2BSDTarAdapter::newInstance($container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
+            return TarBz2BSDTarAdapter::newInstance($container['resource-manager'], $container['gnu-tar.inflator'], $container['gnu-tar.deflator']);
         });
 
         $container['Alchemy\\Zippy\\Adapter\\ZipExtensionAdapter'] = $container->share(function () {
