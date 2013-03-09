@@ -4,7 +4,7 @@ namespace Alchemy\Zippy\Functional;
 
 use Symfony\Component\Finder\Finder;
 
-class ExtractArchiveTest extends FunctionalTestCase
+class ListArchiveTest extends FunctionalTestCase
 {
     public function testOpen()
     {
