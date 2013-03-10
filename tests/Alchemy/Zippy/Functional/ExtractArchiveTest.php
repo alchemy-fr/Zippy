@@ -49,7 +49,7 @@ class ExtractArchiveTest extends FunctionalTestCase
      */
     public function testExtractOnExistingFilesCanOverwrite($archive)
     {
-        $random = uniqid(mt_rand(), true);
+        $random = (string) uniqid(mt_rand(), true);
         $target = __DIR__ . '/samples/tmp';
 
         $files2find = array(
