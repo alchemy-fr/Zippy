@@ -149,7 +149,6 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         if ($inflatorBinaryName !== $deflatorBinaryName) {
             foreach ($deflatorBinaryName as $possible) {
-                echo "looking for $possible in ".getenv('PATH')." \n";
                 if (null !== $found = $finder->find($possible)) {
                     $deflator = new ProcessBuilderFactory($found);
                     break;
