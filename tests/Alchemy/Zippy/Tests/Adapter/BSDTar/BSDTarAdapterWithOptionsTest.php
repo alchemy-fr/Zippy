@@ -129,6 +129,11 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(3))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
             ->will($this->returnSelf());
@@ -169,13 +174,13 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--utc'))
+            ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--list'))
+            ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -275,13 +280,7 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -317,35 +316,23 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
+            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(5))
-            ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(6))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
-            ->expects($this->at(7))
+            ->expects($this->at(5))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());

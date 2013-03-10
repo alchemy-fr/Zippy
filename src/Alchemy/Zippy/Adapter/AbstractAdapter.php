@@ -17,6 +17,7 @@ use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class AbstractAdapter implements AdapterInterface
 {
+    /** @var ResourceManager */
     protected $manager;
 
     public function __construct(ResourceManager $manager)

@@ -202,9 +202,15 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     {
         $builder = $this
             ->inflator
-            ->create()
-            ->add('--utc')
+            ->create();
+
+        foreach ($this->getListMembersOptions() as $option) {
+            $builder->add($option);
+        }
+
+        $builder
             ->add('--list')
+            ->add('-v')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
@@ -343,9 +349,12 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $resource->getResource()))
-            ->add('--overwrite-dir')
-            ->add('--overwrite');
+            ->add(sprintf('--file=%s', $resource->getResource()));
+
+        foreach ($this->getExtractOptions() as $option) {
+            $builder
+                ->add($option);
+        }
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -386,9 +395,12 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder
             ->add('--extract')
-            ->add(sprintf('--file=%s', $resource->getResource()))
-            ->add('--overwrite-dir')
-            ->add('--overwrite');
+            ->add(sprintf('--file=%s', $resource->getResource()));
+
+        foreach ($this->getExtractMembersOptions() as $option) {
+            $builder
+                ->add($option);
+        }
 
         foreach ((array) $options as $option) {
             $builder->add((string) $option);
@@ -418,6 +430,12 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         return $members;
     }
+
+    abstract protected function getListMembersOptions();
+
+    abstract protected function getExtractOptions();
+
+    abstract protected function getExtractMembersOptions();
 
     /**
      * Gets adapter specific additional options

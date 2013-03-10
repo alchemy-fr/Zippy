@@ -129,6 +129,11 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(3))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
             ->will($this->returnSelf());
@@ -176,11 +181,17 @@ abstract class GNUTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
+            ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());

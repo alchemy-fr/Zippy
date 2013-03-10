@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter;
 use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 class ZipAdapterTest extends TestCase
 {
@@ -73,8 +74,13 @@ class ZipAdapterTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(2))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -82,7 +88,14 @@ class ZipAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $manager = ResourceManager::create();
+        $outputParser = ParserFactory::create(ZipAdapter::getName());
+        $deflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+                                    ->disableOriginalConstructor()
+                                    ->setMethods(array('useBinary'))
+                                    ->getMock();
+
+        $this->adapter = new ZipAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder), $deflator);
 
         $this->adapter->create(self::$zipFile, array(__FILE__));
 
