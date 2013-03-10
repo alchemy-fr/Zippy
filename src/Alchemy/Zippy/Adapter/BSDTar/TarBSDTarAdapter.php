@@ -50,6 +50,8 @@ class TarBSDTarAdapter extends AbstractTarAdapter
     {
         $lines = explode("\n", $versionOutput, 2);
 
+        echo "is BSD tar supported ? output is ".$versionOutput."\n";
+
         return false !== stripos($lines[0], 'bsdtar');
     }
 
