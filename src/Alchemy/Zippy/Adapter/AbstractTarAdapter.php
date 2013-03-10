@@ -162,6 +162,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
             echo "changing directory to " . $collection->getContext() . "\n";
             chdir($collection->getContext());
+            $builder->setWorkingDirectory($collection->getContext());
             echo "changed directory to " . getcwd() . ", listing : \n";
             var_dump(scandir(getcwd()));
             try {
