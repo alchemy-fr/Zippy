@@ -54,7 +54,7 @@ class CreateArchiveTest extends FunctionalTestCase
         foreach ($finder as $file ) {
             $this->assertEquals(0, strpos($file->getPathname(), $target));
             $member = substr($file->getPathname(), strlen($target));
-            $this->assertTrue(in_array($member, $files2find));
+            $this->assertTrue(in_array($member, $files2find), "looking for $member in $files2find");
             unset($files2find[array_search($member, $files2find)]);
         }
 
