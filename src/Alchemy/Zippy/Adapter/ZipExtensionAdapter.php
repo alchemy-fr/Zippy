@@ -245,17 +245,19 @@ class ZipExtensionAdapter extends AbstractAdapter
 
         chdir($collection->getContext());
 
+        $adapter = $this;
+
         try {
-            $collection->forAll(function ($i, Resource $resource) use ($zipresource, $stack, $recursive) {
-                $this->checkReadability($zipresource->getResource(), $resource->getTarget());
+            $collection->forAll(function ($i, Resource $resource) use ($zipresource, $stack, $recursive, $adapter) {
+                $adapter->checkReadability($zipresource->getResource(), $resource->getTarget());
                 if (is_dir($resource->getTarget())) {
                     if ($recursive) {
                         $stack->push($resource->getTarget() . ((substr($resource->getTarget(), -1) === DIRECTORY_SEPARATOR) ? '' : DIRECTORY_SEPARATOR ));
                     } else {
-                        $this->addEmptyDir($zipresource->getResource(), $resource->getTarget());
+                        $adapter->addEmptyDir($zipresource->getResource(), $resource->getTarget());
                     }
                 } else {
-                    $this->addFileToZip($zipresource->getResource(), $resource->getTarget());
+                    $adapter->addFileToZip($zipresource->getResource(), $resource->getTarget());
                 }
 
                 return true;
@@ -294,7 +296,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function checkReadability(\ZipArchive $zip, $file)
+    /**
+     * @info is public for PHP 5.3, should be private
+     */
+    public function checkReadability(\ZipArchive $zip, $file)
     {
         if (!is_readable($file)) {
             $zip->unchangeAll();
@@ -304,7 +309,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addFileToZip(\ZipArchive $zip, $file)
+    /**
+     * @info is public for PHP 5.3, should be private
+     */
+    public function addFileToZip(\ZipArchive $zip, $file)
     {
         if (!$zip->addFile($file)) {
             $zip->unchangeAll();
@@ -314,7 +322,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addEmptyDir(\ZipArchive $zip, $dir)
+    /**
+     * @info is public for PHP 5.3, should be private
+     */
+    public function addEmptyDir(\ZipArchive $zip, $dir)
     {
         if (!$zip->addEmptyDir($dir)) {
             $zip->unchangeAll();
