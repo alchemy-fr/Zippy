@@ -160,7 +160,10 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $cwd = getcwd();
             $collection = $this->manager->handle($cwd, $files);
 
+            echo "changing directory to " . $collection->getContext() . "\n";
             chdir($collection->getContext());
+            echo "changed directory to " . getcwd() . ", listing : \n";
+            var_dump(scandir(getcwd()));
             try {
                 $collection->forAll(function ($i, Resource $resource) use ($builder) {
                     return $builder->add($resource->getTarget());
@@ -174,7 +177,9 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $error = $e;
             }
 
+            echo "changing directory to " . $collection->getContext() . "\n";
             chdir($cwd);
+            echo "changed directory to " . getcwd() . "\n";
 
             if ($error) {
                 throw $error;
