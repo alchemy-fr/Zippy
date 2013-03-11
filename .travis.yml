@@ -1,13 +1,8 @@
 language: php
 
 before_script:
-  - sudo apt-get install build-essential zip
+  - sudo apt-get install bsdtar zip
   - sudo easy_install sphinx
-  - wget http://ftp.gnu.org/gnu/tar/tar-1.26.tar.gz
-  - sh -c "tar xzvf tar-1.26.tar.gz && cd tar-1.26 && ./configure && make && sudo make install"
-  - sudo ln -s /usr/local/bin/tar /usr/local/bin/gnutar
-  - /usr/local/bin/gnutar --version
-  - sudo ln -s /bin/tar /usr/local/bin/bsdtar
   - composer install --dev --prefer-source
 
 env:
