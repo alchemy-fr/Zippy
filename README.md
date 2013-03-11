@@ -78,7 +78,3 @@ Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
 ##License
 
 This project is licensed under the [MIT license](http://opensource.org/licenses/MIT).
-
-
-
-
