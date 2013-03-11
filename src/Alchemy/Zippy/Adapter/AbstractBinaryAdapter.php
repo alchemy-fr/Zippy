@@ -133,9 +133,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         $inflatorBinaryName = $inflatorBinaryName ? (array) $inflatorBinaryName : static::getDefaultInflatorBinaryName();
 
         foreach ($inflatorBinaryName as $possible) {
-            echo "looking for inflator names $possible\n";
             if (null !== $found = $finder->find($possible)) {
-                echo "found ! $found\n";
                 $inflator = new ProcessBuilderFactory($found);
                 break;
             }
@@ -151,9 +149,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
         if ($inflatorBinaryName !== $deflatorBinaryName) {
             foreach ($deflatorBinaryName as $possible) {
-                echo "looking for deflator names $possible\n";
                 if (null !== $found = $finder->find($possible)) {
-                    echo "found ! $found\n";
                     $deflator = new ProcessBuilderFactory($found);
                     break;
                 }
