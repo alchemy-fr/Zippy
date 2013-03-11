@@ -427,10 +427,25 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $members;
     }
 
+    /**
+     * Returns an array of option for the listMembers command
+     *
+     * @return Array
+     */
     abstract protected function getListMembersOptions();
 
+    /**
+     * Returns an array of option for the extract command
+     *
+     * @return Array
+     */
     abstract protected function getExtractOptions();
 
+    /**
+     * Returns an array of option for the extractMembers command
+     *
+     * @return Array
+     */
     abstract protected function getExtractMembersOptions();
 
     /**

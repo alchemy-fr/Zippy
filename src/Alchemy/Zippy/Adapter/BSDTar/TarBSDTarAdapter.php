@@ -53,16 +53,25 @@ class TarBSDTarAdapter extends AbstractTarAdapter
         return false !== stripos($lines[0], 'bsdtar');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getListMembersOptions()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getExtractOptions()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getExtractMembersOptions()
     {
         return array();

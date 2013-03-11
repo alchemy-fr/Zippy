@@ -53,16 +53,25 @@ class TarGNUTarAdapter extends AbstractTarAdapter
         return false !== stripos($lines[0], '(gnu tar)');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getListMembersOptions()
     {
         return array('--utc');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getExtractOptions()
     {
         return array('--overwrite-dir', '--overwrite');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getExtractMembersOptions()
     {
         return array('--overwrite-dir', '--overwrite');
