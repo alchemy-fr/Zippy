@@ -35,6 +35,8 @@ class TargetLocator
                 return $this->locateResource($resource);
             case is_string($resource):
                 return $this->locateString($context, $resource);
+            case $resource instanceof \SplFileInfo:
+                return $this->locateString($context, $resource->getRealpath());
             default:
                 throw new TargetLocatorException($resource, 'Unknown resource format');
         }
