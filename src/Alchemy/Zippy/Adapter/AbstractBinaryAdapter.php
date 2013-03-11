@@ -128,41 +128,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         $finder = new ExecutableFinder();
 
-        $deflator = $inflator = null;
-
-        $inflatorBinaryName = $inflatorBinaryName ? (array) $inflatorBinaryName : static::getDefaultInflatorBinaryName();
-
-        foreach ($inflatorBinaryName as $possible) {
-            if (null !== $found = $finder->find($possible)) {
-                $inflator = new ProcessBuilderFactory($found);
-                break;
-            }
-        }
-
-        if (!$inflator) {
-            throw new RuntimeException(sprintf(
-                'Failed to get a valid inflator for %s', get_called_class()
-            ));
-        }
-
-        $deflatorBinaryName = $deflatorBinaryName ? (array) $deflatorBinaryName : static::getDefaultDeflatorBinaryName();
-
-        if ($inflatorBinaryName !== $deflatorBinaryName) {
-            foreach ($deflatorBinaryName as $possible) {
-                if (null !== $found = $finder->find($possible)) {
-                    $deflator = new ProcessBuilderFactory($found);
-                    break;
-                }
-            }
-        } else {
-            $deflator = $inflator;
-        }
-
-        if (!$deflator) {
-            throw new RuntimeException(sprintf(
-                'Failed to get a valid deflator for %s', get_called_class()
-            ));
-        }
+        $inflator = self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
+        $deflator = self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
 
         try {
             $outputParser = ParserFactory::create(static::getName());
@@ -174,6 +141,28 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         }
 
         return new static($outputParser, $manager, $inflator, $deflator);
+    }
+
+    private static function findABinary($wish, array $defaults, ExecutableFinder $finder)
+    {
+        $possibles = $wish ? (array) $wish : $defaults;
+
+        $binary = null;
+
+        foreach ($possibles as $possible) {
+            if (null !== $found = $finder->find($possible)) {
+                $binary = new ProcessBuilderFactory($found);
+                break;
+            }
+        }
+
+        if (!$binary) {
+            throw new RuntimeException(sprintf(
+                'Failed to get a valid binary for %s', get_called_class()
+            ));
+        }
+
+        return $binary;
     }
 
     /**
