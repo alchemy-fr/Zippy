@@ -16,8 +16,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="Zippy Tests Suite">
-            <directory>tests/Alchemy/Zippy/Tests</directory>
+        <testsuite name="Zippy Functional Tests Suite">
+            <directory>tests/Alchemy/Zippy/Functional</directory>
         </testsuite>
     </testsuites>
     <filter>

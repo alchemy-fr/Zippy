@@ -10,20 +10,7 @@ class AdapterContainerTests extends TestCase
     /** @test */
     public function itShouldRegisterAdaptersOnload()
     {
-        $that = $this;
-        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
-        $container
-            ->expects($this->any())
-            ->method('offsetGet')
-            ->will($this->returnCallback(function($offset) use ($that) {
-                if (array_key_exists('Alchemy\Zippy\Adapter\AdapterInterface', class_implements($offset))) {
-                    return $that->getMockBuilder($offset)
-                            ->disableOriginalConstructor()
-                            ->getMock();
-                }
-
-                return null;
-            }));
+        $container = AdapterContainer::load();
 
         $this->assertInstanceOf('Alchemy\\Zippy\\Adapter\\ZipAdapter', $container['Alchemy\\Zippy\\Adapter\\ZipAdapter']);
         $this->assertInstanceOf('Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter', $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter']);

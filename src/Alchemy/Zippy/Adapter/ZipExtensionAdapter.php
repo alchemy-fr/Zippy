@@ -19,6 +19,7 @@ use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\Resource\Resource;
 
 /**
  * ZipExtensionAdapter allows you to create and extract files from archives
@@ -127,7 +128,7 @@ class ZipExtensionAdapter extends AbstractAdapter
                 if ($resource->getResource()->locateName($member) === false) {
                     $resource->getResource()->close();
 
-                    throw new InvalidArgumentException(sprintf('%s is not on the zip file', $member));
+                    throw new InvalidArgumentException(sprintf('%s is not in the zip file', $member));
                 }
                 $members[] = $member;
             }
@@ -234,47 +235,71 @@ class ZipExtensionAdapter extends AbstractAdapter
         return new ZipArchiveResource($zip);
     }
 
-    private function addEntries(ZipArchiveResource $resource, array $files, $recursive)
+    private function addEntries(ZipArchiveResource $zipresource, array $files, $recursive)
     {
         $stack = new \SplStack();
 
-        // add files
-        foreach ($files as $file) {
-            $this->checkReadability($resource->getResource(), $file);
-            if (is_dir($file)) {
-                if ($recursive) {
-                    $stack->push($file . ((substr($file, -1) === DIRECTORY_SEPARATOR) ? '' : DIRECTORY_SEPARATOR ));
+        $error = null;
+        $cwd = getcwd();
+        $collection = $this->manager->handle($cwd, $files);
+
+        chdir($collection->getContext());
+
+        $adapter = $this;
+
+        try {
+            $collection->forAll(function ($i, Resource $resource) use ($zipresource, $stack, $recursive, $adapter) {
+                $adapter->checkReadability($zipresource->getResource(), $resource->getTarget());
+                if (is_dir($resource->getTarget())) {
+                    if ($recursive) {
+                        $stack->push($resource->getTarget() . ((substr($resource->getTarget(), -1) === DIRECTORY_SEPARATOR) ? '' : DIRECTORY_SEPARATOR ));
+                    } else {
+                        $adapter->addEmptyDir($zipresource->getResource(), $resource->getTarget());
+                    }
                 } else {
-                    $this->addEmptyDir($resource->getResource(), $file);
+                    $adapter->addFileToZip($zipresource->getResource(), $resource->getTarget());
                 }
-            } else {
-                $this->addFileToZip($resource->getResource(), $file);
+
+                return true;
+            });
+
+            // recursively add dirs
+            while (!$stack->isEmpty()) {
+                $dir = $stack->pop();
+                // removes . and ..
+                $files = array_diff(scandir($dir), array(".", ".."));
+                if (count($files) > 0) {
+                    foreach ($files as $file) {
+                        $file = $dir . $file;
+                        $this->checkReadability($zipresource->getResource(), $file);
+                        if (is_dir($file)) {
+                            $stack->push($file . DIRECTORY_SEPARATOR);
+                        } else {
+                            $this->addFileToZip($zipresource->getResource(), $file);
+                        }
+                    }
+                } else {
+                    $this->addEmptyDir($zipresource->getResource(), $dir);
+                }
             }
+            $this->flush($zipresource->getResource());
+
+            $this->manager->cleanup($collection);
+        } catch (\Exception $e) {
+            $error = $e;
         }
 
-        // recursively add dirs
-        while (!$stack->isEmpty()) {
-            $dir = $stack->pop();
-            // removes . and ..
-            $files = array_diff(scandir($dir), array(".", ".."));
-            if (count($files) > 0) {
-                foreach ($files as $file) {
-                    $file = $dir . $file;
-                    $this->checkReadability($resource->getResource(), $file);
-                    if (is_dir($file)) {
-                        $stack->push($file . DIRECTORY_SEPARATOR);
-                    } else {
-                        $this->addFileToZip($resource->getResource(), $file);
-                    }
-                }
-            } else {
-                $this->addEmptyDir($resource->getResource(), $dir);
-            }
+        chdir($cwd);
+
+        if ($error) {
+            throw $error;
         }
-        $this->flush($resource->getResource());
     }
 
-    private function checkReadability(\ZipArchive $zip, $file)
+    /**
+     * @info is public for PHP 5.3 compatibility, should be private
+     */
+    public function checkReadability(\ZipArchive $zip, $file)
     {
         if (!is_readable($file)) {
             $zip->unchangeAll();
@@ -284,7 +309,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addFileToZip(\ZipArchive $zip, $file)
+    /**
+     * @info is public for PHP 5.3 compatibility, should be private
+     */
+    public function addFileToZip(\ZipArchive $zip, $file)
     {
         if (!$zip->addFile($file)) {
             $zip->unchangeAll();
@@ -294,7 +322,10 @@ class ZipExtensionAdapter extends AbstractAdapter
         }
     }
 
-    private function addEmptyDir(\ZipArchive $zip, $dir)
+    /**
+     * @info is public for PHP 5.3 compatibility, should be private
+     */
+    public function addEmptyDir(\ZipArchive $zip, $dir)
     {
         if (!$zip->addEmptyDir($dir)) {
             $zip->unchangeAll();

@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class BSDTarAdapterWithOptionsTest extends TestCase
 {
@@ -42,7 +43,9 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $outputParser = ParserFactory::create($classname::getName());
 
-        $this->adapter = new $classname($outputParser, $this->getResourceManagerMock(), $inflator);
+        $manager = $this->getResourceManagerMock(__DIR__);
+
+        $this->adapter = new $classname($outputParser, $manager, $inflator);
     }
 
     public function testCreateNoFiles()
@@ -115,8 +118,13 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(3))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -124,7 +132,11 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $classname = static::getAdapterClassName();
+        $outputParser = ParserFactory::create($classname::getName());
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
+
+        $this->adapter = new $classname($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
@@ -151,13 +163,13 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--utc'))
+            ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--list'))
+            ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -252,6 +264,12 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -441,13 +459,13 @@ Written by John Gilmore and Jay Fenlason.'));
     public function testGetDefaultInflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('bsdtar', $classname::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), $classname::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
         $classname = static::getAdapterClassName();
-        $this->assertEquals('bsdtar', $classname::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), $classname::getDefaultDeflatorBinaryName());
     }
 
     abstract protected function getOptions();

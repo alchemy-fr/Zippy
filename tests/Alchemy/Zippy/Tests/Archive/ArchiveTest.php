@@ -53,32 +53,18 @@ class ArchiveTest extends TestCase
 
     public function testAddMembers()
     {
+        $resource = $this->getResource('location');
+
         $mockAdapter = $this->getAdapterMock();
 
         $mockAdapter
             ->expects($this->once())
-            ->method('add');
-
-        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collection->expects($this->any())
-            ->method('getContext')
-            ->will($this->returnValue(getcwd()));
-
-        $collection->expects($this->once())
-            ->method('map')
-            ->will($this->returnValue(array('hello')));
+            ->method('add')
+            ->with($this->equalTo($resource), $this->equalTo(array('hello')), $this->equalTo(true));
 
         $resourceManager = $this->getResourceManagerMock();
 
-        $resourceManager->expects($this->once())
-            ->method('handle')
-            ->with($this->equalTo(getcwd()), $this->equalTo(array('hello')))
-            ->will($this->returnValue($collection));
-
-        $archive = new Archive($this->getResource('location'), $mockAdapter, $resourceManager);
+        $archive = new Archive($resource, $mockAdapter, $resourceManager);
 
         $this->assertEquals($archive, $archive->addMembers(array('hello')));
     }

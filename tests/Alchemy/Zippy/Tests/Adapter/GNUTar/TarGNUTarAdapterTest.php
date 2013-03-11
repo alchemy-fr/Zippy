@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 class TarGNUTarAdapterTest extends TestCase
 {
@@ -40,7 +41,9 @@ class TarGNUTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
 
-        $this->adapter = new TarGNUTarAdapter($outputParser, $this->getResourceManagerMock(), $inflator);
+        $manager = $this->getResourceManagerMock(__DIR__);
+
+        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $inflator);
     }
 
     public function testCreateNoFiles()
@@ -101,8 +104,13 @@ class TarGNUTarAdapterTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(2))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -110,7 +118,9 @@ class TarGNUTarAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
+        $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
+        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
     }
@@ -143,6 +153,12 @@ class TarGNUTarAdapterTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo('-v'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
@@ -230,6 +246,18 @@ class TarGNUTarAdapterTest extends TestCase
             ->will($this->returnSelf());
 
         $mockProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo('--overwrite-dir'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
+            ->method('add')
+            ->with($this->equalTo('--overwrite'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
@@ -262,17 +290,29 @@ class TarGNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--directory'))
+            ->with($this->equalTo('--overwrite-dir'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(__DIR__))
+            ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(4))
+            ->method('add')
+            ->with($this->equalTo('--directory'))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(5))
+            ->method('add')
+            ->with($this->equalTo(__DIR__))
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(6))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
@@ -403,12 +443,12 @@ Written by John Gilmore and Jay Fenlason.'));
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('tar', TarGNUTarAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('gnutar', 'tar'), TarGNUTarAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('tar', TarGNUTarAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('gnutar', 'tar'), TarGNUTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()
