@@ -43,18 +43,7 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $outputParser = ParserFactory::create($classname::getName());
 
-        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collection->expects($this->any())
-            ->method('getContext')
-            ->will($this->returnValue(__DIR__));
-
-        $manager = $this->getResourceManagerMock();
-        $manager->expects($this->any())
-            ->method('handle')
-            ->will($this->returnValue($collection));
+        $manager = $this->getResourceManagerMock(__DIR__);
 
         $this->adapter = new $classname($outputParser, $manager, $inflator);
     }
@@ -135,7 +124,7 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
+            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -145,7 +134,7 @@ abstract class BSDTarAdapterWithOptionsTest extends TestCase
 
         $classname = static::getAdapterClassName();
         $outputParser = ParserFactory::create($classname::getName());
-        $manager = ResourceManager::create();
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
 
         $this->adapter = new $classname($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
 

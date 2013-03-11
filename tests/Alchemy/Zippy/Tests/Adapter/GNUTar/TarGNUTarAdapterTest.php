@@ -41,18 +41,7 @@ class TarGNUTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
 
-        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collection->expects($this->any())
-            ->method('getContext')
-            ->will($this->returnValue(__DIR__));
-
-        $manager = $this->getResourceManagerMock();
-        $manager->expects($this->any())
-            ->method('handle')
-            ->will($this->returnValue($collection));
+        $manager = $this->getResourceManagerMock(__DIR__);
 
         $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $inflator);
     }
@@ -121,7 +110,7 @@ class TarGNUTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) +1)))
+            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -129,7 +118,7 @@ class TarGNUTarAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $manager = ResourceManager::create();
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
         $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
 

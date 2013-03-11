@@ -80,7 +80,7 @@ class ZipAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(substr(__FILE__, strlen(getcwd()) + 1)))
+            ->with($this->equalTo('lalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -88,7 +88,7 @@ class ZipAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $manager = ResourceManager::create();
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalala'));
         $outputParser = ParserFactory::create(ZipAdapter::getName());
         $deflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
                                     ->disableOriginalConstructor()
