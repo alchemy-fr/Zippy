@@ -5,10 +5,6 @@ through commandline utilities or PHP extension.
 
 [![Build Status](https://secure.travis-ci.org/alchemy-fr/Zippy.png?branch=master)](http://travis-ci.org/alchemy-fr/Zippy)
 
-## Documentation
-
-Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
-
 ## Adapters
 
 Zippy currently support
@@ -74,6 +70,10 @@ $archive = $zippy->create('archive.zip', array(
 ```
 
 ##API Browser
+
+## Documentation
+
+Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
 
 ##License
 
