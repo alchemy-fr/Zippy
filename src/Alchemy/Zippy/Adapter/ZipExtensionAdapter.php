@@ -297,7 +297,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     }
 
     /**
-     * @info is public for PHP 5.3, should be private
+     * @info is public for PHP 5.3 compatibility, should be private
      */
     public function checkReadability(\ZipArchive $zip, $file)
     {
@@ -310,7 +310,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     }
 
     /**
-     * @info is public for PHP 5.3, should be private
+     * @info is public for PHP 5.3 compatibility, should be private
      */
     public function addFileToZip(\ZipArchive $zip, $file)
     {
@@ -323,7 +323,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     }
 
     /**
-     * @info is public for PHP 5.3, should be private
+     * @info is public for PHP 5.3 compatibility, should be private
      */
     public function addEmptyDir(\ZipArchive $zip, $dir)
     {
