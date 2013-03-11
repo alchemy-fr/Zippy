@@ -43,8 +43,7 @@ abstract class FunctionalTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getArchiveFileForAdapter($adapter)
     {
-        switch (get_class($adapter))
-        {
+        switch (get_class($adapter)) {
             case 'Alchemy\Zippy\Adapter\ZipAdapter':
             case 'Alchemy\Zippy\Adapter\ZipExtensionAdapter':
                 return __DIR__ . '/samples/archive.zip';
@@ -69,8 +68,7 @@ abstract class FunctionalTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getArchiveExtensionForAdapter($adapter)
     {
-        switch (get_class($adapter))
-        {
+        switch (get_class($adapter)) {
             case 'Alchemy\Zippy\Adapter\ZipAdapter':
             case 'Alchemy\Zippy\Adapter\ZipExtensionAdapter':
                 return 'zip';

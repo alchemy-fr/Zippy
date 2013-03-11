@@ -5,7 +5,6 @@ namespace Alchemy\Zippy\Tests\Adapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
-use Alchemy\Zippy\Resource\ResourceManager;
 
 class ZipExtensionAdapterTest extends TestCase
 {

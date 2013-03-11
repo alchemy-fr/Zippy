@@ -5,7 +5,6 @@ namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
-use Alchemy\Zippy\Resource\ResourceManager;
 
 class TarGNUTarAdapterTest extends TestCase
 {

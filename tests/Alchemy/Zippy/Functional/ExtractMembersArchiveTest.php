@@ -2,7 +2,6 @@
 
 namespace Alchemy\Zippy\Functional;
 
-use Symfony\Component\Finder\Finder;
 use Alchemy\Zippy\Archive\ArchiveInterface;
 
 class ExtractMembersArchiveTest extends FunctionalTestCase

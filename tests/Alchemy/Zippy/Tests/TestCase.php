@@ -18,7 +18,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             return new Resource($item, $item);
         }, $elements);
 
-
         $collection = new ResourceCollection($context, $elements);
 
         $manager = $this

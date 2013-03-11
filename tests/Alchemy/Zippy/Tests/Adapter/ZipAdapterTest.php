@@ -5,7 +5,6 @@ namespace Alchemy\Zippy\Tests\Adapter;
 use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
-use Alchemy\Zippy\Resource\ResourceManager;
 
 class ZipAdapterTest extends TestCase
 {

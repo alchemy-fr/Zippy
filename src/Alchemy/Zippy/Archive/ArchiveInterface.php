@@ -63,8 +63,8 @@ interface ArchiveInterface extends \IteratorAggregate, \Countable
     /**
      * Extracts specific members from the archive
      *
-     * @param String|Array $members      An array of members path
-     * @param string       $toDirectory  The destination $directory
+     * @param String|Array $members     An array of members path
+     * @param string       $toDirectory The destination $directory
      *
      * @return ArchiveInterface
      *

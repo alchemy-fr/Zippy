@@ -18,7 +18,6 @@ class CreateArchiveTest extends FunctionalTestCase
         }
     }
 
-
     public function testCreate()
     {
         $adapter = $this->getAdapter();
@@ -51,7 +50,7 @@ class CreateArchiveTest extends FunctionalTestCase
             '/directory/photo.jpg'
         );
 
-        foreach ($finder as $file ) {
+        foreach ($finder as $file) {
             $this->assertEquals(0, strpos($file->getPathname(), $target));
             $member = substr($file->getPathname(), strlen($target));
             $this->assertTrue(in_array($member, $files2find), "looking for $member in files2find");
@@ -88,7 +87,7 @@ class CreateArchiveTest extends FunctionalTestCase
             ->files()
             ->in($target);
 
-        foreach ($finder as $file ) {
+        foreach ($finder as $file) {
             $this->assertEquals(0, strpos($file->getPathname(), $target));
             $this->assertNotEquals($random, file_get_contents($file->getPathname()));
             $member = substr($file->getPathname(), strlen($target));

@@ -4,7 +4,6 @@ namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
-use Alchemy\Zippy\Resource\ResourceManager;
 
 abstract class BSDTarAdapterWithOptionsTest extends TestCase
 {
