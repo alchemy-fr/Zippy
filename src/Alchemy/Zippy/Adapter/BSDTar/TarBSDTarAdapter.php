@@ -32,7 +32,7 @@ class TarBSDTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'bsdtar';
+        return array('bsdtar', 'tar');
     }
 
     /**
@@ -40,7 +40,7 @@ class TarBSDTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'bsdtar';
+        return array('bsdtar', 'tar');
     }
 
     /**
@@ -51,5 +51,29 @@ class TarBSDTarAdapter extends AbstractTarAdapter
         $lines = explode("\n", $versionOutput, 2);
 
         return false !== stripos($lines[0], 'bsdtar');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getListMembersOptions()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtractOptions()
+    {
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtractMembersOptions()
+    {
+        return array();
     }
 }

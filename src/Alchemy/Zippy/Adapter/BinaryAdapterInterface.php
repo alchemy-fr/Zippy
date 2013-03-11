@@ -81,14 +81,14 @@ interface BinaryAdapterInterface
     /**
      * Gets the inflator adapter binary name
      *
-     * @return String
+     * @return Array
      */
     public static function getDefaultInflatorBinaryName();
 
     /**
      * Gets the deflator adapter binary name
      *
-     * @return String
+     * @return Array
      */
     public static function getDefaultDeflatorBinaryName();
 }

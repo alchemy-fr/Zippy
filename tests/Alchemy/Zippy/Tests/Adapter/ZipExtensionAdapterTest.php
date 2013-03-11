@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 class ZipExtensionAdapterTest extends TestCase
 {
@@ -33,6 +34,8 @@ class ZipExtensionAdapterTest extends TestCase
     public function testCreate()
     {
         $file = __DIR__ . '/zip-file.zip';
+        $manager = $this->getResourceManagerMock(__DIR__, array(__FILE__));
+        $this->adapter = new ZipExtensionAdapter($manager);
         $archive = $this->adapter->create($file, array(__FILE__));
         $this->assertInstanceOf('Alchemy\Zippy\Archive\Archive', $archive);
         $this->assertFileExists($file);
@@ -226,6 +229,8 @@ class ZipExtensionAdapterTest extends TestCase
             $dir,
         );
 
+        $manager = $this->getResourceManagerMock(__DIR__, $files);
+        $this->adapter = new ZipExtensionAdapter($manager);
         $this->adapter->add(new ZipArchiveResource($resource), $files);
 
         rmdir($dir);
@@ -254,6 +259,8 @@ class ZipExtensionAdapterTest extends TestCase
             $dir,
         );
 
+        $manager = $this->getResourceManagerMock(__DIR__, $files);
+        $this->adapter = new ZipExtensionAdapter($manager);
         $this->adapter->add(new ZipArchiveResource($resource), $files);
     }
 
@@ -284,6 +291,8 @@ class ZipExtensionAdapterTest extends TestCase
             $dir,
         );
 
+        $manager = $this->getResourceManagerMock(__DIR__, $files);
+        $this->adapter = new ZipExtensionAdapter($manager);
         $this->adapter->add(new ZipArchiveResource($resource), $files);
     }
 }

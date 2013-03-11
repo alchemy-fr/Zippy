@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
+use Alchemy\Zippy\Resource\ResourceManager;
 
 class TarBSDTarAdapterTest extends TestCase
 {
@@ -40,7 +41,9 @@ class TarBSDTarAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $this->getResourceManagerMock(), $inflator);
+        $manager = $this->getResourceManagerMock(__DIR__);
+
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $inflator);
     }
 
     public function testCreateNoFiles()
@@ -85,6 +88,8 @@ class TarBSDTarAdapterTest extends TestCase
 
     public function testCreate()
     {
+        $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
+        $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
         $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
         $mockProcessBuilder
@@ -101,8 +106,13 @@ class TarBSDTarAdapterTest extends TestCase
 
         $mockProcessBuilder
             ->expects($this->at(2))
+            ->method('setWorkingDirectory')
+            ->will($this->returnSelf());
+
+        $mockProcessBuilder
+            ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(__FILE__))
+            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -110,8 +120,7 @@ class TarBSDTarAdapterTest extends TestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
         return self::$tarFile;
@@ -137,13 +146,13 @@ class TarBSDTarAdapterTest extends TestCase
         $mockProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--utc'))
+            ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--list'))
+            ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
         $mockProcessBuilder
@@ -408,12 +417,12 @@ Written by John Gilmore and Jay Fenlason.'));
 
     public function testGetDefaultInflatorBinaryName()
     {
-        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultInflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), TarBSDTarAdapter::getDefaultInflatorBinaryName());
     }
 
     public function testGetDefaultDeflatorBinaryName()
     {
-        $this->assertEquals('bsdtar', TarBSDTarAdapter::getDefaultDeflatorBinaryName());
+        $this->assertEquals(array('bsdtar', 'tar'), TarBSDTarAdapter::getDefaultDeflatorBinaryName());
     }
 
     private function getSuccessFullMockProcess()

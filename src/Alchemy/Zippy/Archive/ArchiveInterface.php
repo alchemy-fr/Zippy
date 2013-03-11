@@ -52,22 +52,23 @@ interface ArchiveInterface extends \IteratorAggregate, \Countable
     /**
      * Extracts current archive to the given directory
      *
-     * @param String $to The path the extracted archive
+     * @param String $toDirectory The path the extracted archive
      *
      * @return ArchiveInterface
      *
      * @throws RuntimeException In case archive could not be extracted
      */
-    public function extract($to);
+    public function extract($toDirectory);
 
     /**
      * Extracts specific members from the archive
      *
-     * @param String|Array $members An array of members path
+     * @param String|Array $members      An array of members path
+     * @param string       $toDirectory  The destination $directory
      *
      * @return ArchiveInterface
      *
      * @throws RuntimeException In case member could not be extracted
      */
-    public function extractMembers($members);
+    public function extractMembers($members, $toDirectory = null);
 }

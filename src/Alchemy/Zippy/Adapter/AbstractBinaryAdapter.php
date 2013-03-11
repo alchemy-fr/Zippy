@@ -128,16 +128,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         $finder = new ExecutableFinder();
 
-        $inflatorBinaryName = $inflatorBinaryName ?: static::getDefaultInflatorBinaryName();
-
-        $inflator = new ProcessBuilderFactory($finder->find($inflatorBinaryName));
-
-        $deflator = null;
-
-        if (static::getDefaultInflatorBinaryName() !== static::getDefaultDeflatorBinaryName()) {
-            $deflatorBinaryName = $deflatorBinaryName ?: static::getDefaultDeflatorBinaryName();
-            $deflator = new ProcessBuilderFactory($finder->find($deflatorBinaryName));
-        }
+        $inflator = self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
+        $deflator = self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
 
         try {
             $outputParser = ParserFactory::create(static::getName());
@@ -149,6 +141,28 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         }
 
         return new static($outputParser, $manager, $inflator, $deflator);
+    }
+
+    private static function findABinary($wish, array $defaults, ExecutableFinder $finder)
+    {
+        $possibles = $wish ? (array) $wish : $defaults;
+
+        $binary = null;
+
+        foreach ($possibles as $possible) {
+            if (null !== $found = $finder->find($possible)) {
+                $binary = new ProcessBuilderFactory($found);
+                break;
+            }
+        }
+
+        if (!$binary) {
+            throw new RuntimeException(sprintf(
+                'Failed to get a valid binary for %s', get_called_class()
+            ));
+        }
+
+        return $binary;
     }
 
     /**

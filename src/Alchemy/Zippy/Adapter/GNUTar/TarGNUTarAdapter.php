@@ -32,7 +32,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'tar';
+        return array('gnutar', 'tar');
     }
 
     /**
@@ -40,7 +40,7 @@ class TarGNUTarAdapter extends AbstractTarAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'tar';
+        return array('gnutar', 'tar');
     }
 
     /**
@@ -51,5 +51,29 @@ class TarGNUTarAdapter extends AbstractTarAdapter
         $lines = explode("\n", $versionOutput, 2);
 
         return false !== stripos($lines[0], '(gnu tar)');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getListMembersOptions()
+    {
+        return array('--utc');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtractOptions()
+    {
+        return array('--overwrite-dir', '--overwrite');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtractMembersOptions()
+    {
+        return array('--overwrite-dir', '--overwrite');
     }
 }

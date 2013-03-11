@@ -12,10 +12,12 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Archive\Member;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Resource\Resource;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -37,22 +39,39 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         if (0 === count($files)) {
            throw new NotSupportedException('Can not create empty zip archive');
-        } else {
-
-            if ($recursive) {
-                $builder->add('-r');
-            }
-
-            $builder->add($path);
-
-            if (!$this->addBuilderFileArgument($files, $builder)) {
-                throw new InvalidArgumentException('Invalid files');
-            }
         }
 
-        $process = $builder->getProcess();
+        if ($recursive) {
+            $builder->add('-r');
+        }
 
-        $process->run();
+        $builder->add($path);
+
+        $error = null;
+        $cwd = getcwd();
+        $collection = $this->manager->handle($cwd, $files);
+
+        chdir($collection->getContext());
+        $builder->setWorkingDirectory($collection->getContext());
+
+        try {
+            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+                return $builder->add($resource->getTarget());
+            });
+
+            $process = $builder->getProcess();
+            $process->run();
+
+            $this->manager->cleanup($collection);
+        } catch (\Exception $e) {
+            $error = $e;
+        }
+
+        chdir($cwd);
+
+        if ($error) {
+            throw $error;
+        }
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
@@ -252,12 +271,13 @@ class ZipAdapter extends AbstractBinaryAdapter
     {
         return 'zip';
     }
-        /**
+
+    /**
      * @inheritdoc
      */
     public static function getDefaultDeflatorBinaryName()
     {
-        return 'unzip';
+        return array('unzip');
     }
 
     /**
@@ -265,7 +285,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     public static function getDefaultInflatorBinaryName()
     {
-        return 'zip';
+        return array('zip');
     }
 
     /**
@@ -282,6 +302,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         $builder
+            ->add('-o')
             ->add($resource->getResource());
 
         if (null !== $to) {

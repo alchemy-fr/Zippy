@@ -61,8 +61,8 @@ class Archive implements ArchiveInterface
      */
     public function __construct(ResourceInterface $resource, AdapterInterface $adapter, ResourceManager $manager)
     {
-        $this->adapter = $adapter;
         $this->resource = $resource;
+        $this->adapter = $adapter;
         $this->manager = $manager;
     }
 
@@ -99,26 +99,7 @@ class Archive implements ArchiveInterface
      */
     public function addMembers($sources, $recursive = true)
     {
-        $error = null;
-        $cwd = getcwd();
-        $collection = $this->manager->handle($cwd, $sources);
-
-        chdir($collection->getContext());
-        try {
-            $this->adapter->add($this->resource, $collection->map(function (Resource $resource) {
-                return $resource->getTarget();
-            }), $recursive);
-
-            $this->manager->cleanup($collection);
-        } catch (\Exception $e) {
-            $error = $e;
-        }
-
-        chdir($cwd);
-
-        if ($error) {
-            throw $error;
-        }
+        $this->adapter->add($this->resource, $sources, $recursive);
 
         return $this;
     }
@@ -136,9 +117,9 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-     public function extract($to)
+     public function extract($toDirectory)
      {
-        $this->adapter->extract($this->resource, $to);
+        $this->adapter->extract($this->resource, $toDirectory);
 
         return $this;
      }
@@ -146,9 +127,9 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-    public function extractMembers($members)
+    public function extractMembers($members, $toDirectory = null)
     {
-        $this->adapter->extractMembers($this->resource, $members);
+        $this->adapter->extractMembers($this->resource, $members, $toDirectory);
 
         return $this;
     }
