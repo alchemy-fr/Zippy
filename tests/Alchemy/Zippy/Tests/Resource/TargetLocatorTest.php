@@ -49,6 +49,7 @@ class TargetLocatorTest extends TestCase
 
         return array(
             array(basename(__FILE__), __DIR__, __FILE__),
+            array(basename(__FILE__), __DIR__, new \SplFileInfo(__FILE__)),
             array('input/path/to/local/file.ext', __DIR__ , __DIR__ . '/input/path/to/a/../local/file.ext'),
             array('file.ext', __DIR__ , fopen(__DIR__ . '/input/path/to/a/../local/file.ext', 'rb')),
             array(basename(__FILE__), __DIR__, 'file://' . __FILE__),
