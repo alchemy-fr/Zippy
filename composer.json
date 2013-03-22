@@ -21,7 +21,8 @@
     },
     "require-dev": {
         "ext-zip"              : "*",
-        "symfony/finder"       : "~2.0"
+        "symfony/finder"       : "~2.0",
+        "sami/sami"            : "dev-master@dev"
     },
     "suggest": {
         "ext-zip"              : "To use the ZipExtensionAdapter"
