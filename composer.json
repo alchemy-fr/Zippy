@@ -5,11 +5,11 @@
     "keywords": ["zip", "tar", "bzip", "compression"],
     "license": "MIT",
     "authors": [
-    {
-        "name": "Phraseanet Team",
-        "email": "info@alchemy.fr",
-        "homepage": "http://www.phraseanet.com/"
-    }
+        {
+            "name": "Alchemy",
+            "email": "dev.team@alchemy.fr",
+            "homepage": "http://www.alchemy.fr/"
+        }
     ],
     "require": {
         "php"                  : ">=5.3.3",
