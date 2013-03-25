@@ -38,7 +38,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         if (0 === count($files)) {
-           throw new NotSupportedException('Can not create empty zip archive');
+            throw new NotSupportedException('Can not create empty zip archive');
         }
 
         if ($recursive) {
@@ -133,7 +133,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $members = array();
 
         foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
-               $members[] = new Member(
+            $members[] = new Member(
                 $resource,
                 $this,
                 $member['location'],
