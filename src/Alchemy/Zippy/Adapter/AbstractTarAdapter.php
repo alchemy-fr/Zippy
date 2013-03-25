@@ -456,10 +456,10 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     abstract protected function getLocalOptions();
 
     /**
-     * Tells wether the current TAR binary comes from a specific implementation
+     * Tells whether the current TAR binary comes from a specific implementation
      * (GNU, BSD or Solaris etc ...)
      *
-     * @param $versionOutput The ouptut from --version command
+     * @param string $versionOutput The output from --version command
      *
      * @return Boolean
      */
