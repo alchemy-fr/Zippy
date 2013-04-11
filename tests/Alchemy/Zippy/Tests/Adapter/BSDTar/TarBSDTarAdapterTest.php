@@ -3,10 +3,10 @@
 namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
 use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
-use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Tests\Adapter\AdapterTestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
 
-class TarBSDTarAdapterTest extends TestCase
+class TarBSDTarAdapterTest extends AdapterTestCase
 {
     protected static $tarFile;
 
@@ -33,6 +33,12 @@ class TarBSDTarAdapterTest extends TestCase
 
     public function setUp()
     {
+        $this->adapter = $this->provideSupportedAdapter();
+    }
+
+
+    private function provideAdapter()
+    {
         $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
                 ->disableOriginalConstructor()
                 ->setMethods(array('useBinary'))
@@ -42,8 +48,25 @@ class TarBSDTarAdapterTest extends TestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $inflator);
+        return new TarBSDTarAdapter($outputParser, $manager, $inflator);
     }
+
+    protected function provideNotSupportedAdapter()
+    {
+        $adapter = $this->provideAdapter();
+        $this->setProbeIsNotOk($adapter);
+
+        return $adapter;
+    }
+
+    protected function provideSupportedAdapter()
+    {
+        $adapter = $this->provideAdapter();
+        $this->setProbeIsOk($adapter);
+
+        return $adapter;
+    }
+
 
     public function testCreateNoFiles()
     {
@@ -120,6 +143,7 @@ class TarBSDTarAdapterTest extends TestCase
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
         $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
+        $this->setProbeIsOk($this->adapter);
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
         return self::$tarFile;
@@ -350,65 +374,6 @@ class TarBSDTarAdapterTest extends TestCase
         ));
     }
 
-    public function testThatGNUTarIsNotMarkedAsSupported()
-    {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockProcessBuilder
-            ->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
-
-        $process = $this->getSuccessFullMockProcess();
-
-        $mockProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($process));
-
-        $process
-            ->expects($this->once())
-            ->method('getOutput')
-            ->will($this->returnValue('tar (GNU tar) 1.17
-Copyright (C) 2007 Free Software Foundation, Inc.
-License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Modified to support extended attributes.
-Written by John Gilmore and Jay Fenlason.'));
-
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
-        $this->assertFalse($this->adapter->isSupported());
-    }
-
-    public function testThatBsdTarIsMarkedAsSupported()
-    {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockProcessBuilder
-            ->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
-
-        $process = $this->getSuccessFullMockProcess();
-
-        $mockProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($process));
-
-        $process
-            ->expects($this->once())
-            ->method('getOutput')
-            ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
-
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
-        $this->assertTrue($this->adapter->isSupported());
-    }
-
     public function testGetName()
     {
         $this->assertEquals('bsd-tar', TarBSDTarAdapter::getName());
@@ -422,36 +387,5 @@ Written by John Gilmore and Jay Fenlason.'));
     public function testGetDefaultDeflatorBinaryName()
     {
         $this->assertEquals(array('bsdtar', 'tar'), TarBSDTarAdapter::getDefaultDeflatorBinaryName());
-    }
-
-    private function getSuccessFullMockProcess()
-    {
-        $mockProcess = $this
-            ->getMockBuilder('Symfony\Component\Process\Process')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('run');
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('isSuccessful')
-            ->will($this->returnValue(true));
-
-        return $mockProcess;
-    }
-
-    private function getZippyMockBuilder($mockedProcessBuilder)
-    {
-        $mockBuilder = $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface');
-
-        $mockBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($mockedProcessBuilder));
-
-        return $mockBuilder;
     }
 }

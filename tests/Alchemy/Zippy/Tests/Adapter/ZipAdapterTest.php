@@ -3,10 +3,9 @@
 namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipAdapter;
-use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
 
-class ZipAdapterTest extends TestCase
+class ZipAdapterTest extends AdapterTestCase
 {
     protected static $zipFile;
 
@@ -33,6 +32,11 @@ class ZipAdapterTest extends TestCase
 
     public function setUp()
     {
+        $this->adapter = $this->provideSupportedAdapter();
+    }
+
+    protected function provideNotSupportedAdapter()
+    {
         $inflator = $deflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
                                     ->disableOriginalConstructor()
                                     ->setMethods(array('useBinary'))
@@ -40,7 +44,25 @@ class ZipAdapterTest extends TestCase
 
         $outputParser = ParserFactory::create(ZipAdapter::getName());
 
-        $this->adapter = new ZipAdapter($outputParser, $this->getResourceManagerMock(), $inflator, $deflator);
+        $adapter = new ZipAdapter($outputParser, $this->getResourceManagerMock(), $inflator, $deflator);
+        $this->setProbeIsNotOk($adapter);
+
+        return $adapter;
+    }
+
+    protected function provideSupportedAdapter()
+    {
+        $inflator = $deflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+                                    ->disableOriginalConstructor()
+                                    ->setMethods(array('useBinary'))
+                                    ->getMock();
+
+        $outputParser = ParserFactory::create(ZipAdapter::getName());
+
+        $adapter = new ZipAdapter($outputParser, $this->getResourceManagerMock(), $inflator, $deflator);
+        $this->setProbeIsOk($adapter);
+
+        return $adapter;
     }
 
     /**
@@ -95,6 +117,7 @@ class ZipAdapterTest extends TestCase
                                     ->getMock();
 
         $this->adapter = new ZipAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder), $deflator);
+        $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$zipFile, array(__FILE__));
 
@@ -348,36 +371,5 @@ class ZipAdapterTest extends TestCase
     public function testGetDefaultDeflatorBinaryName()
     {
         $this->assertEquals(array('unzip'), ZipAdapter::getDefaultDeflatorBinaryName());
-    }
-
-    private function getSuccessFullMockProcess()
-    {
-        $mockProcess = $this
-            ->getMockBuilder('Symfony\Component\Process\Process')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('run');
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('isSuccessful')
-            ->will($this->returnValue(true));
-
-        return $mockProcess;
-    }
-
-    private function getZippyMockBuilder($mockedProcessBuilder)
-    {
-        $mockBuilder = $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface');
-
-        $mockBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($mockedProcessBuilder));
-
-        return $mockBuilder;
     }
 }

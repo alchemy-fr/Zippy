@@ -2,8 +2,10 @@
 
 namespace Alchemy\Zippy\Tests;
 
+use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
@@ -43,5 +45,64 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         return $resource;
+    }
+
+    protected function setProbeIsOk(AdapterInterface $adapter)
+    {
+        if (!method_exists($adapter, 'setVersionProbe')) {
+            $this->fail('Trying to set a probe on an adapter that does not support it');
+        }
+
+        $probe = $this->getMock('Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface');
+        $probe->expects($this->any())
+            ->method('getStatus')
+            ->will($this->returnValue(VersionProbeInterface::PROBE_OK));
+
+        $adapter->setVersionProbe($probe);
+    }
+
+    protected function setProbeIsNotOk(AdapterInterface $adapter)
+    {
+        if (!method_exists($adapter, 'setVersionProbe')) {
+            $this->fail('Trying to set a probe on an adapter that does not support it');
+        }
+
+        $probe = $this->getMock('Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface');
+        $probe->expects($this->any())
+            ->method('getStatus')
+            ->will($this->returnValue(VersionProbeInterface::PROBE_NOTSUPPORTED));
+
+        $adapter->setVersionProbe($probe);
+    }
+
+    protected function getZippyMockBuilder($mockedProcessBuilder, $creations = 1)
+    {
+        $mockBuilder = $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface');
+
+        $mockBuilder
+            ->expects($this->exactly($creations))
+            ->method('create')
+            ->will($this->returnValue($mockedProcessBuilder));
+
+        return $mockBuilder;
+    }
+
+    protected function getSuccessFullMockProcess($runs = 1)
+    {
+        $mockProcess = $this
+            ->getMockBuilder('Symfony\Component\Process\Process')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockProcess
+            ->expects($this->exactly($runs))
+            ->method('run');
+
+        $mockProcess
+            ->expects($this->exactly($runs))
+            ->method('isSuccessful')
+            ->will($this->returnValue(true));
+
+        return $mockProcess;
     }
 }
