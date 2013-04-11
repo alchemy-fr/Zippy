@@ -51,7 +51,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $cwd = getcwd();
         $collection = $this->manager->handle($cwd, $files);
 
-        chdir($collection->getContext());
+        $this->chdir($collection->getContext());
         $builder->setWorkingDirectory($collection->getContext());
 
         try {
@@ -67,7 +67,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             $error = $e;
         }
 
-        chdir($cwd);
+        $this->chdir($cwd);
 
         if ($error) {
             throw $error;

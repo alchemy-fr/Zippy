@@ -160,7 +160,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $cwd = getcwd();
             $collection = $this->manager->handle($cwd, $files);
 
-            chdir($collection->getContext());
+            $this->chdir($collection->getContext());
             $builder->setWorkingDirectory($collection->getContext());
 
             try {
@@ -176,7 +176,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $error = $e;
             }
 
-            chdir($cwd);
+            $this->chdir($cwd);
 
             if ($error) {
                 throw $error;
@@ -267,7 +267,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         $cwd = getcwd();
         $collection = $this->manager->handle($cwd, $files);
 
-        chdir($collection->getContext());
+        $this->chdir($collection->getContext());
         try {
             $collection->forAll(function ($i, Resource $resource) use ($builder) {
                 return $builder->add($resource->getTarget());
@@ -281,7 +281,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $error = $e;
         }
 
-        chdir($cwd);
+        $this->chdir($cwd);
 
         if ($error) {
             throw $error;
