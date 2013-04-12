@@ -117,7 +117,7 @@ abstract class AbstractAdapter implements AdapterInterface
 
     /**
      * Sets the version probe used by this adapter
-     * 
+     *
      * @return VersionProbeInterface
      */
     public function setVersionProbe(VersionProbeInterface $probe)

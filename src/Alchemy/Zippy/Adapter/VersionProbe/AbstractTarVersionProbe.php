@@ -29,7 +29,7 @@ abstract class AbstractTarVersionProbe implements VersionProbeInterface
     /**
      * Set the inflator to tar
      *
-     * @param ProcessBuilderFactoryInterface $inflator
+     * @param  ProcessBuilderFactoryInterface $inflator
      * @return BSDTarVersionProbe
      */
     public function setInflator(ProcessBuilderFactoryInterface $inflator)
@@ -42,7 +42,7 @@ abstract class AbstractTarVersionProbe implements VersionProbeInterface
     /**
      * Set the deflator to untar
      *
-     * @param ProcessBuilderFactoryInterface $deflator
+     * @param  ProcessBuilderFactoryInterface $deflator
      * @return BSDTarVersionProbe
      */
     public function setDeflator(ProcessBuilderFactoryInterface $deflator)

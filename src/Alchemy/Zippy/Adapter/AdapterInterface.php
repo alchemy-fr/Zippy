@@ -47,7 +47,7 @@ Interface AdapterInterface
      * @throws InvalidArgumentException In case no files could be added
      */
     public function create($path, $files = null, $recursive = true);
-    
+
     /**
      * Tests if the adapter is supported by the current environment
      *

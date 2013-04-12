@@ -29,7 +29,7 @@ class ZipVersionProbe implements VersionProbeInterface
     /**
      * Set the inflator to zip
      *
-     * @param ProcessBuilderFactoryInterface $inflator
+     * @param  ProcessBuilderFactoryInterface $inflator
      * @return ZipVersionProbe
      */
     public function setInflator(ProcessBuilderFactoryInterface $inflator)
@@ -42,7 +42,7 @@ class ZipVersionProbe implements VersionProbeInterface
     /**
      * Set the deflator to unzip
      *
-     * @param ProcessBuilderFactoryInterface $deflator
+     * @param  ProcessBuilderFactoryInterface $deflator
      * @return ZipVersionProbe
      */
     public function setDeflator(ProcessBuilderFactoryInterface $deflator)
