@@ -18,6 +18,10 @@ use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\Adapter\VersionProbe\ZipVersionProbe;
+use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -26,10 +30,16 @@ use Alchemy\Zippy\Resource\Resource;
  */
 class ZipAdapter extends AbstractBinaryAdapter
 {
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    {
+        parent::__construct($parser, $manager, $inflator, $deflator);
+        $this->probe = new ZipVersionProbe($inflator, $deflator);
+    }
+
     /**
      * @inheritdoc
      */
-    public function create($path, $files = null, $recursive = true)
+    protected function doCreate($path, $files, $recursive)
     {
         $files = (array) $files;
 
@@ -87,31 +97,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function isSupported()
-    {
-        $processDeflate = $this
-            ->deflator
-            ->create()
-            ->add('-h')
-            ->getProcess();
-
-        $processDeflate->run();
-
-        $processInflate = $this
-            ->inflator
-            ->create()
-            ->add('-h')
-            ->getProcess();
-
-        $processInflate->run();
-
-        return $processInflate->isSuccessful() && $processDeflate->isSuccessful();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function listMembers(ResourceInterface $resource)
+    protected function doListMembers(ResourceInterface $resource)
     {
         $process = $this
             ->deflator
@@ -149,7 +135,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function add(ResourceInterface $resource, $files, $recursive = true)
+    protected function doAdd(ResourceInterface $resource, $files, $recursive)
     {
         $files = (array) $files;
 
@@ -185,7 +171,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function getDeflatorVersion()
+    protected function doGetDeflatorVersion()
     {
         $process = $this
             ->deflator
@@ -209,7 +195,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function getInflatorVersion()
+    protected function doGetInflatorVersion()
     {
         $process = $this
             ->inflator
@@ -233,7 +219,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function remove(ResourceInterface $resource, $files)
+    protected function doRemove(ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
@@ -291,7 +277,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function extract(ResourceInterface $resource, $to = null)
+    protected function doExtract(ResourceInterface $resource, $to)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -329,7 +315,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function extractMembers(ResourceInterface $resource, $members, $to = null)
+    protected function doExtractMembers(ResourceInterface $resource, $members, $to)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));

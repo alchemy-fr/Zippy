@@ -23,8 +23,9 @@ use Alchemy\Zippy\Resource\RequestMapper;
 use Alchemy\Zippy\Resource\TeleporterContainer;
 use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Alchemy\Zippy\Resource\TargetLocator;
-use Symfony\Component\Filesystem\Filesystem;
 use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\ExecutableFinder;
 
 class AdapterContainer extends \Pimple
 {
@@ -46,6 +47,10 @@ class AdapterContainer extends \Pimple
                 $container['resource-teleporter'],
                 $container['filesystem']
             );
+        });
+
+        $container['executable-finder'] = $container->share(function ($container) {
+            return new ExecutableFinder();
         });
 
         $container['request-mapper'] = $container->share(function ($container) {
@@ -70,6 +75,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\ZipAdapter'] = $container->share(function ($container) {
             return ZipAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['zip.inflator'],
                 $container['zip.deflator']
@@ -81,6 +87,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGNUTarAdapter'] = $container->share(function ($container) {
             return TarGNUTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['gnu-tar.inflator'],
                 $container['gnu-tar.deflator']
@@ -89,6 +96,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarGzGNUTarAdapter'] = $container->share(function ($container) {
             return TarGzGNUTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['gnu-tar.inflator'],
                 $container['gnu-tar.deflator']
@@ -97,6 +105,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\GNUTar\\TarBz2GNUTarAdapter'] = $container->share(function ($container) {
             return TarBz2GNUTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['gnu-tar.inflator'],
                 $container['gnu-tar.deflator']
@@ -108,6 +117,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBSDTarAdapter'] = $container->share(function ($container) {
             return TarBSDTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['bsd-tar.inflator'],
                 $container['bsd-tar.deflator']
@@ -116,6 +126,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarGzBSDTarAdapter'] = $container->share(function ($container) {
             return TarGzBSDTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['bsd-tar.inflator'],
                 $container['bsd-tar.deflator']
@@ -124,6 +135,7 @@ class AdapterContainer extends \Pimple
 
         $container['Alchemy\\Zippy\\Adapter\\BSDTar\\TarBz2BSDTarAdapter'] = $container->share(function ($container) {
             return TarBz2BSDTarAdapter::newInstance(
+                $container['executable-finder'],
                 $container['resource-manager'],
                 $container['bsd-tar.inflator'],
                 $container['bsd-tar.deflator']);
