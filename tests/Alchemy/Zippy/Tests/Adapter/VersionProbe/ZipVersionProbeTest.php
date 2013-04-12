@@ -13,15 +13,15 @@ class ZipVersionProbeTest extends TestCase
      */
     public function testGetStatusIsOk()
     {
-        $mockProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilderInflator
+        $mockedProcessBuilderInflator
             ->expects($this->once())
             ->method('add')
             ->with('-h')
             ->will($this->returnSelf());
         $processInflator = $this->getSuccessFullMockProcess();
-        $mockProcessBuilderInflator
+        $mockedProcessBuilderInflator
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($processInflator));
@@ -50,15 +50,15 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
   -e   encrypt                      -n   don\'t compress these suffixes
   -h2  show more help'));
 
-        $mockProcessBuilderDeflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilderDeflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilderDeflator
+        $mockedProcessBuilderDeflator
             ->expects($this->once())
             ->method('add')
             ->with('-h')
             ->will($this->returnSelf());
         $processDeflator = $this->getSuccessFullMockProcess();
-        $mockProcessBuilderDeflator
+        $mockedProcessBuilderDeflator
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($processDeflator));
@@ -89,7 +89,7 @@ Examples (see unzip.txt for more info):
   unzip -p foo | more  => send contents of foo.zip via pipe into program more
   unzip -fo foo ReadMe => quietly replace existing ReadMe if archive file newer'));
 
-        $probe = new ZipVersionProbe($this->getZippyMockBuilder($mockProcessBuilderInflator), $this->getZippyMockBuilder($mockProcessBuilderDeflator));
+        $probe = new ZipVersionProbe($this->getMockedProcessBuilderFactory($mockedProcessBuilderInflator), $this->getMockedProcessBuilderFactory($mockedProcessBuilderDeflator));
 
         $this->assertEquals(VersionProbeInterface::PROBE_OK, $probe->getStatus());
         // second time is served from cache
@@ -100,15 +100,15 @@ Examples (see unzip.txt for more info):
      */
     public function testGetStatusIsNotOk()
     {
-        $mockProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilderInflator
+        $mockedProcessBuilderInflator
             ->expects($this->once())
             ->method('add')
             ->with('-h')
             ->will($this->returnSelf());
         $processInflator = $this->getSuccessFullMockProcess();
-        $mockProcessBuilderInflator
+        $mockedProcessBuilderInflator
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($processInflator));
@@ -117,15 +117,15 @@ Examples (see unzip.txt for more info):
             ->method('getOutput')
             ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
 
-        $mockProcessBuilderDeflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilderDeflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilderDeflator
+        $mockedProcessBuilderDeflator
             ->expects($this->once())
             ->method('add')
             ->with('-h')
             ->will($this->returnSelf());
         $processDeflator = $this->getSuccessFullMockProcess();
-        $mockProcessBuilderDeflator
+        $mockedProcessBuilderDeflator
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($processDeflator));
@@ -134,7 +134,7 @@ Examples (see unzip.txt for more info):
             ->method('getOutput')
             ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
 
-        $probe = new ZipVersionProbe($this->getZippyMockBuilder($mockProcessBuilderInflator), $this->getZippyMockBuilder($mockProcessBuilderDeflator));
+        $probe = new ZipVersionProbe($this->getMockedProcessBuilderFactory($mockedProcessBuilderInflator), $this->getMockedProcessBuilderFactory($mockedProcessBuilderDeflator));
 
         $this->assertEquals(VersionProbeInterface::PROBE_NOTSUPPORTED, $probe->getStatus());
         // second time is served from cache

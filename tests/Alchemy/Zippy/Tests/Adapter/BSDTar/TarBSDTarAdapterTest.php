@@ -70,15 +70,15 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     public function testCreateNoFiles()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('-'))
@@ -86,24 +86,24 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array());
     }
@@ -112,37 +112,37 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('setWorkingDirectory')
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder));
         $this->setProbeIsOk($this->adapter);
         $this->adapter->create(self::$tarFile, array(__FILE__));
 
@@ -164,32 +164,32 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->listMembers($resource);
     }
@@ -198,52 +198,52 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--delete'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--append'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
     }
 
     public function testgetVersion()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--version'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->getInflatorVersion();
     }
@@ -252,26 +252,26 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $dir = $this->adapter->extract($resource);
         $pathinfo = pathinfo(self::$tarFile);
@@ -282,44 +282,44 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->extractMembers($resource, array(__FILE__), __DIR__);
     }
@@ -328,33 +328,33 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--delete'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('path-to-file'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
@@ -366,7 +366,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
             ->method('getLocation')
             ->will($this->returnValue('path-to-file'));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->remove($resource, array(
             __DIR__ . '/../TestCase.php',

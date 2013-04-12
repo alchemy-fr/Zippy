@@ -11,8 +11,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
 
     public function setUp()
     {
-        $this->adapter = new ZipExtensionAdapter($this->getResourceManagerMock());
-        $this->setProbeIsOk($this->adapter);
+        $this->adapter = $this->provideSupportedAdapter();
     }
 
     public function testNewInstance()

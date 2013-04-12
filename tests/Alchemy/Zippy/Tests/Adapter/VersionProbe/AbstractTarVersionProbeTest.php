@@ -18,7 +18,7 @@ abstract class AbstractTarVersionProbeTest extends TestCase
 
         $classname = $this->getProbeClassName();
 
-        $probe = new $classname($this->getZippyMockBuilder($mockInflator), $this->getZippyMockBuilder($mockDeflator));
+        $probe = new $classname($this->getMockedProcessBuilderFactory($mockInflator), $this->getMockedProcessBuilderFactory($mockDeflator));
 
         $this->assertEquals(VersionProbeInterface::PROBE_OK, $probe->getStatus());
         // second time is served from cache
@@ -34,8 +34,8 @@ abstract class AbstractTarVersionProbeTest extends TestCase
         $mockInflatorBuilder = $inflatorVersion ? $this->getBuilder($inflatorVersion, $inflatorCall) : null;
         $mockDeflatorBuilder = $deflatorVersion ? $this->getBuilder($deflatorVersion, $deflatorCall) : null;
 
-        $builderInflator = $mockInflatorBuilder ? $this->getZippyMockBuilder($mockInflatorBuilder, $inflatorCall ? 1 : 0) : null;
-        $builderDeflator = $mockDeflatorBuilder ? $this->getZippyMockBuilder($mockDeflatorBuilder, $deflatorCall ? 1 : 0) : null;
+        $builderInflator = $mockInflatorBuilder ? $this->getMockedProcessBuilderFactory($mockInflatorBuilder, $inflatorCall ? 1 : 0) : null;
+        $builderDeflator = $mockDeflatorBuilder ? $this->getMockedProcessBuilderFactory($mockDeflatorBuilder, $deflatorCall ? 1 : 0) : null;
 
         $classname = $this->getProbeClassName();
 
