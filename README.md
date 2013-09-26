@@ -78,3 +78,7 @@ Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
 ##License
 
 This project is licensed under the [MIT license](http://opensource.org/licenses/MIT).
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/romainneutron/zippy/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
