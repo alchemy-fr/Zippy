@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "ext-zip"              : "*",
+        "phpunit/phpunit"      : "~3.7",
         "symfony/finder"       : "~2.0",
         "sami/sami"            : "dev-master@dev"
     },
