@@ -63,13 +63,11 @@ class ResourceManager
                 throw new IOException(sprintf('Could not create temporary folder %s', $context), $e->getCode(), $e);
             }
 
-            $collection->setContext($context);
-
             foreach ($collection as $resource) {
                 $this->teleporter->teleport($context, $resource);
             }
 
-            $collection->setTemporary(true);
+            $collection = new ResourceCollection($context, $collection->toArray(), true);
         }
 
         return $collection;

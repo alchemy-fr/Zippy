@@ -11,22 +11,30 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class ResourceCollection extends ArrayCollection
 {
     private $context;
-    private $temporary = false;
+    private $temporary;
 
     /**
      * Constructor
      *
      * @param String $context
-     * @param array  $elements An array of Resource
+     * @param Resource[]  $elements An array of Resource
      */
-    public function __construct($context, array $elements = array())
+    public function __construct($context, array $elements, $temporary)
     {
+        array_walk($elements, function ($element) {
+            if (!$element instanceof Resource) {
+                throw new InvalidArgumentException('ResourceCollection only accept Resource elements');
+            }
+        });
+
         $this->context = $context;
+        $this->temporary = (Boolean) $temporary;
         parent::__construct($elements);
     }
 
@@ -41,20 +49,6 @@ class ResourceCollection extends ArrayCollection
     }
 
     /**
-     * Sets the context of the current collection
-     *
-     * @param type $context
-     *
-     * @return ResourceCollection
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-
-        return $this;
-    }
-
-    /**
      * Tells whether the collection is temporary or not.
      *
      * A ResourceCollection is temporary when it required a temporary folder to
@@ -65,20 +59,6 @@ class ResourceCollection extends ArrayCollection
     public function isTemporary()
     {
         return $this->temporary;
-    }
-
-    /**
-     * Sets the collection temporary
-     *
-     * @param Boolean $temporary
-     *
-     * @return ResourceCollection
-     */
-    public function setTemporary($temporary)
-    {
-        $this->temporary = (Boolean) $temporary;
-
-        return $this;
     }
 
     /**
