@@ -22,8 +22,8 @@ class ResourceCollection extends ArrayCollection
     /**
      * Constructor
      *
-     * @param String $context
-     * @param Resource[]  $elements An array of Resource
+     * @param String     $context
+     * @param Resource[] $elements An array of Resource
      */
     public function __construct($context, array $elements, $temporary)
     {
