@@ -55,7 +55,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         $this->parser = $parser;
         $this->manager = $manager;
@@ -146,8 +146,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      */
     public static function newInstance(ExecutableFinder $finder, ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
     {
-        $inflator = self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
-        $deflator = self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
+        $inflator = $inflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $inflatorBinaryName : self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
+        $deflator = $deflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $deflatorBinaryName : self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
 
         try {
             $outputParser = ParserFactory::create(static::getName());
@@ -156,6 +156,14 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
                 'Failed to get a new instance of %s',
                 get_called_class()), $e->getCode(), $e
             );
+        }
+
+        if (null === $inflator) {
+            throw new RuntimeException(sprintf('Unable to create the inflator'));
+        }
+
+        if (null === $deflator) {
+            throw new RuntimeException(sprintf('Unable to create the deflator'));
         }
 
         return new static($outputParser, $manager, $inflator, $deflator);

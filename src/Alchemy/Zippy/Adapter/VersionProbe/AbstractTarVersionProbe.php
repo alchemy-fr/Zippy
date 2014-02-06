@@ -20,36 +20,10 @@ abstract class AbstractTarVersionProbe implements VersionProbeInterface
     private $inflator;
     private $deflator;
 
-    public function __construct(ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         $this->inflator = $inflator;
         $this->deflator = $deflator;
-    }
-
-    /**
-     * Set the inflator to tar
-     *
-     * @param  ProcessBuilderFactoryInterface $inflator
-     * @return BSDTarVersionProbe
-     */
-    public function setInflator(ProcessBuilderFactoryInterface $inflator)
-    {
-        $this->inflator = $inflator;
-
-        return $this;
-    }
-
-    /**
-     * Set the deflator to untar
-     *
-     * @param  ProcessBuilderFactoryInterface $deflator
-     * @return BSDTarVersionProbe
-     */
-    public function setDeflator(ProcessBuilderFactoryInterface $deflator)
-    {
-        $this->deflator = $deflator;
-
-        return $this;
     }
 
     /**

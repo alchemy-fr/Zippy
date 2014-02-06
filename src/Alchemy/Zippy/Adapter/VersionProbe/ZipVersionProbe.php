@@ -20,7 +20,7 @@ class ZipVersionProbe implements VersionProbeInterface
     private $inflator;
     private $deflator;
 
-    public function __construct(ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         $this->inflator = $inflator;
         $this->deflator = $deflator;

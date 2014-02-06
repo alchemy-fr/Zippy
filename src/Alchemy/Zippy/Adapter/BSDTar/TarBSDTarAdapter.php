@@ -15,10 +15,10 @@ use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
  */
 class TarBSDTarAdapter extends AbstractTarAdapter
 {
-    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         parent::__construct($parser, $manager, $inflator, $deflator);
-        $this->probe = new BSDTarVersionProbe($inflator);
+        $this->probe = new BSDTarVersionProbe($inflator, $deflator);
     }
 
     /**
