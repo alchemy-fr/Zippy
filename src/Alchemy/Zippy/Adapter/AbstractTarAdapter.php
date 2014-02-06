@@ -17,6 +17,7 @@ use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Archive\Member;
+use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
@@ -135,31 +136,24 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $builder->add('--no-recursion');
             }
 
-            $error = null;
-            $cwd = getcwd();
-            $collection = $this->manager->handle($cwd, $files);
+            $collection = $this->manager->handle(getcwd(), $files);
 
-            $this->chdir($collection->getContext());
             $builder->setWorkingDirectory($collection->getContext());
 
+            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+                return $builder->add($resource->getTarget());
+            });
+
+            $process = $builder->getProcess();
+
             try {
-                $collection->forAll(function ($i, Resource $resource) use ($builder) {
-                    return $builder->add($resource->getTarget());
-                });
-
-                $process = $builder->getProcess();
                 $process->run();
-
+            } catch (ProcessException $e) {
                 $this->manager->cleanup($collection);
-            } catch (\Exception $e) {
-                $error = $e;
+                throw $e;
             }
 
-            $this->chdir($cwd);
-
-            if ($error) {
-                throw $error;
-            }
+            $this->manager->cleanup($collection);
         }
 
         if (!$process->isSuccessful()) {
@@ -242,29 +236,24 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         // there will be an issue if the file starts with a dash
         // see --add-file=FILE
-        $error = null;
-        $cwd = getcwd();
-        $collection = $this->manager->handle($cwd, $files);
+        $collection = $this->manager->handle(getcwd(), $files);
 
-        $this->chdir($collection->getContext());
+        $builder->setWorkingDirectory($collection->getContext());
+
+        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+            return $builder->add($resource->getTarget());
+        });
+
+        $process = $builder->getProcess();
+
         try {
-            $collection->forAll(function ($i, Resource $resource) use ($builder) {
-                return $builder->add($resource->getTarget());
-            });
-
-            $process = $builder->getProcess();
             $process->run();
-
+        } catch (ProcessException $e) {
             $this->manager->cleanup($collection);
-        } catch (\Exception $e) {
-            $error = $e;
+            throw $e;
         }
 
-        $this->chdir($cwd);
-
-        if ($error) {
-            throw $error;
-        }
+        $this->manager->cleanup($collection);
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
