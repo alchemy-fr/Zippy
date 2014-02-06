@@ -22,6 +22,7 @@ use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Adapter\VersionProbe\ZipVersionProbe;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
+use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
 /**
  * ZipAdapter allows you to create and extract files from archives using Zip
@@ -151,13 +152,24 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->add('-u')
             ->add($resource->getResource());
 
-        if (!$this->addBuilderFileArgument($files, $builder)) {
-            throw new InvalidArgumentException('Invalid files');
-        }
+        $collection = $this->manager->handle(getcwd(), $files);
+
+        $builder->setWorkingDirectory($collection->getContext());
+
+        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+            return $builder->add($resource->getTarget());
+        });
 
         $process = $builder->getProcess();
 
-        $process->run();
+        try {
+            $process->run();
+        } catch (ProcessException $e) {
+            $this->manager->cleanup($collection);
+            throw $e;
+        }
+
+        $this->manager->cleanup($collection);
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
