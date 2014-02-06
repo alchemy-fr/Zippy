@@ -47,7 +47,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        return new TarBSDTarAdapter($outputParser, $manager, $inflator);
+        return new TarBSDTarAdapter($outputParser, $manager, $inflator, $inflator);
     }
 
     protected function provideNotSupportedAdapter()
@@ -140,7 +140,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter = new TarBSDTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
         $this->setProbeIsOk($this->adapter);
         $this->adapter->create(self::$tarFile, array(__FILE__));
 

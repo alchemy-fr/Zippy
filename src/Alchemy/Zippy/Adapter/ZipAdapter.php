@@ -30,7 +30,7 @@ use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
  */
 class ZipAdapter extends AbstractBinaryAdapter
 {
-    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator = null, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         parent::__construct($parser, $manager, $inflator, $deflator);
         $this->probe = new ZipVersionProbe($inflator, $deflator);

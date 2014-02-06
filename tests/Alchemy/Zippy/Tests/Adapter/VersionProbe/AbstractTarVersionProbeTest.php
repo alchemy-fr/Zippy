@@ -51,9 +51,6 @@ abstract class AbstractTarVersionProbeTest extends TestCase
         return array(
             array($this->getCorrespondingVersionOutput(), $this->getNonCorrespondingVersionOutput(), true, true),
             array($this->getNonCorrespondingVersionOutput(), $this->getCorrespondingVersionOutput(), true, false),
-            array($this->getNonCorrespondingVersionOutput(), $this->getNonCorrespondingVersionOutput(), true, false),
-            array(null, $this->getCorrespondingVersionOutput(), false, false),
-            array($this->getCorrespondingVersionOutput(), null, false, false),
         );
     }
 

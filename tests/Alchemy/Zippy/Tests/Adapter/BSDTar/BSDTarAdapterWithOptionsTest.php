@@ -49,7 +49,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        return new $classname($outputParser, $manager, $inflator);
+        return new $classname($outputParser, $manager, $inflator, $inflator);
     }
 
     protected function provideNotSupportedAdapter()
@@ -77,7 +77,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
         $manager = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $instance = $classname::newInstance($finder, $manager);
+        $instance = $classname::newInstance($finder, $manager, $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface'), $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface'));
         $this->assertInstanceOf($classname, $instance);
     }
 
@@ -169,7 +169,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
         $outputParser = ParserFactory::create($classname::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
 
-        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
@@ -447,6 +447,6 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
 
     protected static function getAdapterClassName()
     {
-        $this->fail(sprintf('Method %s should be implemented', __METHOD__));
+        self::fail(sprintf('Method %s should be implemented', __METHOD__));
     }
 }

@@ -49,7 +49,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        return new $classname($outputParser, $manager, $inflator);
+        return new $classname($outputParser, $manager, $inflator, $inflator);
     }
 
     protected function provideNotSupportedAdapter()
@@ -156,7 +156,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $outputParser = ParserFactory::create($classname::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
 
-        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
@@ -454,6 +454,6 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
 
     protected static function getAdapterClassName()
     {
-        $this->fail(sprintf('Method %s should be implemented', __METHOD__));
+        self::fail(sprintf('Method %s should be implemented', __METHOD__));
     }
 }

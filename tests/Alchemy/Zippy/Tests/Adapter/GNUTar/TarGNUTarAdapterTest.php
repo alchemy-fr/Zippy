@@ -47,7 +47,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        return new TarGNUTarAdapter($outputParser, $manager, $inflator);
+        return new TarGNUTarAdapter($outputParser, $manager, $inflator, $inflator);
     }
 
     protected function provideSupportedAdapter()
@@ -140,7 +140,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
 
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
-        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
