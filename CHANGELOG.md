@@ -6,6 +6,7 @@ CHANGELOG
   * Allow all adapters to be instancied even if they are not supported
   * Move support detection logic in distinct classes
   * Add support for archives relative path
+  * Archive in context when a single resource is added
 
 * 0.1.1 (04-12-2013)
 
