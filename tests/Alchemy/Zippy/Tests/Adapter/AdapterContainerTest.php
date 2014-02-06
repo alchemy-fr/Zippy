@@ -5,7 +5,7 @@ namespace Alchemy\Zippy\Tests\Adapter;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Adapter\AdapterContainer;
 
-class AdapterContainerTests extends TestCase
+class AdapterContainerTest extends TestCase
 {
     /** @test */
     public function itShouldRegisterAdaptersOnload()

@@ -12,7 +12,6 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
-use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;

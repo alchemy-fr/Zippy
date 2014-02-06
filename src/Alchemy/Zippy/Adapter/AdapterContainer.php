@@ -11,7 +11,6 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Adapter\ZipAdapter;
 use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
 use Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter;
 use Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter;
@@ -23,7 +22,6 @@ use Alchemy\Zippy\Resource\RequestMapper;
 use Alchemy\Zippy\Resource\TeleporterContainer;
 use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Alchemy\Zippy\Resource\TargetLocator;
-use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ExecutableFinder;
 

@@ -36,7 +36,6 @@ class TarBSDTarAdapterTest extends AdapterTestCase
         $this->adapter = $this->provideSupportedAdapter();
     }
 
-
     private function provideAdapter()
     {
         $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
@@ -66,7 +65,6 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
         return $adapter;
     }
-
 
     public function testCreateNoFiles()
     {

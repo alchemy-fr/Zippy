@@ -12,8 +12,6 @@
 namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Resource\RequestMapper;
-use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 
