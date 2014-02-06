@@ -93,7 +93,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(sprintf('> %s', self::$tarFile)))
+            ->with($this->equalTo(sprintf('> %s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
@@ -119,7 +119,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
+            ->with($this->equalTo(sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder

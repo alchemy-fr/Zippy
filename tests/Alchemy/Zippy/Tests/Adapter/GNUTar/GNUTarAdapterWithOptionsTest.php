@@ -101,7 +101,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo((sprintf('> %s', self::$tarFile))))
+            ->with($this->equalTo((sprintf('> %s', $this->getExpectedAbsolutePathForTarget(self::$tarFile)))))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
@@ -133,7 +133,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
+            ->with($this->equalTo(sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder

@@ -11,7 +11,13 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     public static function getResourcesPath()
     {
-        return __DIR__ . '/../../../resources';
+        $dir = __DIR__ . '/../../../resources';
+
+        if (!is_dir($dir)) {
+            mkdir($dir);
+        }
+
+        return $dir;
     }
 
     protected function getResourceManagerMock($context = '', $elements = array())
@@ -104,5 +110,16 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         return $mockProcess;
+    }
+
+    protected function getExpectedAbsolutePathForTarget($target)
+    {
+        $directory = dirname($target);
+
+        if (!is_dir($directory)) {
+            throw new \InvalidArgumentException(sprintf('Unable to get the absolute path for %s', $target));
+        }
+
+        return realpath($directory).'/'.basename($target);
     }
 }

@@ -90,7 +90,7 @@ class ZipAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(self::$zipFile))
+            ->with($this->equalTo($this->getExpectedAbsolutePathForTarget(self::$zipFile)))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder

@@ -13,6 +13,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
@@ -52,7 +53,7 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         $this->requireSupport();
 
-        return $this->doCreate($path, $files, $recursive);
+        return $this->doCreate($this->makeTargetAbsolute($path), $files, $recursive);
     }
 
     /**
@@ -219,4 +220,27 @@ abstract class AbstractAdapter implements AdapterInterface
      * @return ArchiveInterface
      */
     abstract protected function doCreate($path, $file, $recursive);
+
+    /**
+     * Makes the target path absolute as the adapters might have a different directory
+     *
+     * @param $path The path to convert
+     *
+     * @return string The absolute path
+     *
+     * @throws InvalidArgumentException In case the path is not writable or does not exist
+     */
+    private function makeTargetAbsolute($path)
+    {
+        $directory = dirname($path);
+
+        if (!is_dir($directory)) {
+            throw new InvalidArgumentException(sprintf('Target path %s does not exist.', $directory));
+        }
+        if (!is_writable($directory)) {
+            throw new InvalidArgumentException(sprintf('Target path %s is not writeable.', $directory));
+        }
+
+        return realpath($directory).'/'.basename ($path);
+    }
 }
