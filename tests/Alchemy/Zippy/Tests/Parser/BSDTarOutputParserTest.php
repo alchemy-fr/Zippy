@@ -49,7 +49,8 @@ class BSDTarOutputParserTest extends TestCase
         $this->assertEquals(10240, $memberFile['size']);
         $date = $memberFile['mtime'];
 
-        $expected = \DateTime::createFromFormat('d-m-Y H:i:s', '22-01-'.(new \DateTime())->format('Y').' 13:31:00');
+        $currentDate = new \DateTime();
+        $expected = \DateTime::createFromFormat('d-m-Y H:i:s', '22-01-'.$currentDate->format('Y').' 13:31:00');
         $this->assertTrue($date instanceof \DateTime);
         $this->assertEquals($expected->format('U'), $date->format("U"));
 
