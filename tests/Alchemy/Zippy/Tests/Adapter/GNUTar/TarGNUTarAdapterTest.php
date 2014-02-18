@@ -203,17 +203,11 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--delete'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
             ->with($this->equalTo('--append'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(2))
+            ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());

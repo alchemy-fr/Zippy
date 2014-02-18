@@ -219,34 +219,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
     public function testAddFile()
     {
         $resource = $this->getResource(self::$tarFile);
-
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--delete'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('--append'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
-
+        $this->setExpectedException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
     }
 
