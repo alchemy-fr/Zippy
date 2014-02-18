@@ -68,6 +68,13 @@ class ResourceCollection extends ArrayCollection
      */
     public function canBeProcessedInPlace()
     {
+        if (count($this) === 1) {
+            if (null !== $context = $this->first()->getContextForProcessInSinglePlace()) {
+                $this->context = $context;
+                return true;
+            }
+        }
+
         foreach ($this as $resource) {
             if (!$resource->canBeProcessedInPlace($this->context)) {
                 return false;
