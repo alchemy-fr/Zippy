@@ -66,7 +66,6 @@ class ZipAdapter extends AbstractBinaryAdapter
         });
 
         $process = $builder->getProcess();
-        $process->setWorkingDirectory($collection->getContext());
 
         try {
             $process->run();
