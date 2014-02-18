@@ -226,7 +226,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         }
 
         $builder
-            ->add('--delete')
             ->add('--append')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
