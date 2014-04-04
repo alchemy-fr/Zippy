@@ -1,9 +1,11 @@
 CHANGELOG
 ---------
 
-* 0.2.0 (xx-xx-2013)
+* 0.2.0 (04-04-2014)
 
-  * Allow all adapters to be instancied even if they are not supported
+  * Fix the use of "teleporter" for local files
+  * Fix adding a new file using tar adapter ( --append option )
+  * Allow all adapters to be instantiated even if they are not supported
   * Move support detection logic in distinct classes
   * Add support for archives relative path
   * Use Symfony Process working directory instead of changing working directory
