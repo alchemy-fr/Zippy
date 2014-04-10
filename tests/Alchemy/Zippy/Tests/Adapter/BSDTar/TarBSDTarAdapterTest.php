@@ -70,30 +70,37 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
+
         $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--create'))
+            ->with($this->equalTo('-c'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('-'))
+            ->with($this->equalTo('-f'))
+            ->will($this->returnSelf());
+
+        $mockedProcessBuilder
+            ->expects($this->at(2))
+            ->method('add')
+            ->with($this->equalTo($this->getExpectedAbsolutePathForTarget(self::$tarFile)))
             ->will($this->returnSelf());
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
         $mockedProcessBuilder
-            ->expects($this->at(2))
+            ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
+            ->with($this->equalTo('-T'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(3))
+            ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo((sprintf('> %s', $this->getExpectedAbsolutePathForTarget(self::$tarFile)))))
+            ->with($this->equalTo( $nullFile))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
@@ -115,7 +122,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--create'))
+            ->with($this->equalTo('-c'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
