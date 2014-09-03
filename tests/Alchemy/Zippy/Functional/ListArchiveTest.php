@@ -21,9 +21,6 @@ class ListArchiveTest extends FunctionalTestCase
     {
         $target = __DIR__ . '/samples/tmp';
 
-        $expectedMembers = $archive->getMembers($target);
-        $foundMembers = array();
-
         $files2find = array(
             'directory/',
             'directory/README.md',
@@ -31,13 +28,11 @@ class ListArchiveTest extends FunctionalTestCase
         );
 
         foreach ($archive as $member) {
-            $foundMembers[] = $member;
             $this->assertInstanceOf('Alchemy\Zippy\Archive\MemberInterface', $member);
-            $this->assertTrue(in_array($member->getLocation(), $files2find));
+            $this->assertContains($member->getLocation(), $files2find);
             unset($files2find[array_search($member->getLocation(), $files2find)]);
         }
 
-        $this->assertEquals($expectedMembers, $foundMembers);
         $this->assertEquals(array(), $files2find);
     }
 
