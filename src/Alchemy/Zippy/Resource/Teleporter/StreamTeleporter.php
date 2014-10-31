@@ -11,14 +11,29 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
+use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 /**
  * This class transport an object using php stream wrapper
  */
 class StreamTeleporter extends AbstractTeleporter
 {
+    private $filesystem;
+
+    /**
+     * Constructor
+     *
+     * @param Filesystem $filesystem
+     */
+    public function __construct(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -56,6 +71,30 @@ class StreamTeleporter extends AbstractTeleporter
      */
     public static function create()
     {
-        return new static();
+        return new static(new Filesystem());
+    }
+
+    /**
+     * Writes the target
+     *
+     * @param String   $data
+     * @param Resource $resource
+     * @param String   $context
+     *
+     * @return TeleporterInterface
+     *
+     * @throws IOException
+     */
+    protected function writeTarget($data, Resource $resource, $context)
+    {
+        $target = $this->getTarget($context, $resource);
+
+        try {
+            $this->filesystem->dumpFile($target, $data);
+        } catch (IOExceptionInterface $e) {
+            throw new IOException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return $this;
     }
 }

@@ -13,7 +13,7 @@ namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 class ResourceManager
 {
@@ -48,7 +48,7 @@ class ResourceManager
      *
      * @return ResourceCollection
      *
-     * @throws IOException In case of write failure
+     * @throws IOExceptionInterface In case of write failure
      */
     public function handle($context, array $request)
     {
@@ -59,7 +59,7 @@ class ResourceManager
 
             try {
                 $this->filesystem->mkdir($context);
-            } catch (SfIOException $e) {
+            } catch (IOExceptionInterface $e) {
                 throw new IOException(sprintf('Could not create temporary folder %s', $context), $e->getCode(), $e);
             }
 
@@ -87,7 +87,7 @@ class ResourceManager
         if ($collection->isTemporary()) {
             try {
                 $this->filesystem->remove($collection->getContext());
-            } catch (IOException $e) {
+            } catch (IOExceptionInterface $e) {
                 // log this ?
             }
         }

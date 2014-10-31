@@ -82,6 +82,58 @@ class ArchiveTest extends TestCase
         $this->assertEquals($archive, $archive->removeMembers('hello'));
     }
 
+    public function testExtract()
+    {
+
+        $resource = $this->getResource('location');
+        $to = '/directory';
+
+        $mockAdapter = $this->getAdapterMock();
+
+        $mockAdapter
+            ->expects($this->once())
+            ->method('extract')
+            ->with($this->equalTo($resource), $this->equalTo($to));
+
+        $archive = new Archive($resource, $mockAdapter, $this->getResourceManagerMock());
+
+        $archive->extract($to);
+    }
+
+    public function testExtractMembers()
+    {
+
+        $resource = $this->getResource('location');
+        $to = '/directory';
+        $members = array('/member1', '/member2');
+
+        $mockAdapter = $this->getAdapterMock();
+
+        $mockAdapter
+            ->expects($this->once())
+            ->method('extractMembers')
+            ->with($this->equalTo($resource), $this->equalTo($members), $this->equalTo($to));
+
+        $archive = new Archive($resource, $mockAdapter, $this->getResourceManagerMock());
+
+        $archive->extractMembers($members, $to);
+    }
+
+    public function testGetIterator()
+    {
+        $mockAdapter = $this->getAdapterMock();
+
+        $mockAdapter
+            ->expects($this->once())
+            ->method('listMembers')
+            ->will($this->returnValue(array()));
+
+        $archive = new Archive($this->getResource('location'), $mockAdapter, $this->getResourceManagerMock());
+        $iterator = $archive->getIterator();
+        $this->assertInstanceOf('\Traversable', $iterator);
+    }
+
+
     private function getAdapterMock()
     {
         return $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');

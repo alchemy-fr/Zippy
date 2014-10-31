@@ -8,9 +8,6 @@ use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 
 abstract class AbstractTarVersionProbeTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Adapter\VersionProbe\BSDTarVersionProbe::getStatus
-     */
     public function testGetStatusIsOk()
     {
         $mockInflator = $this->getBuilder($this->getCorrespondingVersionOutput());
@@ -27,7 +24,6 @@ abstract class AbstractTarVersionProbeTest extends TestCase
 
     /**
      * @dataProvider provideInvalidVersions
-     * @covers Alchemy\Zippy\Adapter\VersionProbe\BSDTarVersionProbe::getStatus
      */
     public function testGetStatusIsNotOk($inflatorVersion, $deflatorVersion, $inflatorCall, $deflatorCall)
     {

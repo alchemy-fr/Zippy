@@ -8,9 +8,6 @@ use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 
 class ZipExtensionVersionProbeTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Adapter\VersionProbe\ZipExtensionVersionProbe::getStatus
-     */
     public function testGetStatus()
     {
         $expectation = VersionProbeInterface::PROBE_OK;

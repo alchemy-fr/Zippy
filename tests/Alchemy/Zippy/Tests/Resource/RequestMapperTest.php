@@ -7,9 +7,6 @@ use Alchemy\Zippy\Resource\RequestMapper;
 
 class RequestMapperTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Resource\RequestMapper::map
-     */
     public function testMap()
     {
         $locator = $this->getMockBuilder('Alchemy\Zippy\Resource\TargetLocator')
@@ -54,9 +51,28 @@ class RequestMapperTest extends TestCase
         }
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\RequestMapper::create
-     */
+    public function testMapSingleFile()
+    {
+        $locator = $this->getMockBuilder('Alchemy\Zippy\Resource\TargetLocator')
+                        ->disableOriginalConstructor()
+                        ->getMock();
+
+        $locator->expects($this->any())
+                ->method('locate')
+                ->will($this->returnValue('computed-location'));
+
+        $mapper = new RequestMapper($locator);
+
+        $collection = $mapper->map(__DIR__, array(
+            __DIR__ . '/input/path/to/local/file.ext'
+        ));
+
+        $this->assertInstanceOf('Alchemy\Zippy\Resource\ResourceCollection', $collection);
+        $this->assertCount(1, $collection);
+
+        $this->assertEquals(__DIR__ . '/input/path/to/local/file.ext', $collection->getContext());
+    }
+
     public function testCreate()
     {
         $mapper = RequestMapper::create();

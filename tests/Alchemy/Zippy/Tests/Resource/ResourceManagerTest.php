@@ -5,12 +5,10 @@ namespace Alchemy\Zippy\Tests\Resource;
 use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Resource\ResourceManager;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class ResourceManagerTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceManager::handle
-     */
     public function testHandle()
     {
         $mapper = $this->getRequestMapperMock();
@@ -33,6 +31,35 @@ class ResourceManagerTest extends TestCase
 
         $collection = $manager->handle($context, $request);
         $this->assertEquals($expectedCollection, $collection);
+    }
+
+    /**
+     * @expectedException \Alchemy\Zippy\Exception\IOException
+     */
+    public function testHandleShouldThrowExceptionIfFilesystemCanNotWriteContextDirectory()
+    {
+        $filesystem = $this->getFilesystemMock();
+
+        $filesystem->expects($this->any())->method('mkdir')->with($this->isType('string'))->will($this->throwException(new IOException('')));
+
+        $context = '/path/to/current/directory';
+        $request = array($this->createNotProcessableInPlaceResource(), $this->createNotProcessableInPlaceResource());
+
+        $expectedCollection = new ResourceCollection($context, $request, false);
+
+        $mapper = $this->getRequestMapperMock();
+        $mapper->expects($this->once())
+               ->method('map')
+               ->with($this->equalTo($context), $this->equalTo($request))
+               ->will($this->returnValue($expectedCollection));
+
+        $manager = new ResourceManager(
+            $mapper,
+            $this->getResourceTeleporterMock(),
+            $filesystem
+        );
+
+        $manager->handle($context, $request);
     }
 
     public function testHandleNotProcessables()
@@ -84,9 +111,6 @@ class ResourceManagerTest extends TestCase
         return $resource;
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceManager::cleanup
-     */
     public function testCleanup()
     {
         $fs = $this->getFilesystemMock();
@@ -118,9 +142,6 @@ class ResourceManagerTest extends TestCase
         $manager->cleanup($collection);
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceManager::cleanup
-     */
     public function testCleanupWhenCollectionIsNotTemporary()
     {
         $fs = $this->getFilesystemMock();
@@ -148,9 +169,6 @@ class ResourceManagerTest extends TestCase
         $manager->cleanup($collection);
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceManager::handle
-     */
     public function testFunctionnal()
     {
         $wd = __DIR__;

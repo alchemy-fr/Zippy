@@ -7,11 +7,6 @@ use Alchemy\Zippy\Tests\TestCase;
 
 class ResourceTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Resource\Resource::__construct
-     * @covers Alchemy\Zippy\Resource\Resource::getTarget
-     * @covers Alchemy\Zippy\Resource\Resource::getOriginal
-     */
     public function testGetTargetAndOriginal()
     {
         $original = 'original-style';
@@ -24,7 +19,6 @@ class ResourceTest extends TestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Resource::canBeProcessedInPlace
      * @dataProvider provideProcessInPlaceData
      */
     public function testCanBeProcessedInPlace($expected, $context, $original, $target)
@@ -47,6 +41,25 @@ class ResourceTest extends TestCase
             array(true, '/path', '/path/to/file1', 'to/file1'),
             array(true, '/path/to', '/path/to/subdir/file2', 'subdir/file2'),
             array(true, '/path/to', 'file:///path/to/subdir/file2', 'subdir/file2'),
+        );
+    }
+
+    /**
+     * @dataProvider provideLocalResourcesOrNot
+     */
+    public function testGetContextForProcessInSinglePlace($original, $expected)
+    {
+        $resource = new Resource($original, basename(__FILE__));
+        $this->assertEquals($expected, $resource->getContextForProcessInSinglePlace());
+    }
+
+    public function provideLocalResourcesOrNot()
+    {
+        return array(
+            array('ftp:///path/to/file', null),
+            array('http:///path/to/file', null),
+            array(__FILE__, __DIR__),
+            array('file:///path/to/file', null),
         );
     }
 }
