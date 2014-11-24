@@ -21,6 +21,11 @@ Which brings support to file types
  - .tar.gz
  - .tar.bz2
 
+If none of the these compression tools are provided by your environment, Zippy will throw an
+Exception "Unable to create the inflator".
+
+Zippy will try to find the right compression tool binary using your PATH environment variable.
+
 ## API Example
 
 ### Archive listing and extraction :
