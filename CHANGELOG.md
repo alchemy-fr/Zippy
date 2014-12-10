@@ -1,6 +1,11 @@
 CHANGELOG
 ---------
 
+* 0.2.1 (10-12-2014)
+
+  * Fix strategy implementation
+  * Add .gitattribute to limit package size
+
 * 0.2.0 (04-04-2014)
 
   * Fix the use of "teleporter" for local files
