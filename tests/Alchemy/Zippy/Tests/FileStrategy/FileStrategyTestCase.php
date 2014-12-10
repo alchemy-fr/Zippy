@@ -3,6 +3,7 @@
 namespace Alchemy\Zippy\Tests\FileStrategy;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
+use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\FileStrategy\FileStrategyInterface;
 
@@ -45,6 +46,24 @@ abstract class FileStrategyTestCase extends TestCase
 
                     return null;
                 }));
+
+        $adapters = $this->getStrategy($container)->getAdapters();
+
+        $this->assertInternalType('array', $adapters);
+
+        foreach ($adapters as $adapter) {
+            $this->assertInstanceOf('Alchemy\\Zippy\\Adapter\\AdapterInterface', $adapter);
+        }
+    }
+
+    /** @test */
+    public function getAdaptersShouldReturnAnArrayOfAdapterEvenIfAdapterRaiseAnException()
+    {
+        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        $container
+            ->expects($this->any())
+            ->method('offsetGet')
+            ->will($this->throwException(new RuntimeException()));
 
         $adapters = $this->getStrategy($container)->getAdapters();
 
