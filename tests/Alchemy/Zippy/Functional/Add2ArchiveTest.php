@@ -28,6 +28,7 @@ class Add2ArchiveTest extends FunctionalTestCase
 
         self::$file = __DIR__ . '/samples/create-archive.' . $extension;
 
+        mkdir(__DIR__ . '/samples/directory/empty');
         $archive = $adapter->create(self::$file, array(
             'directory' => __DIR__ . '/samples/directory',
         ), true);
@@ -64,6 +65,7 @@ class Add2ArchiveTest extends FunctionalTestCase
         $files2find = array(
             '/directory/README.md',
             '/directory/photo.jpg',
+            '/directory/empty',
             '/somemorefiles/nicephoto.jpg',
         );
 
