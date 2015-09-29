@@ -52,7 +52,7 @@ $zippy = Zippy::load();
 // files contained in "/path/to/directory" recursively
 $archive = $zippy->create('archive.zip', array(
     'folder' => '/path/to/directory'
-), recursive = true);
+), true);
 ```
 
 ### Customize file and directory names inside archive
