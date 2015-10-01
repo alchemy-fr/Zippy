@@ -7,9 +7,6 @@ use Alchemy\Zippy\Resource\ResourceTeleporter;
 
 class ResourceTeleporterTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceTeleporter::__construct
-     */
     public function testConstruct()
     {
         $container = $this->getMockBuilder('Alchemy\Zippy\Resource\TeleporterContainer')
@@ -21,9 +18,6 @@ class ResourceTeleporterTest extends TestCase
         return $teleporter;
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceTeleporter::teleport
-     */
     public function testTeleport()
     {
         $context = 'supa-context';
@@ -49,9 +43,6 @@ class ResourceTeleporterTest extends TestCase
         $resourceTeleporter->teleport($context, $resource);
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceTeleporter::create
-     */
     public function testCreate()
     {
         $this->assertInstanceOf('Alchemy\Zippy\Resource\ResourceTeleporter', ResourceTeleporter::create());

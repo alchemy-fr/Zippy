@@ -62,10 +62,6 @@ class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
      */
     public function create()
     {
-        if (null === $this->binary) {
-            throw new InvalidArgumentException('No binary set');
-        }
-
         return ProcessBuilder::create(array($this->binary))->setTimeout(null);
     }
 }

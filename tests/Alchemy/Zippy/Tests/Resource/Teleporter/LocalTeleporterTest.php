@@ -8,7 +8,6 @@ use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
 class LocalTeleporterTest extends TeleporterTestCase
 {
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideContexts
      */
     public function testTeleport($context)
@@ -29,7 +28,6 @@ class LocalTeleporterTest extends TeleporterTestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideContexts
      */
     public function testTeleportAStream($context)
@@ -50,7 +48,6 @@ class LocalTeleporterTest extends TeleporterTestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideInvalidSources
      * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
      */
@@ -73,7 +70,6 @@ class LocalTeleporterTest extends TeleporterTestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideContexts
      */
     public function testTeleportADir($context)
@@ -101,9 +97,6 @@ class LocalTeleporterTest extends TeleporterTestCase
         rmdir($context . '/' . $target);
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::create
-     */
     public function testCreate()
     {
         $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\LocalTeleporter', LocalTeleporter::create());

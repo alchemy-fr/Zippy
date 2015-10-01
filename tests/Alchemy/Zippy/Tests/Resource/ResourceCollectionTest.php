@@ -7,9 +7,6 @@ use Alchemy\Zippy\Resource\ResourceCollection;
 
 class ResourceCollectionTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::__construct
-     */
     public function testConstructWithoutElements()
     {
         $collection = new ResourceCollection('supa-context', array(), false);
@@ -17,15 +14,21 @@ class ResourceCollectionTest extends TestCase
         $this->assertEquals(array(), $collection->toArray());
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::__construct
-     */
     public function testConstructWithElements()
     {
         $data = array($this->createResourceMock(), 'two' => $this->createResourceMock());
         $collection = new ResourceCollection('supa-context', $data, false);
         $this->assertEquals('supa-context', $collection->getContext());
         $this->assertEquals($data, $collection->toArray());
+    }
+
+    /**
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
+     */
+    public function testConstructWithNotOnlyElements()
+    {
+        $data = array($this->createResourceMock(), 'two' => 'a_string');
+        new ResourceCollection('supa-context', $data, false);
     }
 
     private function createResourceMock()
@@ -36,7 +39,6 @@ class ResourceCollectionTest extends TestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::canBeProcessedInPlace
      * @dataProvider provideVariousInPlaceResources
      */
     public function testCanBeProcessedInPlace($expected, $first, $second, $third)
@@ -49,6 +51,18 @@ class ResourceCollectionTest extends TestCase
 
         $this->assertInternalType('boolean', $collection->canBeProcessedInPlace());
         $this->assertEquals($expected, $collection->canBeProcessedInPlace());
+    }
+
+    public function testCanBeProcessedInPlaceSingleElement()
+    {
+        $resource = $this->getInPlaceResource(true);
+        $resource->expects($this->any())->method('getContextForProcessInSinglePlace')->will($this->returnValue('/path'));
+        $collection = new ResourceCollection('supa-context', array(
+            $resource
+        ), false);
+
+        $this->assertInternalType('boolean', $collection->canBeProcessedInPlace());
+        $this->asserttrue($collection->canBeProcessedInPlace());
     }
 
     public function provideVariousInPlaceResources()

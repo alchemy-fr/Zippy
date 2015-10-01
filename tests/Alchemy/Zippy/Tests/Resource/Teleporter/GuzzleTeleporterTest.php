@@ -8,7 +8,6 @@ use Alchemy\Zippy\Resource\Resource;
 class GuzzleTeleporterTest extends TeleporterTestCase
 {
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter::teleport
      * @dataProvider provideContexts
      */
     public function testTeleport($context)
@@ -28,9 +27,6 @@ class GuzzleTeleporterTest extends TeleporterTestCase
         unlink($context . '/' . $target);
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter::create
-     */
     public function testCreate()
     {
         $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter', GuzzleTeleporter::create());

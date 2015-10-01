@@ -8,9 +8,6 @@ use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 
 class ZipVersionProbeTest extends TestCase
 {
-    /**
-     * @covers Alchemy\Zippy\Adapter\VersionProbe\ZipVersionProbe::getStatus
-     */
     public function testGetStatusIsOk()
     {
         $mockedProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');
@@ -95,9 +92,7 @@ Examples (see unzip.txt for more info):
         // second time is served from cache
         $this->assertEquals(VersionProbeInterface::PROBE_OK, $probe->getStatus());
     }
-    /**
-     * @covers Alchemy\Zippy\Adapter\VersionProbe\ZipVersionProbe::getStatus
-     */
+
     public function testGetStatusIsNotOk()
     {
         $mockedProcessBuilderInflator = $this->getMock('Symfony\Component\Process\ProcessBuilder');

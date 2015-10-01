@@ -20,7 +20,7 @@ use Alchemy\Zippy\Resource\Teleporter\TeleporterInterface;
 /**
  * A container of TeleporterInterface
  */
-class TeleporterContainer extends \Pimple
+class TeleporterContainer extends \Pimple\Container
 {
     /**
      * Returns the appropriate TeleporterInterface given a Resource
@@ -64,15 +64,15 @@ class TeleporterContainer extends \Pimple
     {
         $container = new static();
 
-        $container['stream-teleporter'] = $container->share(function () {
+        $container['stream-teleporter'] = function () {
             return StreamTeleporter::create();
-        });
-        $container['local-teleporter'] = $container->share(function () {
+        };
+        $container['local-teleporter'] = function () {
             return LocalTeleporter::create();
-        });
-        $container['guzzle-teleporter'] = $container->share(function () {
+        };
+        $container['guzzle-teleporter'] = function () {
             return GuzzleTeleporter::create();
-        });
+        };
 
         return $container;
     }

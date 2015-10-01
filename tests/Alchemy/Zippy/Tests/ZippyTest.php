@@ -98,6 +98,17 @@ class ZippyTest extends TestCase
         $zippy->open($filename);
     }
 
+    /**
+     * @test
+     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
+     */
+    public function itShouldThrowExceptionIfZippyCanNotOpenAnArchive()
+    {
+        $zippy = new Zippy($this->getContainer());
+
+        $zippy->open("__.zip");
+    }
+
     /** @test */
     public function itShouldExposeContainerPassedOnConstructor()
     {

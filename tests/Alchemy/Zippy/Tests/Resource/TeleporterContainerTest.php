@@ -8,7 +8,6 @@ use Alchemy\Zippy\Resource\TeleporterContainer;
 class TeleporterContainerTest extends TestCase
 {
     /**
-     * @covers Alchemy\Zippy\Resource\TeleporterContainer::fromResource
      * @dataProvider provideResourceData
      */
     public function testFromResource($resource, $classname)
@@ -18,8 +17,7 @@ class TeleporterContainerTest extends TestCase
         $this->assertInstanceOf($classname, $container->fromResource($resource));
     }
     /**
-     * @covers Alchemy\Zippy\Resource\TeleporterContainer::fromResource
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testFromResourceThatFails()
     {
@@ -50,9 +48,6 @@ class TeleporterContainerTest extends TestCase
         return $resource;
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\TeleporterContainer::load
-     */
     public function testLoad()
     {
         $container = TeleporterContainer::load();

@@ -15,15 +15,14 @@
         "php"                  : ">=5.3.3",
         "doctrine/collections" : "~1.0",
         "guzzle/guzzle"        : "~3.0",
-        "pimple/pimple"        : "~1.0",
+        "pimple/pimple"        : "~3.0",
         "symfony/process"      : "~2.0",
         "symfony/filesystem"   : "~2.0"
     },
     "require-dev": {
         "ext-zip"              : "*",
-        "phpunit/phpunit"      : "~3.7",
-        "symfony/finder"       : "~2.0",
-        "sami/sami"            : "dev-master@dev"
+        "phpunit/phpunit"      : "~4.0",
+        "symfony/finder"       : "~2.0"
     },
     "suggest": {
         "ext-zip"              : "To use the ZipExtensionAdapter"
