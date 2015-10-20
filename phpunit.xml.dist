@@ -9,7 +9,7 @@
          stopOnFailure="false"
          syntaxCheck="true"
          verbose="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="vendor/autoload.php"
 >
     <php>
       <ini name="display_errors" value="on"/>

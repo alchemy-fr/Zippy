@@ -29,8 +29,14 @@
         "ext-zip"              : "To use the ZipExtensionAdapter"
     },
     "autoload": {
-        "psr-0": {
-            "Alchemy": "src"
+        "psr-4": {
+            "Alchemy\\Zippy\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alchemy\\Zippy\\Functional\\": "tests/Functional/",
+            "Alchemy\\Zippy\\Tests\\": "tests/Tests/"
         }
     },
     "extra": {
