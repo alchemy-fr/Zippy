@@ -2,10 +2,6 @@ language: php
 
 sudo: required
 
-before_script:
-  - sudo apt-get install bsdtar zip
-  - composer install --dev --prefer-source
-
 env:
   - ZIPPY_ADAPTER=ZipAdapter
   - ZIPPY_ADAPTER=ZipExtensionAdapter
@@ -23,6 +19,11 @@ php:
   - 5.6
   - 7.0
 
+before_script:
+  - sudo apt-get install bsdtar zip
+  - composer update --prefer-source --no-interaction
+  - composer require phpunit/phpunit --update-with-dependencies --prefer-source --no-interaction
+
 script:
-  - phpunit -v
-  - phpunit -v -c phpunit-functional.xml.dist
+  - ./vendor/bin/phpunit -v
+  - ./vendor/bin/phpunit -v -c phpunit-functional.xml.dist
