@@ -4,3 +4,4 @@
 /docs/build
 composer.phar
 composer.lock
+/tests/node_server.pid

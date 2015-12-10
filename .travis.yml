@@ -21,9 +21,14 @@ php:
 
 before_script:
   - sudo apt-get install bsdtar zip
+  - npm install connect serve-static
+  - ./tests/bootstrap.sh start
   - composer update --prefer-source --no-interaction
   - composer require phpunit/phpunit --update-with-dependencies --prefer-source --no-interaction
 
 script:
   - ./vendor/bin/phpunit -v
   - ./vendor/bin/phpunit -v -c phpunit-functional.xml.dist
+
+after_script:
+  - ./tests/bootstrap.sh stop

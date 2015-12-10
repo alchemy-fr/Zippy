@@ -58,8 +58,8 @@ class TargetLocatorTest extends TestCase
             array('temporary-file.jpg', __DIR__, '/tmp/temporary-file.jpg'),
             array(str_replace($updir, '', __FILE__), $updir, __FILE__),
             array(basename(__FILE__), $updir, fopen(__FILE__, 'rb')),
-            array('plus-badge.png', $updir, 'http://www.google.com/+/business/images/plus-badge.png'),
-            array('plus-badge.png', $updir, fopen('http://www.google.com/+/business/images/plus-badge.png', 'rb')),
+            array('plus-badge.png', $updir, 'http://127.0.0.1:8080/plus-badge.png'),
+            array('plus-badge.png', $updir, fopen('http://127.0.0.1:8080/plus-badge.png', 'rb')),
             array('hedgehog.png', $updir, 'ftp://192.168.1.1/images/hedgehog.png'),
         );
     }

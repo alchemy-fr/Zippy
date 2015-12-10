@@ -16,7 +16,7 @@ class GuzzleTeleporterTest extends TeleporterTestCase
         $teleporter = GuzzleTeleporter::create();
 
         $target = 'plop-badge.png';
-        $resource = new Resource('http://www.google.com/+/business/images/plus-badge.png', $target);
+        $resource = new Resource('http://127.0.0.1:8080/plus-badge.png', $target);
 
         if (is_file($target)) {
             unlink($context . '/' . $target);
