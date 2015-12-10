@@ -26,10 +26,7 @@ class TeleporterContainer extends \Pimple
      * Returns the appropriate TeleporterInterface given a Resource
      *
      * @param Resource $resource
-     *
      * @return TeleporterInterface
-     *
-     * @throws InvalidArgumentException
      */
     public function fromResource(Resource $resource)
     {
@@ -42,7 +39,7 @@ class TeleporterContainer extends \Pimple
 
                 if (!isset($data['scheme']) || 'file' === $data['scheme']) {
                     $teleporter = 'local-teleporter';
-                } elseif (in_array($data['scheme'], array('http', 'https'))) {
+                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this['guzzle-teleporter'])) {
                     $teleporter = 'guzzle-teleporter';
                 } else {
                     $teleporter = 'stream-teleporter';
@@ -70,9 +67,12 @@ class TeleporterContainer extends \Pimple
         $container['local-teleporter'] = $container->share(function () {
             return LocalTeleporter::create();
         });
-        $container['guzzle-teleporter'] = $container->share(function () {
-            return GuzzleTeleporter::create();
-        });
+
+        if (class_exists('Guzzle\Http\Client')) {
+            $container['guzzle-teleporter'] = $container->share(function () {
+                return GuzzleTeleporter::create();
+            });
+        }
 
         return $container;
     }
