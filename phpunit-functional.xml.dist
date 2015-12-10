@@ -9,7 +9,7 @@
          stopOnFailure="false"
          syntaxCheck="true"
          verbose="false"
-         bootstrap="tests/bootstrap.php"
+         bootstrap="vendor/autoload.php"
 >
     <php>
       <ini name="display_errors" value="on"/>
@@ -17,7 +17,7 @@
 
     <testsuites>
         <testsuite name="Zippy Functional Tests Suite">
-            <directory>tests/Alchemy/Zippy/Functional</directory>
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
     <filter>

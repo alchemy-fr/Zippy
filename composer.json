@@ -23,14 +23,20 @@
         "ext-zip"              : "*",
         "phpunit/phpunit"      : "~3.7",
         "symfony/finder"       : "~2.0",
-        "sami/sami"            : "dev-master@dev"
+        "sami/sami"            : "~1.0"
     },
     "suggest": {
         "ext-zip"              : "To use the ZipExtensionAdapter"
     },
     "autoload": {
-        "psr-0": {
-            "Alchemy": "src"
+        "psr-4": {
+            "Alchemy\\Zippy\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alchemy\\Zippy\\Functional\\": "tests/Functional/",
+            "Alchemy\\Zippy\\Tests\\": "tests/Tests/"
         }
     },
     "extra": {
