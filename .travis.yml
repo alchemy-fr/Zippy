@@ -1,6 +1,6 @@
 language: php
 
-sudo: false
+sudo: required
 
 before_script:
   - sudo apt-get install bsdtar zip
