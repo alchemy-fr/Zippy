@@ -13,10 +13,6 @@ class GuzzleTeleporterTest extends TeleporterTestCase
      */
     public function testTeleport($context)
     {
-        if (false === class_exists('Guzzle\Http\Client')) {
-            $this->markTestSkipped('Guzzle library is not installed');
-        }
-
         $teleporter = GuzzleTeleporter::create();
 
         $target = 'plop-badge.png';
@@ -37,10 +33,6 @@ class GuzzleTeleporterTest extends TeleporterTestCase
      */
     public function testCreate()
     {
-        if (false === class_exists('Guzzle\Http\Client')) {
-            $this->markTestSkipped('Guzzle library is not installed');
-        }
-
         $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter', GuzzleTeleporter::create());
     }
 }
