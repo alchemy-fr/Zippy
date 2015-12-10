@@ -20,10 +20,20 @@ use Alchemy\Zippy\Resource\Teleporter\TeleporterInterface;
 /**
  * A container of TeleporterInterface
  */
-class TeleporterContainer extends \Pimple
+class TeleporterContainer
 {
     /**
-     * Returns the appropriate TeleporterInterface given a Resource
+     * @var TeleporterInterface[]
+     */
+    private $teleporters = array();
+
+    /**
+     * @var callable[]
+     */
+    private $factories = array();
+
+    /**
+     * Returns the appropriate TeleporterInterface for a given Resource
      *
      * @param Resource $resource
      * @return TeleporterInterface
@@ -39,7 +49,7 @@ class TeleporterContainer extends \Pimple
 
                 if (!isset($data['scheme']) || 'file' === $data['scheme']) {
                     $teleporter = 'local-teleporter';
-                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this['guzzle-teleporter'])) {
+                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this->factories['guzzle-teleporter'])) {
                     $teleporter = 'guzzle-teleporter';
                 } else {
                     $teleporter = 'stream-teleporter';
@@ -49,7 +59,17 @@ class TeleporterContainer extends \Pimple
                 throw new InvalidArgumentException('No teleporter found');
         }
 
-        return $this[$teleporter];
+        return $this->getTeleporter($teleporter);
+    }
+
+    private function getTeleporter($typeName)
+    {
+        if (! isset($this->teleporters[$typeName])) {
+            $factory = $this->factories[$typeName];
+            $this->teleporters[$typeName] = $factory();
+        }
+
+        return $this->teleporters[$typeName];
     }
 
     /**
@@ -61,17 +81,18 @@ class TeleporterContainer extends \Pimple
     {
         $container = new static();
 
-        $container['stream-teleporter'] = $container->share(function () {
+        $container->factories['stream-teleporter'] = function () {
             return StreamTeleporter::create();
-        });
-        $container['local-teleporter'] = $container->share(function () {
+        };
+
+        $container->factories['local-teleporter'] = function () {
             return LocalTeleporter::create();
-        });
+        };
 
         if (class_exists('Guzzle\Http\Client')) {
-            $container['guzzle-teleporter'] = $container->share(function () {
+            $container->factories['guzzle-teleporter'] = function () {
                 return GuzzleTeleporter::create();
-            });
+            };
         }
 
         return $container;
