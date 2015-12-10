@@ -70,9 +70,13 @@ class TeleporterContainer extends \Pimple
         $container['local-teleporter'] = $container->share(function () {
             return LocalTeleporter::create();
         });
-        $container['guzzle-teleporter'] = $container->share(function () {
-            return GuzzleTeleporter::create();
-        });
+        if (class_exists('Guzzle\Http\Client')) {
+            $container['guzzle-teleporter'] = $container->share(
+                function () {
+                    return GuzzleTeleporter::create();
+                }
+            );
+        }
 
         return $container;
     }
