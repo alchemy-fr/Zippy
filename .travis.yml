@@ -1,5 +1,7 @@
 language: php
 
+sudo: false
+
 before_script:
   - sudo apt-get install bsdtar zip
   - composer install --dev --prefer-source
@@ -18,7 +20,9 @@ php:
   - 5.3.3
   - 5.4
   - 5.5
+  - 5.6
+  - 7.0
 
 script:
-  - phpunit -v
-  - phpunit -v -c phpunit-functional.xml.dist
+  - vendor/bin/phpunit -v
+  - vendor/bin/phpunit -v -c phpunit-functional.xml.dist
