@@ -23,14 +23,18 @@ class Add2ArchiveTest extends FunctionalTestCase
      */
     private function create()
     {
+        $directory = __DIR__ . '/samples/directory';
+        $emptyDirectory = __DIR__ . '/samples/directory/empty';
         $adapter = $this->getAdapter();
         $extension = $this->getArchiveExtensionForAdapter($adapter);
 
         self::$file = __DIR__ . '/samples/create-archive.' . $extension;
 
-        mkdir(__DIR__ . '/samples/directory/empty');
+        if (! file_exists($emptyDirectory)) {
+            mkdir($emptyDirectory);
+        }
         $archive = $adapter->create(self::$file, array(
-            'directory' => __DIR__ . '/samples/directory',
+            'directory' => $directory,
         ), true);
 
         return $archive;

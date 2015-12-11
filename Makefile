@@ -9,7 +9,6 @@ test: node_modules
 	- sleep 1
 	- ./vendor/bin/phpunit
 	- for adapter in $(adapters); do \
-	    echo $$adapter; \
 	    ZIPPY_ADAPTER=$$adapter ./vendor/bin/phpunit -c phpunit-functional.xml.dist; \
 	  done
 	- ./tests/bootstrap.sh stop
