@@ -81,13 +81,13 @@ class LocalTeleporterTest extends TeleporterTestCase
         $teleporter = LocalTeleporter::create();
 
         $target = 'plop-badge-dir';
-        $resource = new Resource(__DIR__ . '/context-test', $target);
+        $resource = new Resource(__DIR__ . '/plop-badge', $target);
 
-        if (!is_dir(__DIR__ . '/context-test')) {
-            mkdir(__DIR__ . '/context-test');
+        if (!is_dir(__DIR__ . '/plop-badge')) {
+            mkdir(__DIR__ . '/plop-badge');
         }
-        if (!is_file(__DIR__ . '/context-test/test-file.png')) {
-            touch(__DIR__ . '/context-test/test-file.png');
+        if (!is_file(__DIR__ . '/plop-badge/test-file.png')) {
+            touch(__DIR__ . '/plop-badge/test-file.png');
         }
 
         if (file_exists($context . '/' . $target . '/test-file.png')) {

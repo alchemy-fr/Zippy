@@ -12,22 +12,21 @@
         }
     ],
     "require": {
-        "php"                  : ">=5.3.3",
-        "doctrine/collections" : "~1.0",
-        "pimple/pimple"        : "~1.0",
-        "symfony/process"      : "~2.0",
-        "symfony/filesystem"   : "~2.0"
+        "php": ">=5.3.3",
+        "doctrine/collections": "~1.0",
+        "pimple/pimple": "~1.0",
+        "symfony/filesystem": "~2.0|^3.0",
+        "symfony/process": "~2.0|^3.0"
     },
     "require-dev": {
-        "ext-zip"              : "*",
-        "phpunit/phpunit"      : "~3.7",
-        "symfony/finder"       : "~2.0",
-        "sami/sami"            : "~1.0",
-        "guzzle/guzzle"        : "~3.0"
+        "ext-zip": "*",
+        "guzzle/guzzle": "~3.0",
+        "sami/sami": "~1.0",
+        "symfony/finder": "~2.0|^3.0"
     },
     "suggest": {
-        "ext-zip"              : "To use the ZipExtensionAdapter",
-        "guzzle/guzzle"        : "To use the GuzzleTeleporter"
+        "ext-zip": "To use the ZipExtensionAdapter",
+        "guzzle/guzzle": "To use the GuzzleTeleporter"
     },
     "autoload": {
         "psr-4": {

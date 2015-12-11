@@ -33,7 +33,7 @@ class TeleporterContainerTest extends TestCase
             array($this->createResource(__FILE__), 'Alchemy\Zippy\Resource\Teleporter\LocalTeleporter'),
             array($this->createResource(fopen(__FILE__, 'rb')), 'Alchemy\Zippy\Resource\Teleporter\StreamTeleporter'),
             array($this->createResource('ftp://192.168.1.1/images/elephant.png'), 'Alchemy\Zippy\Resource\Teleporter\StreamTeleporter'),
-            array($this->createResource('http://www.google.com/+/business/images/plus-badge.png'), 'Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter'),
+            array($this->createResource('http://127.0.0.1:8080/plus-badge.png'), 'Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter'),
         );
     }
 
