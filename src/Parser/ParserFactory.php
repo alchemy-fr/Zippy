@@ -15,6 +15,17 @@ use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 class ParserFactory
 {
+
+    private static $zipDateFormat = 'Y-m-d H:i';
+
+    /**
+     * @param string $format Date format used to parse ZIP file listings
+     */
+    public static function setZipDateFormat($format)
+    {
+        self::$zipDateFormat = $format;
+    }
+
     /**
      * Maps the corresponding parser to the selected adapter
      *
@@ -34,7 +45,7 @@ class ParserFactory
                 return new BSDTarOutputParser();
                 break;
             case 'zip':
-                return new ZipOutputParser();
+                return new ZipOutputParser(self::$zipDateFormat);
                 break;
 
             default:
