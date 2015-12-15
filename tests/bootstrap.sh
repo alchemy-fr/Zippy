@@ -11,6 +11,7 @@ case $1 in
     test -r $NODE_SERVER_PIDFILE && echo "Previously registered pid: $(cat $NODE_SERVER_PIDFILE)"
     $NODE "$DIR/static-file-server.js" &
     echo $! > "${NODE_SERVER_PIDFILE}"
+    echo "Server new pid: $(cat $NODE_SERVER_PIDFILE)"
     ;;
   stop)
     test -r $NODE_SERVER_PIDFILE && kill $(cat $NODE_SERVER_PIDFILE)

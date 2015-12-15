@@ -23,13 +23,18 @@ class Add2ArchiveTest extends FunctionalTestCase
      */
     private function create()
     {
+        $directory = __DIR__ . '/samples/directory';
+        $emptyDirectory = __DIR__ . '/samples/directory/empty';
         $adapter = $this->getAdapter();
         $extension = $this->getArchiveExtensionForAdapter($adapter);
 
         self::$file = __DIR__ . '/samples/create-archive.' . $extension;
 
+        if (! file_exists($emptyDirectory)) {
+            mkdir($emptyDirectory);
+        }
         $archive = $adapter->create(self::$file, array(
-            'directory' => __DIR__ . '/samples/directory',
+            'directory' => $directory,
         ), true);
 
         return $archive;
@@ -58,19 +63,21 @@ class Add2ArchiveTest extends FunctionalTestCase
 
         $finder = new Finder();
         $finder
-            ->files()
             ->in($target);
 
         $files2find = array(
+            '/directory',
+            '/directory/empty',
             '/directory/README.md',
             '/directory/photo.jpg',
+            '/somemorefiles',
             '/somemorefiles/nicephoto.jpg',
         );
 
         foreach ($finder as $file) {
             $this->assertEquals(0, strpos($file->getPathname(), $target));
             $member = substr($file->getPathname(), strlen($target));
-            $this->assertTrue(in_array($member, $files2find), "looking for $member in files2find");
+            $this->assertContains($member, $files2find, "looking for $member in files2find");
             unset($files2find[array_search($member, $files2find)]);
         }
 
