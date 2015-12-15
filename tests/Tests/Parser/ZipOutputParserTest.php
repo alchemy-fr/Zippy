@@ -12,21 +12,37 @@ class ZipOutputParserTest extends TestCase
         return new ZipOutputParser();
     }
 
-    /**
-     * @depends testNewParser
-     */
-    public function testParseFileListing($parser)
+    public function getDatasets()
     {
-        $current_timezone = ini_get('date.timezone');
-        ini_set('date.timezone', 'UTC');
-
-        $output =
-"Length   Date     Time     Name
+        $standardOutput =
+            "Length   Date     Time     Name
 -------- ----     ----     ----
      0   2006-06-09 12:06  practice/
  10240   2006-06-09 12:06  practice/records
 --------                    -------
     785                      2 files";
+
+        $altOutput =
+            "Length   Date     Time     Name
+-------- ----     ----     ----
+     0   09-06-06 12:06  practice/
+ 10240   09-06-06 12:06  practice/records
+--------                    -------
+    785                      2 files";
+
+        return array(
+            array(new ZipOutputParser(), $standardOutput),
+            array(new ZipOutputParser('d-m-y H:i'), $altOutput)
+        );
+    }
+
+    /**
+     * @dataProvider getDatasets
+     */
+    public function testParseFileListing($parser, $output)
+    {
+        $current_timezone = ini_get('date.timezone');
+        ini_set('date.timezone', 'UTC');
 
         $members = $parser->parseFileListing($output);
 

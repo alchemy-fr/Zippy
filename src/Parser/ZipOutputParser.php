@@ -20,6 +20,19 @@ class ZipOutputParser implements ParserInterface
     const FILENAME      = "(.*)";
 
     /**
+     * @var string
+     */
+    private $dateFormat;
+
+    /**
+     * @param string $dateFormat
+     */
+    public function __construct($dateFormat = "Y-m-d H:i")
+    {
+        $this->dateFormat = $dateFormat;
+    }
+
+    /**
      * @inheritdoc
      */
     public function parseFileListing($output)
@@ -50,7 +63,7 @@ class ZipOutputParser implements ParserInterface
             $members[] = array(
                 'location'  => $chunks[3],
                 'size'      => $chunks[1],
-                'mtime'     => \DateTime::createFromFormat("Y-m-d H:i", $chunks[2]),
+                'mtime'     => \DateTime::createFromFormat($this->dateFormat, $chunks[2]),
                 'is_dir'    => '/' === substr($chunks[3], -1)
             );
         }
