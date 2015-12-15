@@ -5,3 +5,5 @@
 composer.phar
 composer.lock
 /tests/node_server.pid
+node_modules/
+tests/Tests/Resource/Teleporter/plop-badge/
