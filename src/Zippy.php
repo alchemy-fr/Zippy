@@ -35,7 +35,7 @@ class Zippy
     public $adapters;
 
     /**
-     * @var FileStrategyInterface[]
+     * @var FileStrategyInterface[][]
      */
     private $strategies = array();
 

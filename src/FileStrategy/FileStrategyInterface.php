@@ -11,12 +11,14 @@
 
 namespace Alchemy\Zippy\FileStrategy;
 
+use Alchemy\Zippy\Adapter\AdapterInterface;
+
 interface FileStrategyInterface
 {
     /**
      * Returns an array of adapters that match the strategy
      *
-     * @return array
+     * @return AdapterInterface[]
      */
     public function getAdapters();
 
