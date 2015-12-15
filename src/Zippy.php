@@ -29,7 +29,14 @@ use Alchemy\Zippy\FileStrategy\ZipFileStrategy;
 
 class Zippy
 {
+    /**
+     * @var AdapterContainer
+     */
     public $adapters;
+
+    /**
+     * @var FileStrategyInterface[]
+     */
     private $strategies = array();
 
     public function __construct(AdapterContainer $adapters)
