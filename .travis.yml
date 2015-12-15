@@ -22,7 +22,7 @@ before_script:
   - sudo apt-get install bsdtar zip
   - npm install connect serve-static
   - composer update --prefer-source --no-interaction $PREFER_LOWEST
-  - if [ -n "$PREFER_LOWEST" ];then composer update phpunit/phpunit --prefer-source --no-interaction;fi
+  - if [ -n "$PREFER_LOWEST" ];then composer update phpunit/phpunit --prefer-source --no-interaction --with-dependencies;fi
 
 script:
   - make test
