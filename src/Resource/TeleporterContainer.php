@@ -20,10 +20,20 @@ use Alchemy\Zippy\Resource\Teleporter\TeleporterInterface;
 /**
  * A container of TeleporterInterface
  */
-class TeleporterContainer extends \Pimple
+class TeleporterContainer implements \ArrayAccess, \Countable
 {
     /**
-     * Returns the appropriate TeleporterInterface given a Resource
+     * @var TeleporterInterface[]
+     */
+    private $teleporters = array();
+
+    /**
+     * @var callable[]
+     */
+    private $factories = array();
+
+    /**
+     * Returns the appropriate TeleporterInterface for a given Resource
      *
      * @param Resource $resource
      * @return TeleporterInterface
@@ -39,7 +49,7 @@ class TeleporterContainer extends \Pimple
 
                 if (!isset($data['scheme']) || 'file' === $data['scheme']) {
                     $teleporter = 'local-teleporter';
-                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this['guzzle-teleporter'])) {
+                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this->factories['guzzle-teleporter'])) {
                     $teleporter = 'guzzle-teleporter';
                 } else {
                     $teleporter = 'stream-teleporter';
@@ -49,7 +59,17 @@ class TeleporterContainer extends \Pimple
                 throw new InvalidArgumentException('No teleporter found');
         }
 
-        return $this[$teleporter];
+        return $this->getTeleporter($teleporter);
+    }
+
+    private function getTeleporter($typeName)
+    {
+        if (! isset($this->teleporters[$typeName])) {
+            $factory = $this->factories[$typeName];
+            $this->teleporters[$typeName] = $factory();
+        }
+
+        return $this->teleporters[$typeName];
     }
 
     /**
@@ -61,19 +81,87 @@ class TeleporterContainer extends \Pimple
     {
         $container = new static();
 
-        $container['stream-teleporter'] = $container->share(function () {
+        $container->factories['stream-teleporter'] = function () {
             return StreamTeleporter::create();
-        });
-        $container['local-teleporter'] = $container->share(function () {
+        };
+
+        $container->factories['local-teleporter'] = function () {
             return LocalTeleporter::create();
-        });
+        };
 
         if (class_exists('Guzzle\Http\Client')) {
-            $container['guzzle-teleporter'] = $container->share(function () {
+            $container->factories['guzzle-teleporter'] = function () {
                 return GuzzleTeleporter::create();
-            });
+            };
         }
 
         return $container;
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->teleporters[$offset]);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     */
+    public function offsetGet($offset)
+    {
+        return $this->getTeleporter($offset);
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \BadMethodCallException();
+    }
+
+    /**
+     * (PHP 5 &gt;= 5.0.0)<br/>
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \BadMethodCallException();
+    }
+
+    public function count()
+    {
+        return count($this->teleporters);
     }
 }
