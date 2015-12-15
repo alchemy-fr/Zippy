@@ -63,20 +63,21 @@ class Add2ArchiveTest extends FunctionalTestCase
 
         $finder = new Finder();
         $finder
-            ->files()
             ->in($target);
 
         $files2find = array(
+            '/directory',
+            '/directory/empty',
             '/directory/README.md',
             '/directory/photo.jpg',
-            '/directory/empty',
+            '/somemorefiles',
             '/somemorefiles/nicephoto.jpg',
         );
 
         foreach ($finder as $file) {
             $this->assertEquals(0, strpos($file->getPathname(), $target));
             $member = substr($file->getPathname(), strlen($target));
-            $this->assertTrue(in_array($member, $files2find), "looking for $member in files2find");
+            $this->assertContains($member, $files2find, "looking for $member in files2find");
             unset($files2find[array_search($member, $files2find)]);
         }
 
