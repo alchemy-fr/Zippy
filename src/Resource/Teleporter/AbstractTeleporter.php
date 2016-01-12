@@ -19,9 +19,9 @@ abstract class AbstractTeleporter implements TeleporterInterface
     /**
      * Writes the target
      *
-     * @param String   $data
-     * @param Resource $resource
-     * @param String   $context
+     * @param string $data
+     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param string $context
      *
      * @return TeleporterInterface
      *
@@ -30,6 +30,10 @@ abstract class AbstractTeleporter implements TeleporterInterface
     protected function writeTarget($data, Resource $resource, $context)
     {
         $target = $this->getTarget($context, $resource);
+
+        if (! file_exists(dirname($target)) && false === mkdir(dirname($target))) {
+            throw new IOException(sprintf('Could not create parent directory %s', dirname($target)));
+        }
 
         if (false === file_put_contents($target, $data)) {
             throw new IOException(sprintf('Could not write to %s', $target));
