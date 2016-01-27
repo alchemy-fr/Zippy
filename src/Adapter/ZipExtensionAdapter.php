@@ -88,20 +88,23 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    protected function doExtractMembers(ResourceInterface $resource, $members, $to)
+    protected function doExtractMembers(ResourceInterface $resource, $members, $to, $overwrite = false)
     {
         if (null === $to) {
             // if no destination is given, will extract to zip current folder
             $to = dirname(realpath($resource->getResource()->filename));
         }
+
         if (!is_dir($to)) {
             $resource->getResource()->close();
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
+
         if (!is_writable($to)) {
             $resource->getResource()->close();
             throw new InvalidArgumentException(sprintf("%s is not writable", $to));
         }
+
         if (null !== $members) {
             $membersTemp = (array) $members;
             if (empty($membersTemp)) {
@@ -115,11 +118,21 @@ class ZipExtensionAdapter extends AbstractAdapter
                 if ($member instanceof Member) {
                     $member = $member->getLocation();
                 }
+
                 if ($resource->getResource()->locateName($member) === false) {
                     $resource->getResource()->close();
 
                     throw new InvalidArgumentException(sprintf('%s is not in the zip file', $member));
                 }
+
+                if ($overwrite == false) {
+                    if (file_exists($member)) {
+                        $resource->getResource()->close();
+
+                        throw new RuntimeException('Target file ' . $member . ' already exists.');
+                    }
+                }
+
                 $members[] = $member;
             }
         }

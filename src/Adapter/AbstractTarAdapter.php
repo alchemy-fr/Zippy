@@ -56,9 +56,9 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    protected function doExtractMembers(ResourceInterface $resource, $members, $to)
+    protected function doExtractMembers(ResourceInterface $resource, $members, $to, $overwrite = false)
     {
-        return $this->doTarExtractMembers($this->getLocalOptions(), $resource, $members, $to);
+        return $this->doTarExtractMembers($this->getLocalOptions(), $resource, $members, $to, $overwrite);
     }
 
     /**
@@ -345,7 +345,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return new \SplFileInfo($to ? : $resource->getResource());
     }
 
-    protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null)
+    protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null, $overwrite = false)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -356,6 +356,10 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         $builder = $this
             ->inflator
             ->create();
+
+        if ($overwrite == false) {
+            $builder->add('-k');
+        }
 
         $builder
             ->add('--extract')
