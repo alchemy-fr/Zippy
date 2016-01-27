@@ -300,41 +300,47 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
-            ->with($this->equalTo('--extract'))
+            ->with($this->equalTo('-k'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo('--file=' . $resource->getResource()))
+            ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
+            ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo('--overwrite-dir'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo('--directory'))
+            ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(5))
             ->method('add')
-            ->with($this->equalTo(__DIR__))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(6))
+            ->method('add')
+            ->with($this->equalTo(__DIR__))
+            ->will($this->returnSelf());
+
+        $mockedProcessBuilder
+            ->expects($this->at(7))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());

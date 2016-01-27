@@ -13,6 +13,7 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Archive\Archive;
+use Alchemy\Zippy\Archive\ArchiveInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
@@ -99,11 +100,11 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @inheritdoc
      */
-    public function extractMembers(ResourceInterface $resource, $members, $to = null)
+    public function extractMembers(ResourceInterface $resource, $members, $to = null, $overwrite = false)
     {
         $this->requireSupport();
 
-        return $this->doExtractMembers($resource, $members, $to);
+        return $this->doExtractMembers($resource, $members, $to, $overwrite);
     }
 
     /**
@@ -203,9 +204,13 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Do the extract members after having check that the current adapter is supported
      *
+     * @param ResourceInterface $resource
+     * @param string|string[] $members
+     * @param string $to
+     * @param bool $overwrite
      * @return \SplFileInfo The extracted archive
      */
-    abstract protected function doExtractMembers(ResourceInterface $resource, $members, $to);
+    abstract protected function doExtractMembers(ResourceInterface $resource, $members, $to, $overwrite = false);
 
     /**
      * Do the list members after having check that the current adapter is supported

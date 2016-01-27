@@ -7,6 +7,9 @@ use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
 
 class ZipExtensionAdapterTest extends AdapterTestCase
 {
+    /**
+     * @var ZipExtensionAdapter
+     */
     private $adapter;
 
     public function setUp()
@@ -38,7 +41,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\NotSupportedException
+     * @expectedException \Alchemy\Zippy\Exception\NotSupportedException
      */
     public function testCreateNoFiles()
     {
@@ -58,7 +61,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
      */
     public function testOpenWithWrongFileName()
     {
@@ -106,7 +109,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testExtractOnError()
     {
@@ -123,7 +126,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testExtractWithInvalidTarget()
     {
@@ -135,7 +138,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testExtractWithInvalidTarget2()
     {
@@ -169,7 +172,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testRemoveWithLocateFailing()
     {
@@ -190,7 +193,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
      */
     public function testRemoveWithDeleteFailing()
     {
@@ -248,7 +251,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
      */
     public function testAddFailOnFile()
     {
@@ -277,7 +280,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
      */
     public function testAddFailOnDir()
     {

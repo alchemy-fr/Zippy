@@ -16,10 +16,10 @@ use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Archive\MemberInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\Parser\ParserFactory;
-use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
+use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
@@ -50,13 +50,17 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Constructor
      *
-     * @param ParserInterface                     $parser   An output parser
-     * @param ResourceManager                     $manager  A resource manager
-     * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
+     * @param ParserInterface $parser An output parser
+     * @param ResourceManager $manager A resource manager
+     * @param ProcessBuilderFactoryInterface $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
-    {
+    public function __construct(
+        ParserInterface $parser,
+        ResourceManager $manager,
+        ProcessBuilderFactoryInterface $inflator,
+        ProcessBuilderFactoryInterface $deflator
+    ) {
         $this->parser = $parser;
         $this->manager = $manager;
         $this->deflator = $deflator;
@@ -144,10 +148,16 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @throws RuntimeException In case object could not be instanciated
      */
-    public static function newInstance(ExecutableFinder $finder, ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
-    {
-        $inflator = $inflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $inflatorBinaryName : self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
-        $deflator = $deflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $deflatorBinaryName : self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
+    public static function newInstance(
+        ExecutableFinder $finder,
+        ResourceManager $manager,
+        $inflatorBinaryName = null,
+        $deflatorBinaryName = null
+    ) {
+        $inflator = $inflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $inflatorBinaryName : self::findABinary($inflatorBinaryName,
+            static::getDefaultInflatorBinaryName(), $finder);
+        $deflator = $deflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $deflatorBinaryName : self::findABinary($deflatorBinaryName,
+            static::getDefaultDeflatorBinaryName(), $finder);
 
         try {
             $outputParser = ParserFactory::create(static::getName());
@@ -171,7 +181,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
     private static function findABinary($wish, array $defaults, ExecutableFinder $finder)
     {
-        $possibles = $wish ? (array) $wish : $defaults;
+        $possibles = $wish ? (array)$wish : $defaults;
 
         $binary = null;
 
@@ -188,7 +198,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Adds files to argument list
      *
-     * @param Array          $files   An array of files
+     * @param Array $files An array of files
      * @param ProcessBuilder $builder A Builder instance
      *
      * @return Boolean
@@ -200,8 +210,8 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         array_walk($files, function ($file) use ($builder, &$iterations) {
             $builder->add(
                 $file instanceof \SplFileInfo ?
-                $file->getRealpath() :
-                ($file instanceof MemberInterface ? $file->getLocation() : $file)
+                    $file->getRealpath() :
+                    ($file instanceof MemberInterface ? $file->getLocation() : $file)
             );
 
             $iterations++;
