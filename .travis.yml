@@ -23,6 +23,10 @@ before_script:
   - npm install connect serve-static
   - composer update --prefer-source --no-interaction $PREFER_LOWEST
   - if [ -n "$PREFER_LOWEST" ];then composer update phpunit/phpunit --prefer-source --no-interaction --with-dependencies;fi
-
+  
 script:
   - make test
+  - >
+      if [ $(phpenv version-name | tr '[:upper:]' '[:lower:]') != 'hhvm' ];
+        then make scrutinizer;
+      fi
