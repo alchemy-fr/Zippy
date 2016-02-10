@@ -1,6 +1,6 @@
 adapters:="ZipAdapter" "ZipExtensionAdapter" "GNUTar\\TarGNUTarAdapter" "GNUTar\\TarGzGNUTarAdapter" "GNUTar\\TarBz2GNUTarAdapter" "BSDTar\\TarBSDTarAdapter" "BSDTar\\TarGzBSDTarAdapter" "BSDTar\\TarBz2BSDTarAdapter"
 
-.PHONY: test clean
+.PHONY: test clean ocular scrutinizer
 
 test: node_modules
 	-./tests/bootstrap.sh stop
@@ -15,3 +15,13 @@ node_modules:
 
 clean:
 	rm -rf node_modules
+
+ocular:
+	[ ! -f ocular.phar ] && wget https://scrutinizer-ci.com/ocular.phar
+
+ifdef OCULAR_TOKEN
+scrutinizer: ocular
+	@php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover --access-token=$(OCULAR_TOKEN);
+else
+scrutinizer: ocular
+	php ocular.phar code-coverage:upload --format=php-clover tests/output/coverage.clover;
