@@ -87,7 +87,7 @@ class Resource
             return null;
         }
 
-        if (basename($this->original) === $this->target) {
+        if (substr($this->original, strrpos(str_replace('\\', '/', $this->original), '/') + 1)  === $this->target) {
             return dirname($this->original);
         }
     }

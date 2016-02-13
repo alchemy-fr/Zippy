@@ -246,6 +246,6 @@ abstract class AbstractAdapter implements AdapterInterface
             throw new InvalidArgumentException(sprintf('Target path %s is not writeable.', $directory));
         }
 
-        return realpath($directory).'/'.basename ($path);
+        return realpath($directory).'/'.substr($path, strrpos(str_replace('\\', '/', $path), '/') + 1);
     }
 }
