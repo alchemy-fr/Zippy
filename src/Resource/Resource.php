@@ -87,7 +87,7 @@ class Resource
             return null;
         }
 
-        if (basename($this->original) === $this->target) {
+        if (PathUtil::basename($this->original)  === $this->target) {
             return dirname($this->original);
         }
     }

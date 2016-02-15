@@ -16,6 +16,7 @@ use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Archive\ArchiveInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\Resource\PathUtil;
 use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
@@ -246,6 +247,6 @@ abstract class AbstractAdapter implements AdapterInterface
             throw new InvalidArgumentException(sprintf('Target path %s is not writeable.', $directory));
         }
 
-        return realpath($directory).'/'.basename ($path);
+        return realpath($directory).'/'.PathUtil::basename($path);
     }
 }
