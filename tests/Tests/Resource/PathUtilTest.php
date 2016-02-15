@@ -12,7 +12,7 @@ class PathUtilTest extends TestCase
      */
     public function testBasename($expected, $context)
     {
-        $this->assertEquals('', PathUtil::basename($context));
+        $this->assertEquals($expected, PathUtil::basename($context));
     }
 
     public function providePathData()
