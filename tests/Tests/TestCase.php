@@ -3,6 +3,7 @@
 namespace Alchemy\Zippy\Tests;
 
 use Alchemy\Zippy\Adapter\AdapterInterface;
+use Alchemy\Zippy\Resource\PathUtil;
 use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
@@ -120,6 +121,6 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             throw new \InvalidArgumentException(sprintf('Unable to get the absolute path for %s', $target));
         }
 
-        return realpath($directory).'/'.substr($target, strrpos(str_replace('\\', '/', $target), '/') + 1);
+        return realpath($directory).'/'.PathUtil::basename($target);
     }
 }

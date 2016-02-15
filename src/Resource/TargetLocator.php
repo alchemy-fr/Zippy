@@ -60,7 +60,7 @@ class TargetLocator
             throw new TargetLocatorException($resource, 'Unable to retrieve path from resource');
         }
 
-        return substr($data['path'], strrpos(str_replace('\\', '/', $data['path']), '/') + 1);
+        return PathUtil::basename($data['path']);
     }
 
     /**
@@ -86,7 +86,7 @@ class TargetLocator
                 return $this->getRelativePathFromContext($url['path'], $context);
             }
 
-            return substr($resource, strrpos(str_replace('\\', '/', $resource), '/') + 1);
+            return PathUtil::basename($resource);
         }
 
         // resource is a local path
@@ -95,7 +95,7 @@ class TargetLocator
 
             return $this->getRelativePathFromContext($resource, $context);
         } else {
-            return substr($resource, strrpos(str_replace('\\', '/', $resource), '/') + 1);
+            return PathUtil::basename($resource);
         }
     }
 

@@ -87,7 +87,7 @@ class Resource
             return null;
         }
 
-        if (substr($this->original, strrpos(str_replace('\\', '/', $this->original), '/') + 1)  === $this->target) {
+        if (PathUtil::basename($this->original)  === $this->target) {
             return dirname($this->original);
         }
     }
