@@ -8,6 +8,14 @@
 
 A PHP library to read, create, and extract archives in various formats via command line utilities or PHP extensions
 
+## Installation
+
+The only supported installation method is via [Composer](https://getcomposer.org). Run the following command to require Zippy in your project:
+
+```
+composer require alchemy/zippy
+```
+
 ## Adapters
 
 Zippy currently supports the following drivers and file formats:
