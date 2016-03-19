@@ -1,29 +1,29 @@
 # Zippy
 
-A Object-Oriented PHP library to manipulate any archive format (de)compression
-through commandline utilities or PHP extension.
-
 [![License](https://img.shields.io/packagist/l/alchemy/zippy.svg?style=flat-square)](https://github.com/alchemy-fr/Zippy/LICENSE)
 [![Packagist](https://img.shields.io/packagist/v/alchemy/zippy.svg?style=flat-square)](https://packagist.org/packages/alchemy/zippy)
 [![Travis](https://img.shields.io/travis/alchemy-fr/Zippy.svg?style=flat-square)](https://travis-ci.org/alchemy-fr/Zippy)
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/alchemy-fr/Zippy.svg?style=flat-square)](https://scrutinizer-ci.com/g/alchemy-fr/Zippy/)
 [![Packagist](https://img.shields.io/packagist/dt/alchemy/zippy.svg?style=flat-square)](https://packagist.org/packages/alchemy/zippy/stats)
 
+A PHP library to read, create, and extract archives in various formats via command line utilities or PHP extensions
+
 ## Adapters
 
-Zippy currently supports
+Zippy currently supports the following drivers and file formats:
 
  - zip
- - PHP zip
+  - .zip
+ - PHP zip extension
+  - .zip
  - GNU tar
+  - .tar
+  - .tar.gz
+  - .tar.bz2
  - BSD tar
-
-Which brings support to file types
-
- - .tar
- - .zip
- - .tar.gz
- - .tar.bz2
+  - .tar
+  - .tar.gz
+  - .tar.bz2
 
 ## API Example
 
@@ -82,7 +82,3 @@ Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
 ##License
 
 This project is licensed under the [MIT license](http://opensource.org/licenses/MIT).
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/romainneutron/zippy/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
