@@ -14,6 +14,12 @@ namespace Alchemy\Zippy\Resource\Teleporter;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
 
+/**
+ * Class AbstractTeleporter
+ * @package Alchemy\Zippy\Resource\Teleporter
+ *
+ * @deprecated Typehint against TeleporterInterface instead and use GenericTeleporter with custom reader/writers instead.
+ */
 abstract class AbstractTeleporter implements TeleporterInterface
 {
     /**
@@ -46,7 +52,7 @@ abstract class AbstractTeleporter implements TeleporterInterface
      * Returns the relative target of a Resource
      *
      * @param String   $context
-     * @param Resource $resource
+     * @param \Alchemy\Zippy\Resource\Resource $resource
      *
      * @return String
      */

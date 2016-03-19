@@ -11,45 +11,23 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Resource\Resource;
-use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReaderFactory;
+use Alchemy\Zippy\Resource\ResourceLocator;
+use Alchemy\Zippy\Resource\Writer\FilesystemWriter;
 use Guzzle\Http\Client;
-use Guzzle\Plugin\Backoff\BackoffPlugin;
-use Guzzle\Common\Event;
 
 /**
  * Guzzle Teleporter implementation for HTTP resources
  */
-class GuzzleTeleporter extends AbstractTeleporter
+class GuzzleTeleporter extends GenericTeleporter
 {
-    private $client;
-
     /**
-     * Constructor
-     *
      * @param Client $client
+     * @param ResourceLocator $resourceLocator
      */
-    public function __construct(Client $client)
+    public function __construct(Client $client = null, ResourceLocator $resourceLocator = null)
     {
-        $this->client = $client;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function teleport(Resource $resource, $context)
-    {
-        $target = $this->getTarget($context, $resource);
-
-        $stream = fopen($target, 'w');
-        $response = $this->client->get($resource->getOriginal(), null, $stream)->send();
-        fclose($stream);
-
-        if (!$response->isSuccessful()) {
-            throw new RuntimeException(sprintf('Unable to fetch %s', $resource->getOriginal()));
-        }
-
-        return $this;
+        parent::__construct(new LegacyGuzzleReaderFactory($client), new FilesystemWriter(), $resourceLocator);
     }
 
     /**
@@ -59,16 +37,6 @@ class GuzzleTeleporter extends AbstractTeleporter
      */
     public static function create()
     {
-        $client = new Client();
-
-        $client->getEventDispatcher()->addListener('request.error', function (Event $event) {
-            // override guzzle default behavior of throwing exceptions
-            // when 4xx & 5xx responses are encountered
-            $event->stopPropagation();
-        }, -254);
-
-        $client->addSubscriber(BackoffPlugin::getExponentialBackoff(5, array(500, 502, 503, 408)));
-
-        return new static($client);
+        return new static();
     }
 }

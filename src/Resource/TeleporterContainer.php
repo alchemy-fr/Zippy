@@ -35,7 +35,7 @@ class TeleporterContainer implements \ArrayAccess, \Countable
     /**
      * Returns the appropriate TeleporterInterface for a given Resource
      *
-     * @param Resource $resource
+     * @param \Alchemy\Zippy\Resource\Resource $resource
      * @return TeleporterInterface
      */
     public function fromResource(Resource $resource)
