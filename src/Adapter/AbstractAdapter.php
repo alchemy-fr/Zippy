@@ -247,6 +247,6 @@ abstract class AbstractAdapter implements AdapterInterface
             throw new InvalidArgumentException(sprintf('Target path %s is not writeable.', $directory));
         }
 
-        return realpath($directory).'/'.PathUtil::basename($path);
+        return realpath($directory) . '/' . PathUtil::basename($path);
     }
 }

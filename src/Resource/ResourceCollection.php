@@ -27,7 +27,7 @@ class ResourceCollection extends ArrayCollection
      */
     public function __construct($context, array $elements, $temporary)
     {
-        array_walk($elements, function ($element) {
+        array_walk($elements, function($element) {
             if (!$element instanceof Resource) {
                 throw new InvalidArgumentException('ResourceCollection only accept Resource elements');
             }

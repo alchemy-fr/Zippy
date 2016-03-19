@@ -16,13 +16,13 @@ use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 interface ProcessBuilderFactoryInterface
 {
-     /**
-     * Returns a new instance of Symfony ProcessBuilder
-     *
-     * @return ProcessBuilder
-     *
-     * @throws InvalidArgumentException
-     */
+        /**
+         * Returns a new instance of Symfony ProcessBuilder
+         *
+         * @return ProcessBuilder
+         *
+         * @throws InvalidArgumentException
+         */
     public function create();
 
     /**

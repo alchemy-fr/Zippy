@@ -15,7 +15,6 @@ use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\ResourceLocator;
-use Alchemy\Zippy\Resource\TargetLocator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 

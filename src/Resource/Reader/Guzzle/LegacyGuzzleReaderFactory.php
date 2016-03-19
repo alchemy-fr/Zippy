@@ -21,10 +21,10 @@ class LegacyGuzzleReaderFactory implements ResourceReaderFactory
     {
         $this->client = $client;
 
-        if (! $this->client) {
+        if (!$this->client) {
             $this->client = new Client();
 
-            $this->client->getEventDispatcher()->addListener('request.error', function (Event $event) {
+            $this->client->getEventDispatcher()->addListener('request.error', function(Event $event) {
                 // override guzzle default behavior of throwing exceptions
                 // when 4xx & 5xx responses are encountered
                 $event->stopPropagation();

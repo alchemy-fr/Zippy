@@ -89,7 +89,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseInflatorVersion($process->getOutput() ? : '');
+        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -124,7 +124,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $builder->add('-f');
             $builder->add($path);
             $builder->add('-T');
-            $builder->add( $nullFile);
+            $builder->add($nullFile);
 
             $process = $builder->getProcess();
             $process->run();
@@ -141,7 +141,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
             $builder->setWorkingDirectory($collection->getContext());
 
-            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+            $collection->forAll(function($i, Resource $resource) use ($builder) {
                 return $builder->add($resource->getTarget());
             });
 
@@ -200,7 +200,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $members = array();
 
-        foreach ($this->parser->parseFileListing($process->getOutput() ? : '') as $member) {
+        foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
             $members[] = new Member(
                     $resource,
                     $this,
@@ -240,7 +240,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+        $collection->forAll(function($i, Resource $resource) use ($builder) {
             return $builder->add($resource->getTarget());
         });
 
@@ -342,9 +342,12 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new \SplFileInfo($to ? : $resource->getResource());
+        return new \SplFileInfo($to ?: $resource->getResource());
     }
 
+    /**
+     * @param string $to
+     */
     protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null, $overwrite = false)
     {
         if (null !== $to && !is_dir($to)) {
