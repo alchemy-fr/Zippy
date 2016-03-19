@@ -53,7 +53,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param ParserInterface $parser An output parser
      * @param ResourceManager $manager A resource manager
      * @param ProcessBuilderFactoryInterface $inflator A process builder factory for the inflator binary
-     * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
+     * @param ProcessBuilderFactoryInterface $deflator A process builder factory for the deflator binary
      */
     public function __construct(
         ParserInterface $parser,
@@ -181,7 +181,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
     private static function findABinary($wish, array $defaults, ExecutableFinder $finder)
     {
-        $possibles = $wish ? (array)$wish : $defaults;
+        $possibles = $wish ? (array) $wish : $defaults;
 
         $binary = null;
 
@@ -207,11 +207,10 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         $iterations = 0;
 
-        array_walk($files, function ($file) use ($builder, &$iterations) {
+        array_walk($files, function($file) use ($builder, &$iterations) {
             $builder->add(
                 $file instanceof \SplFileInfo ?
-                    $file->getRealpath() :
-                    ($file instanceof MemberInterface ? $file->getLocation() : $file)
+                    $file->getRealpath() : ($file instanceof MemberInterface ? $file->getLocation() : $file)
             );
 
             $iterations++;

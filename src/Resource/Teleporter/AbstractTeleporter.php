@@ -37,7 +37,7 @@ abstract class AbstractTeleporter implements TeleporterInterface
     {
         $target = $this->getTarget($context, $resource);
 
-        if (! file_exists(dirname($target)) && false === mkdir(dirname($target))) {
+        if (!file_exists(dirname($target)) && false === mkdir(dirname($target))) {
             throw new IOException(sprintf('Could not create parent directory %s', dirname($target)));
         }
 

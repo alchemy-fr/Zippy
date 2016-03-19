@@ -117,12 +117,12 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-     public function extract($toDirectory)
-     {
+        public function extract($toDirectory)
+        {
         $this->adapter->extract($this->resource, $toDirectory);
 
         return $this;
-     }
+        }
 
     /**
      * @inheritdoc

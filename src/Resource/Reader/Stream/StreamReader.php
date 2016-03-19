@@ -34,8 +34,7 @@ class StreamReader implements ResourceReader
     public function getContentsAsStream()
     {
         $stream = is_resource($this->resource->getOriginal()) ?
-            $this->resource->getOriginal() :
-            @fopen($this->resource->getOriginal(), 'rb');
+            $this->resource->getOriginal() : @fopen($this->resource->getOriginal(), 'rb');
 
         return $stream;
     }

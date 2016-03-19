@@ -50,7 +50,7 @@ class LegacyGuzzleReader implements ResourceReader
      */
     public function getContentsAsStream()
     {
-        if (! $this->stream) {
+        if (!$this->stream) {
             $this->stream = $this->buildRequest()->send()->getBody(false);
         }
 

@@ -65,7 +65,7 @@ class TeleporterContainer implements \ArrayAccess, \Countable
 
     private function getTeleporter($typeName)
     {
-        if (! isset($this->teleporters[$typeName])) {
+        if (!isset($this->teleporters[$typeName])) {
             $factory = $this->factories[$typeName];
             $this->teleporters[$typeName] = $factory();
         }
