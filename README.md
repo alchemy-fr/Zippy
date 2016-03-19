@@ -40,18 +40,30 @@ All the following code samples assume that Zippy is loaded and available as `$zi
 ```
 <?php
 
+use Alchemy\Zippy\Zippy;
+
 // Require Composer's autoloader
 require __DIR__ . '/vendor/autoload.php';
 
+// Load Zippy
+$zippy = Zippy::load();
+```
 
 ### List an archive's contents:
 
 ```php
-use Alchemy\Zippy\Zippy;
+// Open an archive
+$archive = $zippy->open('build.tar');
 
-// Load Zippy
-$zippy = Zippy::load();
+// Iterate through members
+foreach ($archive as $member) {
+    echo "Archive contains $member" . PHP_EOL;
+}
+```
 
+### Extract an archive to a specific directory:
+
+```php
 // Open an archive
 $archive = $zippy->open('build.tar');
 
@@ -59,47 +71,10 @@ $archive = $zippy->open('build.tar');
 $archive->extract('/tmp');
 ```
 
-### Extract an archive to a specific directory:
+### Create a new archive
 
 ```php
-use Alchemy\Zippy\Zippy;
-
-// Load Zippy
-$zippy = Zippy::load();
-
-// Open an archive
-$archive = $zippy->open('build.tar');
-
-// extract content to `/tmp`
-$archive->extract('/tmp');
-```
-
-### Archive listing and extraction :
-
-```php
-use Alchemy\Zippy\Zippy;
-
-$zippy = Zippy::load();
-$zippy->create('archive.zip', '/path/to/folder');
-
-$archive = $zippy->open('build.tar');
-
-// extract content to `/tmp`
-$archive->extract('/tmp');
-
-// iterates through members
-foreach ($archive as $member) {
-    echo "archive contains $member \n";
-}
-```
-
-### Archive creation
-
-```php
-use Alchemy\Zippy\Zippy;
-
-$zippy = Zippy::load();
-// creates an archive.zip that contains a directory "folder" that contains
+// Creates an archive.zip that contains a directory "folder" that contains
 // files contained in "/path/to/directory" recursively
 $archive = $zippy->create('archive.zip', array(
     'folder' => '/path/to/directory'
@@ -109,9 +84,6 @@ $archive = $zippy->create('archive.zip', array(
 ### Customize file and directory names inside archive
 
 ```php
-use Alchemy\Zippy\Zippy;
-
-$zippy = Zippy::load();
 $archive = $zippy->create('archive.zip', array(
     'folder' => '/path/to/directory',            // will create a folder at root
     'http://www.google.com/logo.jpg',            // will create a logo.jpg file at root
@@ -120,12 +92,10 @@ $archive = $zippy->create('archive.zip', array(
 ));
 ```
 
-##API Browser
-
 ## Documentation
 
 Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
 
-##License
+## License
 
 This project is licensed under the [MIT license](http://opensource.org/licenses/MIT).
