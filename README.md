@@ -4,6 +4,7 @@ A Object-Oriented PHP library to manipulate any archive format (de)compression
 through commandline utilities or PHP extension.
 
 [![Build Status](https://secure.travis-ci.org/alchemy-fr/Zippy.png?branch=master)](http://travis-ci.org/alchemy-fr/Zippy)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/alchemy-fr/Zippy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/alchemy-fr/Zippy/?branch=master)
 
 ## Adapters
 
