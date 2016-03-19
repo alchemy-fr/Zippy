@@ -3,8 +3,10 @@
 ## [Unreleased]
 ### Removed:
 - Support for PHP versions lower than 5.5
+
 ### Added
 - Support for Guzzle 6 when teleporting remote files
+
 ### Fixed
 - Improper checking of files to delete in tests
 
@@ -33,12 +35,14 @@
 - Uses PSR-4 autoloading - thanks to @afurculita
 - Makes dependency to Guzzle optional (only required if you need to fetch remote archives) - thanks to @afurculita
 - Improves testing process (allows easier local testing)
+
 ### Removed
 - Removes dependency to Pimple
 
 ## [0.2.1] - 2014-12-10
 ### Added
 - Add .gitattribute to limit package size
+
 ### Fixed
 - Fix strategy implementation
 
@@ -46,9 +50,11 @@
 ### Fixed
 - Fix the use of "teleporter" for local files
 - Fix adding a new file using tar adapter ( --append option )
+
 ### Added
 - Add support for archives relative path
 - Archive in context when a single resource is added
+
 ### Changed
 - Allow all adapters to be instantiated even if they are not supported
 - Move support detection logic in distinct classes
