@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Tests\Resource;
 use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Resource\ResourceManager;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ResourceManagerTest extends TestCase
 {
@@ -153,29 +154,29 @@ class ResourceManagerTest extends TestCase
      */
     public function testFunctionnal()
     {
-        $wd = __DIR__;
-        $tmpdir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
+        $workDir = __DIR__;
+        $tempDir = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR);
 
-        $filesystem = new \Symfony\Component\Filesystem\Filesystem();
-        $filesystem->mkdir($tmpdir . '/path/to/local/');
-        $filesystem->mkdir($tmpdir . '/to/');
-        $filesystem->mkdir($tmpdir . '/path/to/a');
+        $filesystem = new Filesystem();
+        $filesystem->mkdir($tempDir . '/path/to/local/');
+        $filesystem->mkdir($tempDir . '/to/');
+        $filesystem->mkdir($tempDir . '/path/to/a');
 
-        touch($tmpdir . '/path/to/local/file.ext');
-        touch($tmpdir . '/path/to/local/file2.ext');
-        touch($tmpdir . '/to/file3.ext');
+        $filesystem->touch($tempDir . '/path/to/local/file.ext');
+        $filesystem->touch($tempDir . '/path/to/local/file2.ext');
+        $filesystem->touch($tempDir . '/to/file3.ext');
 
         $request = array(
-            $wd . '/input/path/to/local/file.ext',
-            $wd . '/input/path/to/a/../local/file2.ext',
-            $tmpdir . '/path/to/local/file.ext',
-            $tmpdir . '/path/to/a/../local/file2.ext',
+            $workDir . '/input/path/to/local/file.ext',
+            $workDir . '/input/path/to/a/../local/file2.ext',
+            $tempDir . '/path/to/local/file.ext',
+            $tempDir . '/path/to/a/../local/file2.ext',
             'http://127.0.0.1:8080/plus-badge.png',
             'http://127.0.0.1:8080/plusone-button.png',
-            'file://' . $tmpdir . '/to/file3.ext',
-            'file://' . $wd . '/input/path/to/a/../local/file3.ext',
-            '/I/want/this/file/to/go/there' => 'file://' . $wd . '/input/path/to/local/file2.ext',
-            '/I/want/this/file/to/go/here'  => 'file://' . $wd . '/input/path/to/local/file3.ext'
+            'file://' . $tempDir . '/to/file3.ext',
+            'file://' . $workDir . '/input/path/to/a/../local/file3.ext',
+            '/I/want/this/file/to/go/there' => 'file://' . $workDir . '/input/path/to/local/file2.ext',
+            '/I/want/this/file/to/go/here'  => 'file://' . $workDir . '/input/path/to/local/file3.ext'
         );
 
         $expected = array(
@@ -205,7 +206,7 @@ class ResourceManagerTest extends TestCase
 
         $resourceManger = ResourceManager::create();
 
-        $collection = $resourceManger->handle($wd, $request);
+        $collection = $resourceManger->handle($workDir, $request);
 
         $this->assertCount(10, $collection);
 

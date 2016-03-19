@@ -251,11 +251,11 @@ class ZipExtensionAdapter extends AbstractAdapter
         $adapter = $this;
 
         try {
-            $collection->forAll(function ($i, Resource $resource) use ($zipresource, $stack, $recursive, $adapter) {
+            $collection->forAll(function($i, Resource $resource) use ($zipresource, $stack, $recursive, $adapter) {
                 $adapter->checkReadability($zipresource->getResource(), $resource->getTarget());
                 if (is_dir($resource->getTarget())) {
                     if ($recursive) {
-                        $stack->push($resource->getTarget() . ((substr($resource->getTarget(), -1) === DIRECTORY_SEPARATOR) ? '' : DIRECTORY_SEPARATOR ));
+                        $stack->push($resource->getTarget() . ((substr($resource->getTarget(), -1) === DIRECTORY_SEPARATOR) ? '' : DIRECTORY_SEPARATOR));
                     } else {
                         $adapter->addEmptyDir($zipresource->getResource(), $resource->getTarget());
                     }
@@ -301,6 +301,7 @@ class ZipExtensionAdapter extends AbstractAdapter
 
     /**
      * @info is public for PHP 5.3 compatibility, should be private
+     * @param string $file
      */
     public function checkReadability(\ZipArchive $zip, $file)
     {
@@ -314,6 +315,7 @@ class ZipExtensionAdapter extends AbstractAdapter
 
     /**
      * @info is public for PHP 5.3 compatibility, should be private
+     * @param string $file
      */
     public function addFileToZip(\ZipArchive $zip, $file)
     {

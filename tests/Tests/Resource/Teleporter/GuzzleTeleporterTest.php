@@ -18,7 +18,7 @@ class GuzzleTeleporterTest extends TeleporterTestCase
         $target = 'plop-badge.png';
         $resource = new Resource('http://127.0.0.1:8080/plus-badge.png', $target);
 
-        if (is_file($target)) {
+        if (is_file($context . '/' . $target)) {
             unlink($context . '/' . $target);
         }
 

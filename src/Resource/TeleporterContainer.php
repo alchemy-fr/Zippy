@@ -12,6 +12,7 @@
 namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReaderFactory;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\StreamTeleporter;
@@ -35,7 +36,7 @@ class TeleporterContainer implements \ArrayAccess, \Countable
     /**
      * Returns the appropriate TeleporterInterface for a given Resource
      *
-     * @param Resource $resource
+     * @param \Alchemy\Zippy\Resource\Resource $resource
      * @return TeleporterInterface
      */
     public function fromResource(Resource $resource)
@@ -64,7 +65,7 @@ class TeleporterContainer implements \ArrayAccess, \Countable
 
     private function getTeleporter($typeName)
     {
-        if (! isset($this->teleporters[$typeName])) {
+        if (!isset($this->teleporters[$typeName])) {
             $factory = $this->factories[$typeName];
             $this->teleporters[$typeName] = $factory();
         }
@@ -89,9 +90,18 @@ class TeleporterContainer implements \ArrayAccess, \Countable
             return LocalTeleporter::create();
         };
 
-        if (class_exists('Guzzle\Http\Client')) {
+        if (class_exists('GuzzleHttp\Client')) {
             $container->factories['guzzle-teleporter'] = function () {
-                return GuzzleTeleporter::create();
+                return new GuzzleTeleporter(
+                    null,
+                    new GuzzleReaderFactory(),
+                    new ResourceLocator()
+                );
+            };
+        }
+        elseif (class_exists('Guzzle\Http\Client')) {
+            $container->factories['guzzle-teleporter'] = function () {
+                return new GuzzleTeleporter();
             };
         }
 

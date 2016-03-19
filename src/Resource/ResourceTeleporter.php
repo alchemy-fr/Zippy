@@ -26,10 +26,10 @@ class ResourceTeleporter
     }
 
     /**
-     * Teleports a Resource to its target in the context
+     * Teleports a resource to its target in the context
      *
-     * @param String   $context
-     * @param Resource $resource
+     * @param string $context
+     * @param \Alchemy\Zippy\Resource\Resource $resource
      *
      * @return ResourceTeleporter
      */
