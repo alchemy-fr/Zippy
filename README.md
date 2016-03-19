@@ -33,7 +33,46 @@ Zippy currently supports the following drivers and file formats:
   - .tar.gz
   - .tar.bz2
 
-## API Example
+## Getting started
+
+All the following code samples assume that Zippy is loaded and available as `$zippy`. You need the following code (or variation of) to load Zippy:
+
+```
+<?php
+
+// Require Composer's autoloader
+require __DIR__ . '/vendor/autoload.php';
+
+
+### List an archive's contents:
+
+```php
+use Alchemy\Zippy\Zippy;
+
+// Load Zippy
+$zippy = Zippy::load();
+
+// Open an archive
+$archive = $zippy->open('build.tar');
+
+// Extract archive contents to `/tmp`
+$archive->extract('/tmp');
+```
+
+### Extract an archive to a specific directory:
+
+```php
+use Alchemy\Zippy\Zippy;
+
+// Load Zippy
+$zippy = Zippy::load();
+
+// Open an archive
+$archive = $zippy->open('build.tar');
+
+// extract content to `/tmp`
+$archive->extract('/tmp');
+```
 
 ### Archive listing and extraction :
 
