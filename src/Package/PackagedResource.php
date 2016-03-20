@@ -3,9 +3,10 @@
 namespace Alchemy\Zippy\Package;
 
 use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Zippy\Resource\ResourceTransport;
+use Alchemy\Zippy\Resource\ResourceWriterResolver;
 
 class PackagedResource
 {
@@ -25,27 +26,26 @@ class PackagedResource
     private $readerResolver;
 
     /**
+     * @var ResourceWriterResolver
+     */
+    private $writerResolver;
+
+    /**
      * @param ResourceUri $resourceUri
      * @param ResourceReaderResolver $readerResolver
+     * @param ResourceWriterResolver $writerResolver
      * @param PackagedResource $parent
      */
     public function __construct(
         ResourceUri $resourceUri,
         ResourceReaderResolver $readerResolver,
+        ResourceWriterResolver $writerResolver,
         PackagedResource $parent = null
     ) {
         $this->relativeUri = $resourceUri;
         $this->parent = $parent;
         $this->readerResolver = $readerResolver;
-    }
-
-    /**
-     * @param PackagedResource $parent
-     * @return PackagedResource
-     */
-    public function withParent(PackagedResource $parent)
-    {
-        return new self($this->relativeUri, $this->readerResolver, $parent);
+        $this->writerResolver = $writerResolver;
     }
 
     /**
@@ -65,11 +65,27 @@ class PackagedResource
     }
 
     /**
+     * @return ResourceTransport
+     */
+    public function getTransport()
+    {
+        return new ResourceTransport($this->readerResolver, $this->writerResolver, $this->getRelativeUri());
+    }
+
+    /**
      * @return ResourceReaderResolver
      */
-    protected function getReaderResolver()
+    public function getReaderResolver()
     {
         return $this->readerResolver;
+    }
+
+    /**
+     * @return ResourceWriterResolver
+     */
+    public function getWriterResolver()
+    {
+        return $this->writerResolver;
     }
 
     /**

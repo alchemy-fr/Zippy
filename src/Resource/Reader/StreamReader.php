@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Stream;
+namespace Alchemy\Zippy\Resource\Reader;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;

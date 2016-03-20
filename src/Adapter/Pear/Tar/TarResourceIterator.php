@@ -1,15 +1,15 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\Pecl\Rar;
+namespace Alchemy\Zippy\Adapter\Pear\Tar;
 
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIterator;
 use Alchemy\Zippy\Resource\ResourceUri;
 
-class RarResourceIterator implements PackagedResourceIterator
+class TarResourceIterator implements PackagedResourceIterator
 {
     /**
-     * @var \RarArchive
+     * @var \Archive_Tar
      */
     private $archive;
 
@@ -19,31 +19,21 @@ class RarResourceIterator implements PackagedResourceIterator
     private $container;
 
     /**
-     * @var \Iterator
+     * @var \ArrayIterator
      */
     private $iterator;
 
     /**
-     * @param PackagedResource $container
+     * @var TarResourceReaderResolver
      */
+    private $readerResolver;
+
     public function __construct(PackagedResource $container)
     {
         $this->container = $container;
-        $this->archive = \RarArchive::open($container->getAbsoluteUri()->getResource());
+        $this->archive = new \Archive_Tar($container->getRelativeUri()->getResource());
 
-        $this->readerResolver = new RarResourceReaderResolver($this->archive);
-    }
-
-    /**
-     * @return \ArrayIterator|\Iterator
-     */
-    private function getIterator()
-    {
-        if (! $this->iterator) {
-            $this->iterator = new \ArrayIterator($this->archive->getEntries());
-        }
-
-        return $this->iterator;
+        $this->readerResolver = new TarResourceReaderResolver($this->archive);
     }
 
     /**
@@ -65,7 +55,7 @@ class RarResourceIterator implements PackagedResourceIterator
      */
     public function key()
     {
-        return $this->getIterator()->current();
+        return $this->getIterator()->key();
     }
 
     /**
@@ -96,13 +86,26 @@ class RarResourceIterator implements PackagedResourceIterator
      */
     public function current()
     {
-        $current = $this->getIterator()->current();
+        $current = $this->iterator->current();
+        $resource = ResourceUri::fromString($current['filename']);
 
         return new PackagedResource(
-            ResourceUri::fromString($current->getName()),
+            $resource,
             $this->readerResolver,
             $this->container->getWriterResolver(),
             $this->container
         );
+    }
+
+    /**
+     * @return \ArrayIterator
+     */
+    private function getIterator()
+    {
+        if (! $this->iterator) {
+            $this->iterator = new \ArrayIterator($this->archive->listContent());
+        }
+
+        return $this->iterator;
     }
 }

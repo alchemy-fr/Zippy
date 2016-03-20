@@ -1,7 +1,8 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Guzzle;
+namespace Alchemy\Zippy\Adapter\Guzzle;
 
+use Alchemy\Zippy\Adapter\Guzzle\GuzzleReader;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;

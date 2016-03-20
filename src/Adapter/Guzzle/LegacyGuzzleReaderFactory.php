@@ -1,10 +1,12 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Guzzle;
+namespace Alchemy\Zippy\Adapter\Guzzle;
 
+use Alchemy\Zippy\Adapter\Guzzle\LegacyGuzzleReader;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
+use Alchemy\Zippy\Resource\ResourceUri;
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Plugin\Backoff\BackoffPlugin;
@@ -35,10 +37,10 @@ class LegacyGuzzleReaderFactory implements ResourceReaderFactory
     }
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param ResourceUri $resource
      * @return ResourceReader
      */
-    public function getReader(Resource $resource)
+    public function getReader(ResourceUri $resource)
     {
         return new LegacyGuzzleReader($resource, $this->client);
     }

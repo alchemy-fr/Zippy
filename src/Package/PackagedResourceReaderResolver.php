@@ -14,18 +14,11 @@ class PackagedResourceReaderResolver implements ResourceReaderResolver
     private $container;
 
     /**
-     * @var ResourceReaderResolver
-     */
-    private $resolver;
-
-    /**
      * @param PackagedResource $container
-     * @param ResourceReaderResolver $resourceReaderResolver
      */
-    public function __construct(PackagedResource $container, ResourceReaderResolver $resourceReaderResolver)
+    public function __construct(PackagedResource $container)
     {
         $this->container = $container;
-        $this->resolver = $resourceReaderResolver;
     }
 
     /**
@@ -41,6 +34,6 @@ class PackagedResourceReaderResolver implements ResourceReaderResolver
             $resource->getResource()
         );
 
-        return $this->resolver->resolveReader($target);
+        return $this->container->getReaderResolver()->resolveReader($target);
     }
 }

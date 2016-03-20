@@ -2,8 +2,10 @@
 
 namespace Alchemy\Zippy\Package;
 
+use Alchemy\Zippy\Package\Iterator\FilteredPackagedResourceIterator;
 use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Zippy\Resource\ResourceWriterResolver;
 use Traversable;
 
 class Package extends PackagedResource implements \IteratorAggregate
@@ -21,17 +23,19 @@ class Package extends PackagedResource implements \IteratorAggregate
     /**
      * @param ResourceUri $container
      * @param ResourceReaderResolver $readerResolver
+     * @param ResourceWriterResolver $writerResolver
      * @param PackagedResourceIteratorResolver $iteratorResolver
      */
     public function __construct(
         ResourceUri $container,
         ResourceReaderResolver $readerResolver,
+        ResourceWriterResolver $writerResolver,
         PackagedResourceIteratorResolver $iteratorResolver
     ) {
         $this->container = $container;
         $this->iteratorResolver = $iteratorResolver;
 
-        parent::__construct($container, $readerResolver);
+        parent::__construct($container, $readerResolver, $writerResolver);
     }
 
     /**
@@ -51,8 +55,15 @@ class Package extends PackagedResource implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return $this->iteratorResolver
-            ->resolveIterator($this->container, $this->getReaderResolver())
-            ->withParent($this);
+        return $this->iteratorResolver->resolveIterator($this);
+    }
+
+    /**
+     * @param callable $filter
+     * @return FilteredPackagedResourceIterator
+     */
+    public function filter(callable $filter)
+    {
+        return new FilteredPackagedResourceIterator($this->getIterator(), $filter);
     }
 }

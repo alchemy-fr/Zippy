@@ -1,9 +1,10 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Guzzle;
+namespace Alchemy\Zippy\Adapter\Guzzle;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceUri;
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\EntityBodyInterface;
@@ -16,7 +17,7 @@ class LegacyGuzzleReader implements ResourceReader
     private $client;
 
     /**
-     * @var \Alchemy\Zippy\Resource\Resource $resource
+     * @var ResourceUri $resource
      */
     private $resource;
 
@@ -28,10 +29,10 @@ class LegacyGuzzleReader implements ResourceReader
     private $stream = null;
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param ResourceUri $resource
      * @param ClientInterface $client
      */
-    public function __construct(Resource $resource, ClientInterface $client = null)
+    public function __construct(ResourceUri $resource, ClientInterface $client = null)
     {
         $this->client = $client ?: new Client();
         $this->resource = $resource;

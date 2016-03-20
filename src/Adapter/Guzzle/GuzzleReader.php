@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Guzzle;
+namespace Alchemy\Zippy\Adapter\Guzzle;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;

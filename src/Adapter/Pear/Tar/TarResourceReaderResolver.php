@@ -1,20 +1,20 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\Pecl\Zip;
+namespace Alchemy\Zippy\Adapter\Pear\Tar;
 
-use Alchemy\Zippy\Resource\Reader\RawStreamReader;
+use Alchemy\Zippy\Resource\Reader\StringReader;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
 
-class ZipResourceReaderResolver implements ResourceReaderResolver
+class TarResourceReaderResolver implements ResourceReaderResolver
 {
     /**
-     * @var \ZipArchive
+     * @var \Archive_Tar
      */
     private $archive;
 
-    public function __construct(\ZipArchive $archive)
+    public function __construct(\Archive_Tar $archive)
     {
         $this->archive = $archive;
     }
@@ -27,6 +27,6 @@ class ZipResourceReaderResolver implements ResourceReaderResolver
      */
     public function resolveReader(ResourceUri $resource)
     {
-        return new RawStreamReader($this->archive->getStream($resource->getResource()));
+        return new StringReader($this->archive->extractInString($resource->getResource()));
     }
 }

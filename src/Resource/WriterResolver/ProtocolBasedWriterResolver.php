@@ -43,7 +43,7 @@ class ProtocolBasedWriterResolver implements ResourceWriterResolver
     public function resolveWriter(ResourceUri $resource)
     {
         if (! array_key_exists($resource->getProtocol(), $this->protocolWriterIndexes)) {
-            throw new \RuntimeException('Unsupported protocol: ' . $resource->getProtocol());
+            throw new \RuntimeException('Unsupported protocol: ' . $resource->getProtocol() . '( ' . $resource  . ')');
         }
 
         $index = $this->protocolWriterIndexes[$resource->getProtocol()];

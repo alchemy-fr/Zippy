@@ -1,44 +1,23 @@
 <?php
 
-namespace Alchemy\Zippy\Adapter\Pecl\Zip;
+namespace Alchemy\Zippy\Package\Iterator;
 
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIterator;
-use Alchemy\Zippy\Resource\ResourceUri;
 
-class ZipResourceIterator implements PackagedResourceIterator
+class FilteredPackagedResourceIterator implements PackagedResourceIterator
 {
-
     /**
-     * @var \ZipArchive
+     * @var PackagedResourceIterator
      */
-    private $archive;
+    private $iterator;
 
-    /**
-     * @var int
-     */
-    private $current = 0;
+    private $filter;
 
-    /**
-     * @var PackagedResource
-     */
-    private $parent;
-
-    /**
-     * @var ZipResourceReaderResolver
-     */
-    private $readerResolver;
-
-    /**
-     * @param PackagedResource $parent
-     */
-    public function __construct(PackagedResource $parent) {
-        $this->parent = $parent;
-
-        $this->archive = new \ZipArchive();
-        $this->readerResolver = new ZipResourceReaderResolver($this->archive);
-
-        $this->archive->open($this->parent->getAbsoluteUri()->getResource());
+    public function __construct(PackagedResourceIterator $iterator, callable $filter)
+    {
+        $this->iterator = $iterator;
+        $this->filter = $filter;
     }
 
     /**
@@ -49,7 +28,9 @@ class ZipResourceIterator implements PackagedResourceIterator
      */
     public function next()
     {
-        $this->current++;
+        do {
+            $this->iterator->next();
+        } while ($this->shouldSkipCurrent($this->filter));
     }
 
     /**
@@ -60,7 +41,7 @@ class ZipResourceIterator implements PackagedResourceIterator
      */
     public function key()
     {
-        return $this->archive->getNameIndex($this->current);
+        return $this->iterator->key();
     }
 
     /**
@@ -72,7 +53,11 @@ class ZipResourceIterator implements PackagedResourceIterator
      */
     public function valid()
     {
-        return $this->current < $this->archive->numFiles;
+        while ($this->shouldSkipCurrent($this->filter)) {
+            $this->iterator->next();
+        }
+
+        return $this->iterator->valid();
     }
 
     /**
@@ -83,7 +68,11 @@ class ZipResourceIterator implements PackagedResourceIterator
      */
     public function rewind()
     {
-        $this->current = 0;
+        $this->iterator->rewind();
+
+        while ($this->shouldSkipCurrent($this->filter)) {
+            $this->iterator->next();
+        }
     }
 
     /**
@@ -91,13 +80,19 @@ class ZipResourceIterator implements PackagedResourceIterator
      */
     public function current()
     {
-        $file = $this->key();
+        while ($this->shouldSkipCurrent($this->filter)) {
+            $this->iterator->next();
+        }
 
-        return new PackagedResource(
-            ResourceUri::fromString($file),
-            $this->readerResolver,
-            $this->parent->getWriterResolver(),
-            $this->parent
-        );
+        return $this->iterator->current();
+    }
+
+    /**
+     * @param $filter
+     * @return bool
+     */
+    private function shouldSkipCurrent($filter)
+    {
+        return !$filter($this->iterator->key()) && $this->iterator->valid();
     }
 }

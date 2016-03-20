@@ -37,4 +37,15 @@ final class PathUtil
     {
         return ltrim(trim(mb_strtolower($extension)), '.');
     }
+
+    /**
+     * Returns the extension of a file
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function extractExtension($path)
+    {
+        return self::sanitizeExtension(pathinfo($path, PATHINFO_EXTENSION));
+    }
 }
