@@ -93,6 +93,6 @@ class FilteredPackagedResourceIterator implements PackagedResourceIterator
      */
     private function shouldSkipCurrent($filter)
     {
-        return !$filter($this->iterator->key()) && $this->iterator->valid();
+        return $this->iterator->valid() && !$filter($this->iterator->current());
     }
 }
