@@ -1,6 +1,8 @@
 <?php
 
-namespace Alchemy\Zippy;
+namespace Alchemy\Zippy\Iterator;
+
+use ArrayIterator;
 
 class MappingArrayIterator extends \ArrayIterator
 {

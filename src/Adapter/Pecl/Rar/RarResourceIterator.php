@@ -2,7 +2,7 @@
 
 namespace Alchemy\Zippy\Adapter\Pecl\Rar;
 
-use Alchemy\Zippy\MappingArrayIterator;
+use Alchemy\Zippy\Iterator\MappingArrayIterator;
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Resource\Reader\RawStreamReader;
