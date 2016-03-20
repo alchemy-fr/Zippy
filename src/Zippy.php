@@ -45,14 +45,13 @@ class Zippy
      * @param PackagedResourceIteratorResolver $iteratorResolver
      */
     public function __construct(
-        ResourceReaderResolver $readerResolver = null,
-        ResourceWriterResolver $writerResolver = null,
-        PackagedResourceIteratorResolver $iteratorResolver = null
+        ResourceReaderResolver $readerResolver,
+        ResourceWriterResolver $writerResolver,
+        PackagedResourceIteratorResolver $iteratorResolver
     ) {
-        $this->packagedResourceIteratorResolver = $iteratorResolver ?: new ProtocolBasedIteratorResolver();
-
-        $this->resourceReaderResolver = $readerResolver ?: new ProtocolBasedReaderResolver();
-        $this->resourceWriterResolver = $writerResolver ?: new ProtocolBasedWriterResolver();
+        $this->packagedResourceIteratorResolver = $iteratorResolver;
+        $this->resourceReaderResolver = $readerResolver;
+        $this->resourceWriterResolver = $writerResolver;
     }
 
     /**

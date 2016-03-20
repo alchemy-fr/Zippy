@@ -26,6 +26,9 @@ class ZippyFactory
         $this->adapters[] = new ZipAdapter();
     }
 
+    /**
+     * @return Zippy
+     */
     public function create()
     {
         $iteratorResolver = new ProtocolBasedIteratorResolver();
