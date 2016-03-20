@@ -4,9 +4,12 @@ namespace Alchemy\Zippy\Adapter\Pear\Tar;
 
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
+use Alchemy\Zippy\Resource\Reader\StringReader;
+use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
 
-class TarResourceIterator extends AbstractIterator
+class TarResourceIterator extends AbstractIterator implements ResourceReaderResolver
 {
     /**
      * @var \Archive_Tar
@@ -19,16 +22,12 @@ class TarResourceIterator extends AbstractIterator
     private $container;
 
     /**
-     * @var TarResourceReaderResolver
+     * @param PackagedResource $container
      */
-    private $readerResolver;
-
     public function __construct(PackagedResource $container)
     {
         $this->container = $container;
         $this->archive = new \Archive_Tar($container->getRelativeUri()->getResource());
-
-        $this->readerResolver = new TarResourceReaderResolver($this->archive);
     }
 
     /**
@@ -41,7 +40,7 @@ class TarResourceIterator extends AbstractIterator
 
         return new PackagedResource(
             $resource,
-            $this->readerResolver,
+            $this,
             $this->container->getWriterResolver(),
             $this->container
         );
@@ -53,5 +52,16 @@ class TarResourceIterator extends AbstractIterator
     protected function buildIterator()
     {
         return new \ArrayIterator($this->archive->listContent());
+    }
+
+    /**
+     * Resolves a reader for the given resource URI.
+     *
+     * @param ResourceUri $resource
+     * @return ResourceReader
+     */
+    public function resolveReader(ResourceUri $resource)
+    {
+        return new StringReader($this->archive->extractInString($resource->getResource()));
     }
 }

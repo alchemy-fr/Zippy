@@ -4,9 +4,12 @@ namespace Alchemy\Zippy\Adapter\Pecl\Zip;
 
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIterator;
+use Alchemy\Zippy\Resource\Reader\RawStreamReader;
+use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
 
-class ZipResourceIterator implements PackagedResourceIterator
+class ZipResourceIterator implements PackagedResourceIterator, ResourceReaderResolver
 {
 
     /**
@@ -25,19 +28,12 @@ class ZipResourceIterator implements PackagedResourceIterator
     private $parent;
 
     /**
-     * @var ZipResourceReaderResolver
-     */
-    private $readerResolver;
-
-    /**
      * @param PackagedResource $parent
      */
     public function __construct(PackagedResource $parent) {
         $this->parent = $parent;
 
         $this->archive = new \ZipArchive();
-        $this->readerResolver = new ZipResourceReaderResolver($this->archive);
-
         $this->archive->open($this->parent->getAbsoluteUri()->getResource());
     }
 
@@ -95,9 +91,20 @@ class ZipResourceIterator implements PackagedResourceIterator
 
         return new PackagedResource(
             ResourceUri::fromString($file),
-            $this->readerResolver,
+            $this,
             $this->parent->getWriterResolver(),
             $this->parent
         );
+    }
+
+    /**
+     * Resolves a reader for the given resource URI.
+     *
+     * @param ResourceUri $resource
+     * @return ResourceReader
+     */
+    public function resolveReader(ResourceUri $resource)
+    {
+        return new RawStreamReader($this->archive->getStream($resource->getResource()));
     }
 }
