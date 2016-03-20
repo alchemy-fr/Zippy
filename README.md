@@ -16,28 +16,24 @@ The only supported installation method is via [Composer](https://getcomposer.org
 composer require alchemy/zippy
 ```
 
-## Adapters
+## Compatibility matrix
 
-Zippy currently supports the following drivers and file formats:
-
- - zip
-  - .zip
- - PHP zip extension
-  - .zip
- - GNU tar
-  - .tar
-  - .tar.gz
-  - .tar.bz2
- - BSD tar
-  - .tar
-  - .tar.gz
-  - .tar.bz2
+| Driver             | Format    | Read archive | Create archive | Update archive (add file) | Update archive (remove file) |
+|--------------------|-----------|--------------|----------------|---------------------------|------------------------------|
+| ZIP Extension      | *.zip     | Yes          | Yes            | Yes                       | Yes                          |
+| ZIP Binary Wrapper | *.zip     | Yes          | Yes            | Yes                       | Yes                          |
+| GNU Tar            | *.tar     | Yes          | Yes            | Yes                       | Yes                          |
+| GNU Tar            | *.tar.gz  | Yes          | Yes            | No                        | Yes                          |
+| GNU Tar            | *.tar.bz2 | Yes          | Yes            | No                        | Yes                          |
+| BSD Tar            | *.tar     | Yes          | Yes            | Yes                       | Yes                          |
+| BSD Tar            | *.tar.gz  | Yes          | Yes            | No                        | Yes                          |
+| BSD Tar            | *.tar.bz2 | Yes          | Yes            | No                        | Yes                          |
 
 ## Getting started
 
 All the following code samples assume that Zippy is loaded and available as `$zippy`. You need the following code (or variation of) to load Zippy:
 
-```
+```php
 <?php
 
 use Alchemy\Zippy\Zippy;
