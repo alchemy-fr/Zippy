@@ -2,6 +2,7 @@
 
 namespace Alchemy\Zippy\Adapter\Pear\Tar;
 
+use Alchemy\Zippy\MappingArrayIterator;
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Resource\Reader\StringReader;
@@ -35,8 +36,7 @@ class TarResourceIterator extends AbstractIterator implements ResourceReaderReso
      */
     public function current()
     {
-        $current = $this->getIterator()->current();
-        $resource = ResourceUri::fromString($current['filename']);
+        $resource = $this->getIterator()->current();
 
         return new PackagedResource(
             $resource,
@@ -51,7 +51,9 @@ class TarResourceIterator extends AbstractIterator implements ResourceReaderReso
      */
     protected function buildIterator()
     {
-        return new \ArrayIterator($this->archive->listContent());
+        return new MappingArrayIterator($this->archive->listContent(), function ($current) {
+            return ResourceUri::fromString($current['filename']);
+        });
     }
 
     /**

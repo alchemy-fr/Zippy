@@ -2,6 +2,7 @@
 
 namespace Alchemy\Zippy\Adapter\Pecl\Rar;
 
+use Alchemy\Zippy\MappingArrayIterator;
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Resource\Reader\RawStreamReader;
@@ -35,7 +36,9 @@ class RarResourceIterator extends AbstractIterator implements ResourceReaderReso
      */
     protected  function buildIterator()
     {
-        return new \ArrayIterator($this->archive->getEntries());
+        return new MappingArrayIterator($this->archive->getEntries(), function ($current) {
+            return ResourceUri::fromString($current->getName());
+        });
     }
 
     /**
@@ -43,10 +46,10 @@ class RarResourceIterator extends AbstractIterator implements ResourceReaderReso
      */
     public function current()
     {
-        $current = $this->getIterator()->current();
+        $resource = $this->getIterator()->current();
 
         return new PackagedResource(
-            ResourceUri::fromString($current->getName()),
+            $resource,
             $this,
             $this->container->getWriterResolver(),
             $this->container

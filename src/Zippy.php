@@ -11,19 +11,13 @@
 
 namespace Alchemy\Zippy;
 
-use Alchemy\Zippy\Adapter\Pear\Tar\TarResourceIterator;
-use Alchemy\Zippy\Adapter\Pecl\Rar\RarResourceIterator;
-use Alchemy\Zippy\Adapter\Pecl\Zip\ZipResourceIterator;
 use Alchemy\Zippy\Package\Package;
 use Alchemy\Zippy\Package\PackageBuilder;
-use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIteratorResolver;
 use Alchemy\Zippy\Package\IteratorResolver\ProtocolBasedIteratorResolver;
-use Alchemy\Zippy\Resource\PathUtil;
 use Alchemy\Zippy\Resource\ReaderResolver\ProtocolBasedReaderResolver;
 use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
-use Alchemy\Zippy\Resource\Writer\StreamWriter;
 use Alchemy\Zippy\Resource\WriterResolver\ProtocolBasedWriterResolver;
 use Alchemy\Zippy\Resource\ResourceWriterResolver;
 
@@ -45,6 +39,11 @@ class Zippy
      */
     private $packagedResourceIteratorResolver;
 
+    /**
+     * @param ResourceReaderResolver $readerResolver
+     * @param ResourceWriterResolver $writerResolver
+     * @param PackagedResourceIteratorResolver $iteratorResolver
+     */
     public function __construct(
         ResourceReaderResolver $readerResolver = null,
         ResourceWriterResolver $writerResolver = null,
@@ -109,31 +108,6 @@ class Zippy
      */
     public static function load()
     {
-        $iteratorResolver = new ProtocolBasedIteratorResolver();
-        $readerResolver = new ProtocolBasedReaderResolver();
-        $writerResolver = new ProtocolBasedWriterResolver();
-
-        $writerResolver->addWriter(new StreamWriter(), 'file');
-
-        $iteratorResolver->addFactory('zip', function ($container) {
-            return new ZipResourceIterator($container);
-        });
-
-        $iteratorResolver->addFactory('rar', function ($container) {
-            return new RarResourceIterator($container);
-        });
-
-        $iteratorResolver->addFactory('tar', function ($container) {
-            return new TarResourceIterator($container);
-        });
-
-        $iteratorResolver->addFactory('file', function (PackagedResource $container) use ($iteratorResolver) {
-            $extension = PathUtil::extractExtension($container->getRelativeUri()->getResource());
-            $factory = $iteratorResolver->getFactory($extension);
-
-            return $factory($container);
-        });
-
-        return new self($readerResolver, $writerResolver, $iteratorResolver);
+        return (new ZippyFactory())->create();
     }
 }
