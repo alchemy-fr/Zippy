@@ -1,13 +1,12 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\Reader\Stream;
+namespace Alchemy\Zippy\Resource\Reader\Zip;
 
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\ResourceUri;
 
-class StreamReaderFactory implements ResourceReaderFactory
+class ZipReaderFactory implements ResourceReaderFactory
 {
 
     /**
@@ -16,6 +15,6 @@ class StreamReaderFactory implements ResourceReaderFactory
      */
     public function getReader(ResourceUri $resource)
     {
-        return new StreamReader($resource);
+
     }
 }

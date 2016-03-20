@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Resource\Reader\Stream;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceUri;
 
 class StreamReader implements ResourceReader
 {
@@ -13,11 +14,23 @@ class StreamReader implements ResourceReader
     private $resource;
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @var resource[]
      */
-    public function __construct(Resource $resource)
+    private $streams = [];
+
+    /**
+     * @param ResourceUri $resource
+     */
+    public function __construct(ResourceUri $resource)
     {
         $this->resource = $resource;
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->streams as $stream) {
+            @fclose($stream);
+        }
     }
 
     /**
@@ -25,7 +38,7 @@ class StreamReader implements ResourceReader
      */
     public function getContents()
     {
-        return file_get_contents($this->resource->getOriginal());
+        return stream_get_contents($this->getContentsAsStream());
     }
 
     /**
@@ -33,8 +46,13 @@ class StreamReader implements ResourceReader
      */
     public function getContentsAsStream()
     {
-        $stream = is_resource($this->resource->getOriginal()) ?
-            $this->resource->getOriginal() : @fopen($this->resource->getOriginal(), 'rb');
+        $stream = @fopen(rawurldecode($this->resource), 'r');
+
+        if ($stream === false) {
+            throw new \RuntimeException('Unable to open stream resource for ' . rawurldecode($this->resource));
+        }
+
+        $this->streams[] = $stream;
 
         return $stream;
     }

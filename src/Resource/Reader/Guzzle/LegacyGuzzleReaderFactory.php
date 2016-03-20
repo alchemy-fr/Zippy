@@ -36,10 +36,9 @@ class LegacyGuzzleReaderFactory implements ResourceReaderFactory
 
     /**
      * @param \Alchemy\Zippy\Resource\Resource $resource
-     * @param string $context
      * @return ResourceReader
      */
-    public function getReader(Resource $resource, $context)
+    public function getReader(Resource $resource)
     {
         return new LegacyGuzzleReader($resource, $this->client);
     }

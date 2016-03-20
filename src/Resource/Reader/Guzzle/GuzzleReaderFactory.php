@@ -5,6 +5,7 @@ namespace Alchemy\Zippy\Resource\Reader\Guzzle;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
+use Alchemy\Zippy\Resource\ResourceUri;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 
@@ -25,11 +26,10 @@ class GuzzleReaderFactory implements ResourceReaderFactory
     }
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
-     * @param string $context
+     * @param ResourceUri $resource
      * @return ResourceReader
      */
-    public function getReader(Resource $resource, $context)
+    public function getReader(ResourceUri $resource)
     {
         return new GuzzleReader($resource, $this->client);
     }

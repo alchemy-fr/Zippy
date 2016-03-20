@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Resource\Reader\Guzzle;
 
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceUri;
 use GuzzleHttp\ClientInterface;
 
 class GuzzleReader implements ResourceReader
@@ -19,10 +20,10 @@ class GuzzleReader implements ResourceReader
     private $resource;
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param ResourceUri $resource
      * @param ClientInterface $client
      */
-    public function __construct(Resource $resource, ClientInterface $client = null)
+    public function __construct(ResourceUri $resource, ClientInterface $client = null)
     {
         $this->resource = $resource;
         $this->client = $client;
@@ -54,6 +55,6 @@ class GuzzleReader implements ResourceReader
 
     private function buildRequest()
     {
-        return $this->client->request('GET', $this->resource->getOriginal());
+        return $this->client->request('GET', $this->resource->getUri());
     }
 }

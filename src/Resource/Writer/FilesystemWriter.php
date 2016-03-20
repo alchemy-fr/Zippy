@@ -3,6 +3,7 @@
 namespace Alchemy\Zippy\Resource\Writer;
 
 use Alchemy\Zippy\Resource\ResourceReader;
+use Alchemy\Zippy\Resource\ResourceUri;
 use Alchemy\Zippy\Resource\ResourceWriter;
 
 class FilesystemWriter implements ResourceWriter
@@ -10,10 +11,10 @@ class FilesystemWriter implements ResourceWriter
 
     /**
      * @param ResourceReader $reader
-     * @param string $target
+     * @param ResourceUri $target
      */
-    public function writeFromReader(ResourceReader $reader, $target)
+    public function writeFromReader(ResourceReader $reader, ResourceUri $target)
     {
-        file_put_contents($target, $reader->getContentsAsStream());
+        file_put_contents($target->getResource(), $reader->getContentsAsStream());
     }
 }

@@ -4,5 +4,5 @@ namespace Alchemy\Zippy\Resource;
 
 interface ResourceWriter 
 {
-    public function writeFromReader(ResourceReader $reader, $target);
+    public function writeFromReader(ResourceReader $reader, ResourceUri $targetPath);
 }

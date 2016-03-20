@@ -6,9 +6,8 @@ interface ResourceReaderFactory
 {
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
-     * @param string $context
+     * @param ResourceUri $resource
      * @return ResourceReader
      */
-    public function getReader(Resource $resource, $context);
+    public function getReader(ResourceUri $resource);
 }
