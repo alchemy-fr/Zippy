@@ -5,10 +5,10 @@ namespace Alchemy\Zippy\Adapter\Pecl\Rar;
 use Alchemy\Zippy\Iterator\MappingArrayIterator;
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
-use Alchemy\Zippy\Resource\Reader\RawStreamReader;
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\Reader\RawStreamReader;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
 
 class RarResourceIterator extends AbstractIterator implements ResourceReaderResolver
 {

@@ -2,9 +2,9 @@
 
 namespace Alchemy\Zippy\Package;
 
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
 
 class PackagedResourceReaderResolver implements ResourceReaderResolver
 {

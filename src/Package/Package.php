@@ -3,9 +3,9 @@
 namespace Alchemy\Zippy\Package;
 
 use Alchemy\Zippy\Package\Iterator\FilteredPackagedResourceIterator;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
-use Alchemy\Zippy\Resource\ResourceWriterResolver;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceWriterResolver;
 
 class Package extends PackagedResource implements \IteratorAggregate
 {

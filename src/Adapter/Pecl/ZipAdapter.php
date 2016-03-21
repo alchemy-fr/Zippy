@@ -5,8 +5,8 @@ namespace Alchemy\Zippy\Adapter\Pecl;
 use Alchemy\Zippy\Adapter\Adapter;
 use Alchemy\Zippy\Adapter\Pecl\Zip\ZipResourceIterator;
 use Alchemy\Zippy\Package\Resolver\ProtocolBasedIteratorResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedReaderResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedWriterResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedReaderResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedWriterResolver;
 
 class ZipAdapter implements Adapter
 {

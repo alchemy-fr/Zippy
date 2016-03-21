@@ -3,8 +3,8 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Package\Resolver\ProtocolBasedIteratorResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedReaderResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedWriterResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedReaderResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedWriterResolver;
 
 interface Adapter
 {

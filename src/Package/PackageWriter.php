@@ -2,7 +2,7 @@
 
 namespace Alchemy\Zippy\Package;
 
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceUri;
 
 interface PackageWriter
 {

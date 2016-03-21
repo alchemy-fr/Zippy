@@ -3,7 +3,7 @@
 namespace Alchemy\Zippy\Package\Writer;
 
 use Alchemy\Zippy\Package\PackagedResource;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceUri;
 
 class StreamWriter
 {

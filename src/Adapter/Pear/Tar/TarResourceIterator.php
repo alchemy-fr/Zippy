@@ -5,10 +5,10 @@ namespace Alchemy\Zippy\Adapter\Pear\Tar;
 use Alchemy\Zippy\Iterator\MappingArrayIterator;
 use Alchemy\Zippy\Package\Iterator\AbstractIterator;
 use Alchemy\Zippy\Package\PackagedResource;
-use Alchemy\Zippy\Resource\Reader\StringReader;
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\Reader\StringReader;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
 
 class TarResourceIterator extends AbstractIterator implements ResourceReaderResolver
 {

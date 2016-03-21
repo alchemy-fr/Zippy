@@ -8,8 +8,8 @@ use Alchemy\Zippy\Adapter\Pear\TarAdapter;
 use Alchemy\Zippy\Adapter\Pecl\RarAdapter;
 use Alchemy\Zippy\Adapter\Pecl\ZipAdapter;
 use Alchemy\Zippy\Package\Resolver\ProtocolBasedIteratorResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedReaderResolver;
-use Alchemy\Zippy\Resource\Resolver\ProtocolBasedWriterResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedReaderResolver;
+use Alchemy\Resource\Resolver\ProtocolBasedWriterResolver;
 
 class ZippyFactory
 {

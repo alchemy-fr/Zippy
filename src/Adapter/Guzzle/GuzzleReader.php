@@ -2,8 +2,8 @@
 
 namespace Alchemy\Zippy\Adapter\Guzzle;
 
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceUri;
 use GuzzleHttp\ClientInterface;
 
 class GuzzleReader implements ResourceReader

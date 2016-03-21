@@ -2,11 +2,11 @@
 
 namespace Alchemy\Zippy\Package;
 
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
-use Alchemy\Zippy\Resource\ResourceTransport;
-use Alchemy\Zippy\Resource\ResourceWriterResolver;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceTransport;
+use Alchemy\Resource\ResourceWriterResolver;
 
 class PackagedResource
 {

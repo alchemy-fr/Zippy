@@ -4,10 +4,10 @@ namespace Alchemy\Zippy\Adapter\Pecl\Zip;
 
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIterator;
-use Alchemy\Zippy\Resource\Reader\RawStreamReader;
-use Alchemy\Zippy\Resource\ResourceReader;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
+use Alchemy\Resource\Reader\RawStreamReader;
+use Alchemy\Resource\ResourceReader;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
 
 class ZipResourceIterator implements PackagedResourceIterator, ResourceReaderResolver
 {

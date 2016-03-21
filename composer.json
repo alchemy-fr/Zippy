@@ -24,7 +24,8 @@
   ],
   "require": {
     "php": ">=5.5",
-    "ext-mbstring": "*"
+    "ext-mbstring": "*",
+    "alchemy/resource-component": "dev-master"
   },
   "require-dev": {
     "ext-zip": "*",

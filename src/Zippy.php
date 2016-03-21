@@ -14,9 +14,9 @@ namespace Alchemy\Zippy;
 use Alchemy\Zippy\Package\Package;
 use Alchemy\Zippy\Package\PackageBuilder;
 use Alchemy\Zippy\Package\PackagedResourceIteratorResolver;
-use Alchemy\Zippy\Resource\ResourceReaderResolver;
-use Alchemy\Zippy\Resource\ResourceUri;
-use Alchemy\Zippy\Resource\ResourceWriterResolver;
+use Alchemy\Resource\ResourceReaderResolver;
+use Alchemy\Resource\ResourceUri;
+use Alchemy\Resource\ResourceWriterResolver;
 
 class Zippy
 {

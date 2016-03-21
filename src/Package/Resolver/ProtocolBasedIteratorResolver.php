@@ -26,7 +26,6 @@ class ProtocolBasedIteratorResolver implements PackagedResourceIteratorResolver
         }
 
         return $this->factories[$protocol];
-
     }
 
     public function resolveIterator(PackagedResource $container)
