@@ -154,7 +154,7 @@ final class ResourceUri
      */
     public function getChainedResource()
     {
-       return new self($this->resource);
+        return new self($this->resource);
     }
 
     /**

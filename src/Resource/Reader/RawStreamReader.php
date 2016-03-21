@@ -11,7 +11,7 @@ class RawStreamReader implements ResourceReader
 
     public function __construct($resource)
     {
-        if (! is_resource($resource)) {
+        if (!is_resource($resource)) {
             throw new \InvalidArgumentException('Invalid resource.');
         }
 

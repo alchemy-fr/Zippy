@@ -68,8 +68,8 @@ class Zippy
             $this->packagedResourceIteratorResolver
         );
 
-        if (! is_array($files) && ! $files instanceof \Traversable) {
-            $files = [ $files ];
+        if (!is_array($files) && !$files instanceof \Traversable) {
+            $files = [$files];
         }
 
         foreach ($files as $file) {
