@@ -7,7 +7,29 @@ final class ResourceUri
 
     const DEFAULT_PROTOCOL = 'file';
 
+    /**
+     * @param $uri
+     * @return array
+     */
+    private static function getNonEmptyParts($uri)
+    {
+        $nonEmptyStringFilter = function ($value) {
+            return $value != '';
+        };
+
+        return array_filter(explode(self::PROTOCOL_SEPARATOR, $uri, 2), $nonEmptyStringFilter);
+    }
+
     const PROTOCOL_SEPARATOR = '://';
+
+    /**
+     * @param $parts
+     * @return bool
+     */
+    private static function validateResourceParts($parts)
+    {
+        return count($parts) === 2;
+    }
 
     /**
      * @param $protocol
@@ -29,9 +51,9 @@ final class ResourceUri
             return false;
         }
 
-        $parts = explode(self::PROTOCOL_SEPARATOR, $uri, 2);
+        $parts = self::getNonEmptyParts($uri);
 
-        if (count(array_filter($parts, function ($value) { return $value != ''; })) !== 2) {
+        if (! self::validateResourceParts($parts)) {
             return false;
         }
 
