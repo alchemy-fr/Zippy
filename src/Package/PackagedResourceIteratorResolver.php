@@ -1,4 +1,5 @@
 <?php
+
 namespace Alchemy\Zippy\Package;
 
 interface PackagedResourceIteratorResolver

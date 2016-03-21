@@ -1,8 +1,6 @@
 <?php
-namespace Alchemy\Zippy\Resource;
 
-use Alchemy\Zippy\Resource\ResourceUri;
-use Alchemy\Zippy\Resource\ResourceWriter;
+namespace Alchemy\Zippy\Resource;
 
 interface ResourceWriterResolver
 {

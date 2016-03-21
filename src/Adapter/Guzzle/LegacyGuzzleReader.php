@@ -2,7 +2,6 @@
 
 namespace Alchemy\Zippy\Adapter\Guzzle;
 
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceUri;
 use Guzzle\Http\Client;

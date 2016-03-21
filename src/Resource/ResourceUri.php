@@ -145,14 +145,6 @@ final class ResourceUri
     }
 
     /**
-     * @return ResourceUri
-     */
-    public function __clone()
-    {
-        return new self($this->uri);
-    }
-
-    /**
      * @return string
      */
     public function __toString()

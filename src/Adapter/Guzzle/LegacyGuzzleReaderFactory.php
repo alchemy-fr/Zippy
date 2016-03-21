@@ -2,8 +2,6 @@
 
 namespace Alchemy\Zippy\Adapter\Guzzle;
 
-use Alchemy\Zippy\Adapter\Guzzle\LegacyGuzzleReader;
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\ResourceUri;
@@ -40,7 +38,7 @@ class LegacyGuzzleReaderFactory implements ResourceReaderFactory
      * @param ResourceUri $resource
      * @return ResourceReader
      */
-    public function getReader(ResourceUri $resource)
+    public function createReaderFor(ResourceUri $resource)
     {
         return new LegacyGuzzleReader($resource, $this->client);
     }

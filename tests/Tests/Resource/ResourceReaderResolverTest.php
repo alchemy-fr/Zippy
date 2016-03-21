@@ -54,7 +54,7 @@ class MockReaderFactory implements ResourceReaderFactory
      * @param ResourceUri $resource
      * @return ResourceReader
      */
-    public function getReader(ResourceUri $resource)
+    public function createReaderFor(ResourceUri $resource)
     {
         return $this->reader;
     }

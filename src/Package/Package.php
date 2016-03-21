@@ -6,7 +6,6 @@ use Alchemy\Zippy\Package\Iterator\FilteredPackagedResourceIterator;
 use Alchemy\Zippy\Resource\ResourceReaderResolver;
 use Alchemy\Zippy\Resource\ResourceUri;
 use Alchemy\Zippy\Resource\ResourceWriterResolver;
-use Traversable;
 
 class Package extends PackagedResource implements \IteratorAggregate
 {
@@ -47,11 +46,7 @@ class Package extends PackagedResource implements \IteratorAggregate
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Retrieve an external iterator
-     * @link http://php.net/manual/en/iteratoraggregate.getiterator.php
-     * @return Traversable An instance of an object implementing <b>Iterator</b> or
-     * <b>Traversable</b>
+     * @return PackagedResourceIterator
      */
     public function getIterator()
     {

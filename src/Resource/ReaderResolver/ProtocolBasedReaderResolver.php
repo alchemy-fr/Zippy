@@ -50,6 +50,6 @@ class ProtocolBasedReaderResolver implements ResourceReaderResolver
         $index = $this->protocolFactoryIndexes[$resource->getProtocol()];
         $factory = $this->factories[$index];
 
-        return $factory->getReader($resource);
+        return $factory->createReaderFor($resource);
     }
 }
