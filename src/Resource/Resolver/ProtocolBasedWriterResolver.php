@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\WriterResolver;
+namespace Alchemy\Zippy\Resource\Resolver;
 
 use Alchemy\Zippy\Resource\ResourceUri;
 use Alchemy\Zippy\Resource\ResourceWriter;
@@ -46,6 +46,7 @@ class ProtocolBasedWriterResolver implements ResourceWriterResolver
             throw new \RuntimeException('Unsupported protocol: ' . $resource->getProtocol() . '( ' . $resource  . ')');
         }
 
+        /** @var int $index */
         $index = $this->protocolWriterIndexes[$resource->getProtocol()];
 
         return $this->writers[$index];

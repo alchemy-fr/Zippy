@@ -7,7 +7,12 @@ use Alchemy\Zippy\Package\PackagedResourceIterator;
 abstract class AbstractIterator implements PackagedResourceIterator
 {
 
-   /**
+    /**
+     * @var \Iterator|null
+     */
+    private $iterator;
+
+    /**
      * @return \Iterator
      */
     abstract protected function buildIterator();
@@ -17,7 +22,7 @@ abstract class AbstractIterator implements PackagedResourceIterator
      */
     public function getIterator()
     {
-        if (! isset($this->iterator)) {
+        if ($this->iterator === null) {
             $this->iterator = $this->buildIterator();
         }
 

@@ -62,6 +62,6 @@ class LegacyGuzzleReader implements ResourceReader
      */
     private function buildRequest()
     {
-        return $this->client->get($this->resource->getOriginal());
+        return $this->client->get($this->resource->getUri());
     }
 }

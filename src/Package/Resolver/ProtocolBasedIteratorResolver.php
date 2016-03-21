@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Package\IteratorResolver;
+namespace Alchemy\Zippy\Package\Resolver;
 
 use Alchemy\Zippy\Package\PackagedResource;
 use Alchemy\Zippy\Package\PackagedResourceIteratorResolver;
@@ -32,9 +32,7 @@ class ProtocolBasedIteratorResolver implements PackagedResourceIteratorResolver
     public function resolveIterator(PackagedResource $container)
     {
         $protocol = $container->getAbsoluteUri()->getProtocol();
-        $factory = $this->getFactory($protocol);
-
-        $iterator = $factory($container);
+        $iterator = call_user_func($this->getFactory($protocol), $container);
 
         if (! $iterator) {
             throw new \RuntimeException('Unsupported protocol: ' . $protocol);

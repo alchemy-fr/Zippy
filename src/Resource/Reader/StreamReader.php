@@ -8,7 +8,7 @@ use Alchemy\Zippy\Resource\ResourceUri;
 class StreamReader implements ResourceReader
 {
     /**
-     * @var \Alchemy\Zippy\Resource\Resource
+     * @var ResourceUri
      */
     private $resource;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Resource\ReaderResolver;
+namespace Alchemy\Zippy\Resource\Resolver;
 
 use Alchemy\Zippy\Resource\ResourceReader;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
@@ -31,7 +31,7 @@ class ProtocolBasedReaderResolver implements ResourceReaderResolver
         $this->factories[$index] = $factory;
 
         foreach ($protocols as $protocol) {
-            $this->protocolFactoryIndexes[$protocol] = $index;
+            $this->protocolFactoryIndexes[$protocol] = (int) $index;
         }
     }
 
@@ -47,7 +47,9 @@ class ProtocolBasedReaderResolver implements ResourceReaderResolver
             throw new \RuntimeException('Unsupported protocol: ' . $resource->getProtocol() . '( ' . $resource  . ')');
         }
 
+        /** @var int $index */
         $index = $this->protocolFactoryIndexes[$resource->getProtocol()];
+        /** @var ResourceReaderFactory $factory */
         $factory = $this->factories[$index];
 
         return $factory->createReaderFor($resource);

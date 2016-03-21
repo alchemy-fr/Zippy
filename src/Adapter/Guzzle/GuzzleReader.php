@@ -14,7 +14,7 @@ class GuzzleReader implements ResourceReader
     private $client;
 
     /**
-     * @var \Alchemy\Zippy\Resource\Resource
+     * @var ResourceUri
      */
     private $resource;
 

@@ -2,12 +2,12 @@
 
 namespace Alchemy\Zippy\Adapter;
 
-use Alchemy\Zippy\Package\IteratorResolver\ProtocolBasedIteratorResolver;
 use Alchemy\Zippy\Package\PackagedResource;
+use Alchemy\Zippy\Package\Resolver\ProtocolBasedIteratorResolver;
 use Alchemy\Zippy\Resource\PathUtil;
-use Alchemy\Zippy\Resource\ReaderResolver\ProtocolBasedReaderResolver;
+use Alchemy\Zippy\Resource\Resolver\ProtocolBasedReaderResolver;
+use Alchemy\Zippy\Resource\Resolver\ProtocolBasedWriterResolver;
 use Alchemy\Zippy\Resource\Writer\StreamWriter;
-use Alchemy\Zippy\Resource\WriterResolver\ProtocolBasedWriterResolver;
 
 class FileAdapter implements Adapter
 {
