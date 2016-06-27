@@ -2,13 +2,15 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
+
 interface ResourceReaderFactory
 {
-
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
-     * @param string $context
+     * @param ZippyResource $resource
+     * @param string        $context
+     *
      * @return ResourceReader
      */
-    public function getReader(Resource $resource, $context);
+    public function getReader(ZippyResource $resource, $context);
 }

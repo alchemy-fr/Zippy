@@ -13,10 +13,10 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Archive\Archive;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Archive\Member;
+use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
@@ -141,7 +141,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
             $builder->setWorkingDirectory($collection->getContext());
 
-            $collection->forAll(function($i, Resource $resource) use ($builder) {
+            $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
                 return $builder->add($resource->getTarget());
             });
 
@@ -240,7 +240,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function($i, Resource $resource) use ($builder) {
+        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
             return $builder->add($resource->getTarget());
         });
 
@@ -346,7 +346,13 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     }
 
     /**
-     * @param string $to
+     * @param array             $options
+     * @param ResourceInterface $resource
+     * @param array             $members
+     * @param string            $to
+     * @param bool              $overwrite
+     *
+     * @return array
      */
     protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null, $overwrite = false)
     {
@@ -405,28 +411,28 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * Returns an array of option for the listMembers command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getListMembersOptions();
 
     /**
      * Returns an array of option for the extract command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getExtractOptions();
 
     /**
      * Returns an array of option for the extractMembers command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getExtractMembersOptions();
 
     /**
      * Gets adapter specific additional options
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getLocalOptions();
 }

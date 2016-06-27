@@ -2,7 +2,7 @@
 
 namespace Alchemy\Zippy\Resource\Reader\Guzzle;
 
-use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\ResourceReader;
 use Guzzle\Http\Client;
 use Guzzle\Http\ClientInterface;
@@ -28,10 +28,10 @@ class LegacyGuzzleReader implements ResourceReader
     private $stream = null;
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param ZippyResource   $resource
      * @param ClientInterface $client
      */
-    public function __construct(Resource $resource, ClientInterface $client = null)
+    public function __construct(ZippyResource $resource, ClientInterface $client = null)
     {
         $this->client = $client ?: new Client();
         $this->resource = $resource;

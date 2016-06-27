@@ -4,7 +4,7 @@ namespace Alchemy\Zippy\Resource\Teleporter;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\ResourceLocator;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\ResourceWriter;
@@ -28,8 +28,8 @@ class GenericTeleporter implements TeleporterInterface
 
     /**
      * @param ResourceReaderFactory $readerFactory
-     * @param ResourceWriter $resourceWriter
-     * @param ResourceLocator $resourceLocator
+     * @param ResourceWriter        $resourceWriter
+     * @param ResourceLocator       $resourceLocator
      */
     public function __construct(
         ResourceReaderFactory $readerFactory,
@@ -44,13 +44,13 @@ class GenericTeleporter implements TeleporterInterface
     /**
      * Teleports a file from a destination to an other
      *
-     * @param \Alchemy\Zippy\Resource\Resource $resource A Resource
-     * @param string $context The current context
+     * @param ZippyResource $resource A Resource
+     * @param string        $context  The current context
      *
      * @throws IOException when file could not be written on local
      * @throws InvalidArgumentException when path to file is not valid
      */
-    public function teleport(Resource $resource, $context)
+    public function teleport(ZippyResource $resource, $context)
     {
         $reader = $this->readerFactory->getReader($resource, $context);
         $target = $this->resourceLocator->mapResourcePath($resource, $context);

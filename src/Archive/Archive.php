@@ -23,7 +23,7 @@ class Archive implements ArchiveInterface
     /**
      * The path to the archive
      *
-     * @var String
+     * @var string
      */
     protected $path;
 
@@ -37,7 +37,7 @@ class Archive implements ArchiveInterface
     /**
      * An array of archive members
      *
-     * @var Array
+     * @var MemberInterface[]
      */
     protected $members = array();
 

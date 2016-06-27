@@ -12,16 +12,16 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\BSDTar\TarBSDTarAdapter;
-use Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter;
 use Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter;
+use Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter;
+use Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
 use Alchemy\Zippy\Adapter\GNUTar\TarGzGNUTarAdapter;
-use Alchemy\Zippy\Adapter\GNUTar\TarBz2GNUTarAdapter;
-use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Resource\RequestMapper;
-use Alchemy\Zippy\Resource\TeleporterContainer;
+use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Alchemy\Zippy\Resource\TargetLocator;
+use Alchemy\Zippy\Resource\TeleporterContainer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\ExecutableFinder;
 
@@ -152,14 +152,15 @@ class AdapterContainer implements \ArrayAccess
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Whether a offset exists
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     *
      * @param mixed $offset <p>
-     * An offset to check for.
-     * </p>
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     * The return value will be casted to boolean if non-boolean was returned.
+     *                      An offset to check for.
+     *                      </p>
+     *
+     * @return bool true on success or false on failure.
+     * <p>The return value will be casted to boolean if non-boolean was returned.</p>
      */
     public function offsetExists($offset)
     {

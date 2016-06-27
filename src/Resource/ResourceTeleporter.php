@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of Zippy.
  *
@@ -8,8 +7,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Alchemy\Zippy\Resource;
+
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 
 class ResourceTeleporter
 {
@@ -28,12 +28,12 @@ class ResourceTeleporter
     /**
      * Teleports a resource to its target in the context
      *
-     * @param string $context
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param string        $context
+     * @param ZippyResource $resource
      *
      * @return ResourceTeleporter
      */
-    public function teleport($context, Resource $resource)
+    public function teleport($context, ZippyResource $resource)
     {
         $this
             ->container

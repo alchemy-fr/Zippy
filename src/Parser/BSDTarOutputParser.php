@@ -17,13 +17,13 @@ use Alchemy\Zippy\Exception\RuntimeException;
  */
 class BSDTarOutputParser implements ParserInterface
 {
-    const PERMISSIONS   = "([ldrwx-]+)";
-    const HARD_LINK     = "(\d+)";
-    const OWNER         = "([a-z][-a-z0-9]*)";
-    const GROUP         = "([a-z][-a-z0-9]*)";
-    const FILESIZE      = "(\d*)";
-    const DATE          = "([a-zA-Z0-9]+\s+[a-z0-9]+\s+[a-z0-9:]+)";
-    const FILENAME      = "(.*)";
+    const PERMISSIONS   = '([ldrwx-]+)';
+    const HARD_LINK     = '(\d+)';
+    const OWNER         = '([a-z][-a-z0-9]*)';
+    const GROUP         = '([a-z][-a-z0-9]*)';
+    const FILESIZE      = '(\d*)';
+    const DATE          = '([a-zA-Z0-9]+\s+[a-z0-9]+\s+[a-z0-9:]+)';
+    const FILENAME      = '(.*)';
 
     /**
      * @inheritdoc
@@ -78,7 +78,7 @@ class BSDTarOutputParser implements ParserInterface
                 throw new RuntimeException(sprintf('Failed to parse mtime date from %s', $line));
             }
 
-                $members[] = array(
+            $members[] = array(
                 'location'  => $chunks[7],
                 'size'      => $chunks[5],
                 'mtime'     => $date,
@@ -100,7 +100,7 @@ class BSDTarOutputParser implements ParserInterface
             return null;
         }
 
-        list($name, $version) = explode(' ', $output, 3);
+        list(, $version) = explode(' ', $output, 3);
 
         return $version;
     }
@@ -110,6 +110,6 @@ class BSDTarOutputParser implements ParserInterface
      */
     public function parseDeflatorVersion($output)
     {
-        return $this->parseInflatoVersion($output);
+        return $this->parseInflatorVersion($output);
     }
 }

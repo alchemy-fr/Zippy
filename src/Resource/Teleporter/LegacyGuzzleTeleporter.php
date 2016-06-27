@@ -15,12 +15,12 @@ use Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReaderFactory;
 use Alchemy\Zippy\Resource\ResourceLocator;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\Writer\FilesystemWriter;
-use GuzzleHttp\Client;
+use Guzzle\Http\Client;
 
 /**
  * Guzzle Teleporter implementation for HTTP resources
  */
-class GuzzleTeleporter extends GenericTeleporter
+class LegacyGuzzleTeleporter extends GenericTeleporter
 {
     /**
      * @param Client $client
@@ -40,7 +40,7 @@ class GuzzleTeleporter extends GenericTeleporter
      * Creates the GuzzleTeleporter
      *
      * @deprecated
-     * @return GuzzleTeleporter
+     * @return LegacyGuzzleTeleporter
      */
     public static function create()
     {

@@ -24,7 +24,7 @@ class LocalTeleporterTest extends TeleporterTestCase
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
@@ -45,7 +45,7 @@ class LocalTeleporterTest extends TeleporterTestCase
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
