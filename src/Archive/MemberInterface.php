@@ -11,6 +11,7 @@
 
 namespace Alchemy\Zippy\Archive;
 
+use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 
@@ -62,7 +63,14 @@ interface MemberInterface
      * @throws InvalidArgumentException In case no members could be removed or provide extract target directory is not valid
      */
     public function extract($to = null, $overwrite = false);
-
+    
+    /**
+     * Get resource.
+     * 
+     * @return ResourceInterface
+     * */
+    public function getResource();
+    
     /**
      * @inheritdoc
      */
