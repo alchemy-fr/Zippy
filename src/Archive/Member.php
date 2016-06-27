@@ -136,4 +136,12 @@ class Member implements MemberInterface
 
         return new \SplFileInfo(sprintf('%s%s', rtrim(null === $to ? getcwd() : $to, '/'), $this->location));
     }
+
+    /**
+     * @inheritdoc
+     * */
+    public function getResource()
+    {
+        return $this->resource;
+    }
 }
