@@ -11,31 +11,31 @@
 
 namespace Alchemy\Zippy\ProcessBuilder;
 
-use Symfony\Component\Process\ProcessBuilder;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Symfony\Component\Process\ProcessBuilder;
 
 interface ProcessBuilderFactoryInterface
 {
-        /**
-         * Returns a new instance of Symfony ProcessBuilder
-         *
-         * @return ProcessBuilder
-         *
-         * @throws InvalidArgumentException
-         */
+    /**
+     * Returns a new instance of Symfony ProcessBuilder
+     *
+     * @return ProcessBuilder
+     *
+     * @throws InvalidArgumentException
+     */
     public function create();
 
     /**
      * Returns the binary path
      *
-     * @return String
+     * @return string
      */
     public function getBinary();
 
     /**
      * Sets the binary path
      *
-     * @param String $binary A binary path
+     * @param string $binary A binary path
      *
      * @return ProcessBuilderFactoryInterface
      *

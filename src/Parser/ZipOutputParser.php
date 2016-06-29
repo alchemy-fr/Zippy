@@ -15,9 +15,9 @@ namespace Alchemy\Zippy\Parser;
  */
 class ZipOutputParser implements ParserInterface
 {
-    const LENGTH        = "(\d*)";
-    const ISO_DATE      = "([0-9]+-[0-9]+-[0-9]+\s+[0-9]+:[0-9]+)";
-    const FILENAME      = "(.*)";
+    const LENGTH        = '(\d*)';
+    const ISO_DATE      = '([0-9]+-[0-9]+-[0-9]+\s+[0-9]+:[0-9]+)';
+    const FILENAME      = '(.*)';
 
     /**
      * @var string
@@ -84,7 +84,7 @@ class ZipOutputParser implements ParserInterface
             return null;
         }
 
-        list($name, $version) = $chunks;
+        list(, $version) = $chunks;
 
         return $version;
     }
@@ -102,7 +102,7 @@ class ZipOutputParser implements ParserInterface
             return null;
         }
 
-        list($name, $version) = $chunks;
+        list(, $version) = $chunks;
 
         return $version;
     }

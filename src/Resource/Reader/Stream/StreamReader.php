@@ -2,20 +2,20 @@
 
 namespace Alchemy\Zippy\Resource\Reader\Stream;
 
-use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\ResourceReader;
 
 class StreamReader implements ResourceReader
 {
     /**
-     * @var \Alchemy\Zippy\Resource\Resource
+     * @var ZippyResource
      */
     private $resource;
 
     /**
-     * @param \Alchemy\Zippy\Resource\Resource $resource
+     * @param ZippyResource $resource
      */
-    public function __construct(Resource $resource)
+    public function __construct(ZippyResource $resource)
     {
         $this->resource = $resource;
     }

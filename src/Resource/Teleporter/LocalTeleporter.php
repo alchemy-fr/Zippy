@@ -11,12 +11,12 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Resource\Resource;
-use Alchemy\Zippy\Exception\IOException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Exception\IOException;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\ResourceLocator;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * This class transport an object using the local filesystem
@@ -47,7 +47,7 @@ class LocalTeleporter extends AbstractTeleporter
     /**
      * {@inheritdoc}
      */
-    public function teleport(Resource $resource, $context)
+    public function teleport(ZippyResource $resource, $context)
     {
         $target = $this->resourceLocator->mapResourcePath($resource, $context);
         $path = $resource->getOriginal();

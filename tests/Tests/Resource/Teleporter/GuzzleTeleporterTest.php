@@ -24,7 +24,7 @@ class GuzzleTeleporterTest extends TeleporterTestCase
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
