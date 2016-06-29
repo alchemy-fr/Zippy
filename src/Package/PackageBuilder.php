@@ -4,7 +4,7 @@ namespace Alchemy\Zippy\Package;
 
 use Alchemy\Resource\ResourceUri;
 
-class PackageBuilder extends Package implements \IteratorAggregate
+class PackageBuilder extends Package
 {
     /**
      * @var ResourceUri[]
