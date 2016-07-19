@@ -83,6 +83,10 @@ class Resource
      */
     public function getContextForProcessInSinglePlace()
     {
+        if (!is_string($this->original)) {
+            return null;
+        }
+
         if (!$this->isLocal()) {
             return null;
         }
@@ -101,6 +105,10 @@ class Resource
      */
     private function isLocal()
     {
+        if (!is_string($this->original)) {
+            return false;
+        }
+
         $data = parse_url($this->original);
 
         return isset($data['path']);
