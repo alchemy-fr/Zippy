@@ -50,8 +50,8 @@ class AbstractFileStrategyTest extends TestCase
 
     public function testGetAdaptersWithAdapterThatRaiseAnException()
     {
-        $adapterMock = $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
-        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        $adapterMock = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
         $container
             ->expects($this->at(0))
             ->method('offsetGet')

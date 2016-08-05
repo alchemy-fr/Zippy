@@ -13,7 +13,7 @@ abstract class FileStrategyTestCase extends TestCase
     public function getFileExtensionShouldReturnAnString()
     {
         $that = $this;
-        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
         $container
                 ->expects($this->any())
                 ->method('offsetGet')
@@ -35,13 +35,13 @@ abstract class FileStrategyTestCase extends TestCase
     public function getAdaptersShouldReturnAnArrayOfAdapter()
     {
         $that = $this;
-        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
         $container
                 ->expects($this->any())
                 ->method('offsetGet')
                 ->will($this->returnCallback(function ($offset) use ($that) {
                     if (array_key_exists('Alchemy\Zippy\Adapter\AdapterInterface', class_implements($offset))) {
-                        return $that->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+                        return $that->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
                     }
 
                     return null;
@@ -59,7 +59,7 @@ abstract class FileStrategyTestCase extends TestCase
     /** @test */
     public function getAdaptersShouldReturnAnArrayOfAdapterEvenIfAdapterRaiseAnException()
     {
-        $container = $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
         $container
             ->expects($this->any())
             ->method('offsetGet')

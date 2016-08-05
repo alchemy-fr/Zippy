@@ -84,6 +84,6 @@ class ArchiveTest extends TestCase
 
     private function getAdapterMock()
     {
-        return $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+        return $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
     }
 }

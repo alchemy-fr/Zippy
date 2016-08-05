@@ -63,7 +63,7 @@ class ResourceManagerTest extends TestCase
 
     private function createProcessableInPlaceResource()
     {
-        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+        $resource = $this->getMockBuilder('\Alchemy\Zippy\Resource\Resource')
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
@@ -75,7 +75,7 @@ class ResourceManagerTest extends TestCase
 
     private function createNotProcessableInPlaceResource()
     {
-        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+        $resource = $this->getMockBuilder('\Alchemy\Zippy\Resource\Resource')
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
@@ -104,7 +104,7 @@ class ResourceManagerTest extends TestCase
             ->method('remove')
             ->with($this->equalTo($context));
 
-        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
+        $collection = $this->getMockBuilder('\Alchemy\Zippy\Resource\ResourceCollection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -135,7 +135,7 @@ class ResourceManagerTest extends TestCase
         $fs->expects($this->never())
             ->method('remove');
 
-        $collection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
+        $collection = $this->getMockBuilder('\Alchemy\Zippy\Resource\ResourceCollection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -220,21 +220,21 @@ class ResourceManagerTest extends TestCase
 
     protected function getRequestMapperMock()
     {
-        return $this->getMockBuilder('Alchemy\Zippy\Resource\RequestMapper')
+        return $this->getMockBuilder('\Alchemy\Zippy\Resource\RequestMapper')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getResourceTeleporterMock()
     {
-        return $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceTeleporter')
+        return $this->getMockBuilder('\Alchemy\Zippy\Resource\ResourceTeleporter')
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getFilesystemMock()
     {
-        return $this->getMockBuilder('Symfony\Component\Filesystem\Filesystem')
+        return $this->getMockBuilder('\Symfony\Component\Filesystem\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
     }

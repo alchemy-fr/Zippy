@@ -13,11 +13,14 @@ namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReaderFactory;
+use Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReaderFactory;
 use Alchemy\Zippy\Resource\Resource as ZippyResource;
-use Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter;
+use Alchemy\Zippy\Resource\Teleporter\GenericTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\StreamTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\TeleporterInterface;
+use Alchemy\Zippy\Resource\Writer\FilesystemWriter;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * A container of TeleporterInterface
@@ -85,25 +88,29 @@ class TeleporterContainer implements \ArrayAccess, \Countable
         $container = new static();
 
         $container->factories['stream-teleporter'] = function () {
-            return StreamTeleporter::create();
+            return new StreamTeleporter();
         };
 
         $container->factories['local-teleporter'] = function () {
-            return LocalTeleporter::create();
+            return new LocalTeleporter(new Filesystem());
         };
 
         if (class_exists('GuzzleHttp\Client')) {
             $container->factories['guzzle-teleporter'] = function () {
-                return new GuzzleTeleporter(
-                    null,
+                return new GenericTeleporter(
                     new GuzzleReaderFactory(),
+                    new FilesystemWriter(),
                     new ResourceLocator()
                 );
             };
         }
         elseif (class_exists('Guzzle\Http\Client')) {
             $container->factories['guzzle-teleporter'] = function () {
-                return new GuzzleTeleporter();
+                return new GenericTeleporter(
+                    new LegacyGuzzleReaderFactory(),
+                    new FilesystemWriter(),
+                    new ResourceLocator()
+                );
             };
         }
 

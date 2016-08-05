@@ -11,35 +11,31 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReaderFactory;
+use Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReaderFactory;
 use Alchemy\Zippy\Resource\ResourceLocator;
 use Alchemy\Zippy\Resource\ResourceReaderFactory;
 use Alchemy\Zippy\Resource\Writer\FilesystemWriter;
-use GuzzleHttp\Client;
 
 /**
  * Guzzle Teleporter implementation for HTTP resources
+ *
+ * @deprecated Use \Alchemy\Zippy\Resource\GenericTeleporter instead. This class will be removed in v0.5.x
  */
 class GuzzleTeleporter extends GenericTeleporter
 {
     /**
-     * @param Client $client
      * @param ResourceReaderFactory $readerFactory
      * @param ResourceLocator $resourceLocator
      */
-    public function __construct(
-        Client $client = null,
-        ResourceReaderFactory $readerFactory = null,
-        ResourceLocator $resourceLocator = null
-    ) {
-        parent::__construct($readerFactory ?: new LegacyGuzzleReaderFactory($client), new FilesystemWriter(),
-            $resourceLocator);
+    public function __construct(ResourceReaderFactory $readerFactory = null, ResourceLocator $resourceLocator = null)
+    {
+        parent::__construct($readerFactory ?: new GuzzleReaderFactory(), new FilesystemWriter(), $resourceLocator);
     }
 
     /**
      * Creates the GuzzleTeleporter
      *
-     * @deprecated
+     * @deprecated This method will be removed in v0.5.x
      * @return GuzzleTeleporter
      */
     public static function create()

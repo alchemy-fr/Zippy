@@ -220,7 +220,7 @@ class ZippyTest extends TestCase
 
     private function getStrategy($extension, $adapters)
     {
-        $strategy = $this->getMock('Alchemy\Zippy\FileStrategy\FileStrategyInterface');
+        $strategy = $this->getMockBuilder('\Alchemy\Zippy\FileStrategy\FileStrategyInterface')->getMock();
 
         $strategy->expects($this->any())
             ->method('getFileExtension')
@@ -235,7 +235,7 @@ class ZippyTest extends TestCase
 
     private function getSupportedAdapter()
     {
-        $adapter = $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+        $adapter = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
         $adapter->expects($this->any())
             ->method('isSupported')
             ->will($this->returnValue(true));
@@ -245,7 +245,7 @@ class ZippyTest extends TestCase
 
     private function getNotSupportedAdapter()
     {
-        $adapter = $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+        $adapter = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
         $adapter->expects($this->any())
             ->method('isSupported')
             ->will($this->returnValue(false));
@@ -255,6 +255,6 @@ class ZippyTest extends TestCase
 
     private function getContainer()
     {
-        return $this->getMock('Alchemy\Zippy\Adapter\AdapterContainer');
+        return $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
     }
 }
