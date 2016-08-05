@@ -13,6 +13,11 @@ class StreamWriter implements ResourceWriter
      */
     public function writeFromReader(ResourceReader $reader, $target)
     {
+        $directory = dirname($target);
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
+
         $targetResource = fopen($target, 'w+');
         $sourceResource = $reader->getContentsAsStream();
 
