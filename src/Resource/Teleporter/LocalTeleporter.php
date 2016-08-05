@@ -19,7 +19,7 @@ use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * This class transport an object using the local filesystem
+ * This class transports an object using the local filesystem
  */
 class LocalTeleporter extends AbstractTeleporter
 {
@@ -73,6 +73,7 @@ class LocalTeleporter extends AbstractTeleporter
      * Creates the LocalTeleporter
      *
      * @return LocalTeleporter
+     * @deprecated This method will be removed in a future release (0.5.x)
      */
     public static function create()
     {

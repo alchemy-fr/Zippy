@@ -30,7 +30,7 @@ class ResourceCollectionTest extends TestCase
 
     private function createResourceMock()
     {
-        return $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+        return $this->getMockBuilder('\Alchemy\Zippy\Resource\Resource')
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -63,7 +63,7 @@ class ResourceCollectionTest extends TestCase
 
     private function getInPlaceResource($processInPlace)
     {
-        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+        $resource = $this->getMockBuilder('\Alchemy\Zippy\Resource\Resource')
             ->disableOriginalConstructor()
             ->getMock();
 

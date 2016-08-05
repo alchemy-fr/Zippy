@@ -30,7 +30,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $collection = new ResourceCollection($context, $elements, false);
 
         $manager = $this
-            ->getMockBuilder('Alchemy\Zippy\Resource\ResourceManager')
+            ->getMockBuilder('\Alchemy\Zippy\Resource\ResourceManager')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -43,7 +43,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function getResource($data = null)
     {
-        $resource = $this->getMock('Alchemy\Zippy\Adapter\Resource\ResourceInterface');
+        $resource = $this->getMockBuilder('\Alchemy\Zippy\Adapter\Resource\ResourceInterface')->getMock();
 
         if (null !== $data) {
             $resource->expects($this->any())
@@ -60,7 +60,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             $this->fail('Trying to set a probe on an adapter that does not support it');
         }
 
-        $probe = $this->getMock('Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface');
+        $probe = $this->getMockBuilder('\Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface')->getMock();
         $probe->expects($this->any())
             ->method('getStatus')
             ->will($this->returnValue(VersionProbeInterface::PROBE_OK));
@@ -74,7 +74,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
             $this->fail('Trying to set a probe on an adapter that does not support it');
         }
 
-        $probe = $this->getMock('Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface');
+        $probe = $this->getMockBuilder('\Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface')->getMock();
         $probe->expects($this->any())
             ->method('getStatus')
             ->will($this->returnValue(VersionProbeInterface::PROBE_NOTSUPPORTED));
@@ -84,7 +84,8 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockedProcessBuilderFactory($mockedProcessBuilder, $creations = 1)
     {
-        $mockedProcessBuilderFactory = $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface');
+        $mockedProcessBuilderFactory =
+            $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface')->getMock();
 
         $mockedProcessBuilderFactory
             ->expects($this->exactly($creations))
@@ -97,7 +98,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     protected function getSuccessFullMockProcess($runs = 1)
     {
         $mockProcess = $this
-            ->getMockBuilder('Symfony\Component\Process\Process')
+            ->getMockBuilder('\Symfony\Component\Process\Process')
             ->disableOriginalConstructor()
             ->getMock();
 

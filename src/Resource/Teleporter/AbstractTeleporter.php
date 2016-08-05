@@ -18,7 +18,8 @@ use Alchemy\Zippy\Resource\Resource as ZippyResource;
  * Class AbstractTeleporter
  * @package Alchemy\Zippy\Resource\Teleporter
  *
- * @deprecated Typehint against TeleporterInterface instead and use GenericTeleporter with custom reader/writers instead.
+ * @deprecated Typehint against TeleporterInterface instead and use GenericTeleporter
+*  with custom reader/writers instead. This class will be removed in v0.5.x
  */
 abstract class AbstractTeleporter implements TeleporterInterface
 {

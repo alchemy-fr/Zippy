@@ -19,6 +19,8 @@ use Guzzle\Http\Client;
 
 /**
  * Guzzle Teleporter implementation for HTTP resources
+ *
+ * @deprecated Use \Alchemy\Zippy\Resource\GenericTeleporter instead. This class will be removed in v0.5.x
  */
 class LegacyGuzzleTeleporter extends GenericTeleporter
 {

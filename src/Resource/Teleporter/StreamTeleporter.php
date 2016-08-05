@@ -29,6 +29,7 @@ class StreamTeleporter extends GenericTeleporter
      * Creates the StreamTeleporter
      *
      * @return StreamTeleporter
+     * @deprecated This method will be removed in a future release (0.5.x)
      */
     public static function create()
     {

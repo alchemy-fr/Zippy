@@ -12,7 +12,7 @@ class ResourceTeleporterTest extends TestCase
      */
     public function testConstruct()
     {
-        $container = $this->getMockBuilder('Alchemy\Zippy\Resource\TeleporterContainer')
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Resource\TeleporterContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -27,15 +27,15 @@ class ResourceTeleporterTest extends TestCase
     public function testTeleport()
     {
         $context = 'supa-context';
-        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+        $resource = $this->getMockBuilder('\Alchemy\Zippy\Resource\Resource')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $container = $this->getMockBuilder('Alchemy\Zippy\Resource\TeleporterContainer')
+        $container = $this->getMockBuilder('\Alchemy\Zippy\Resource\TeleporterContainer')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $teleporter = $this->getMock('Alchemy\Zippy\Resource\Teleporter\TeleporterInterface');
+        $teleporter = $this->getMockBuilder('\Alchemy\Zippy\Resource\Teleporter\TeleporterInterface')->getMock();
         $teleporter->expects($this->once())
             ->method('teleport')
             ->with($this->equalTo($resource), $this->equalTo($context));

@@ -38,7 +38,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     private function provideAdapter()
     {
-        $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
+        $inflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
                 ->disableOriginalConstructor()
                 ->setMethods(array('useBinary'))
                 ->getMock();
@@ -68,8 +68,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     public function testCreateNoFiles()
     {
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -117,7 +116,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -169,7 +168,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -203,7 +202,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -229,7 +228,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     public function testgetVersion()
     {
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -251,7 +250,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -281,7 +280,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -333,7 +332,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -364,7 +363,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $archiveFileMock = $this->getMock('Alchemy\Zippy\Archive\MemberInterface');
+        $archiveFileMock = $this->getMockBuilder('\Alchemy\Zippy\Archive\MemberInterface')->getMock();
 
         $archiveFileMock
             ->expects($this->any())
