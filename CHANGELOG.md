@@ -1,13 +1,36 @@
 # CHANGELOG
 
 ## [Unreleased]
-### Removed:
-- Support for PHP versions lower than 5.5
+- No unreleased changes
 
-### Added
-- Support for Guzzle 6 when teleporting remote files
+## [0.4.3] - 2016-11-03
+### Fixed
+- #114: Recent versions of TAR trigger errors when using incompatible options (instead of silently ignoring them, see https://lists.gnu.org/archive/html/bug-tar/2016-05/msg00016.html for more information)
+
+## [0.4.2] - 2016-08-05
+### Fixed
+- #113: Fix issue with FilesystemWriter and missing target directories, courtesy of @mikemeier
+
+## [0.4.1] - 2016-08-05
+### Changed
+- Use generic teleporter instead of Guzzle specific teleporter
+- Deprecate static method `create` on teleporters
+- Deprecate class `\Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter`
+- Deprecate class `\Alchemy\Zippy\Resource\Teleporter\LegacyGuzzleTeleporter`
+- Deprecate class `\Alchemy\Zippy\Resource\Teleporter\AbstractTeleporter`
+
+### Removed 
+- Remove usage of deprecated test method `getMock`
+
+## [0.4.0] - 2016-07-19
+### Changed
+- #106: Improve PHPDoc comments (thanks @GoktugOzturk)
+- #107: Alias `Resource` as `ZippyResource` in order to prepare for PHP7 compatibility (thanks @GoktugOzturk)
+- #109: Adds `Resource::getResource` method to extract original resource
+- Rewrite teleporters to allow usage of the new Guzzle library (v4 and up)
 
 ### Fixed
+- #110: Fixes issue with non string resources (thanks @mikemeyer)
 - Improper checking of files to delete in tests
 
 ## [0.3.5] - 2016-02-15
