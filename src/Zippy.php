@@ -82,7 +82,7 @@ class Zippy
      */
     public function open($path, $type = null)
     {
-        if($type == null){
+        if (null === $type) {
             $type = $this->guessAdapterExtension($path);
         }
 
