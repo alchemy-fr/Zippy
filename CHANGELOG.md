@@ -3,6 +3,10 @@
 ## [Unreleased]
 - No unreleased changes
 
+## [0.4.4] - 2016-11-03
+### Added
+- #115: Add an option to override archive type detection in `Zippy::open`, similar to `Zippy::create`, courtesy of @GiantCowFilms
+
 ## [0.4.3] - 2016-11-03
 ### Fixed
 - #114: Recent versions of TAR trigger errors when using incompatible options (instead of silently ignoring them, see https://lists.gnu.org/archive/html/bug-tar/2016-05/msg00016.html for more information)
