@@ -1,11 +1,11 @@
 # CHANGELOG
 
 ## [Unreleased]
-- No unreleased changes
+- #111, #115: Parsing Zip archive dates failed on CentOS
 
 ## [0.4.4] - 2016-11-03
 ### Added
-- #115: Add an option to override archive type detection in `Zippy::open`, similar to `Zippy::create`, courtesy of @GiantCowFilms
+- #116: Add an option to override archive type detection in `Zippy::open`, similar to `Zippy::create`, courtesy of @GiantCowFilms
 
 ## [0.4.3] - 2016-11-03
 ### Fixed
