@@ -270,12 +270,6 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
             ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
@@ -318,29 +312,23 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
+            ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(5))
             ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(6))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(7))
+            ->expects($this->at(6))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());

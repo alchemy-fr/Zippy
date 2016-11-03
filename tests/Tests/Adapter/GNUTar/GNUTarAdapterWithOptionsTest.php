@@ -271,12 +271,6 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
             ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
@@ -319,35 +313,29 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite-dir'))
+            ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(5))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(6))
             ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(7))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(8))
+            ->expects($this->at(7))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
