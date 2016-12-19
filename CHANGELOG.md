@@ -1,7 +1,15 @@
 # CHANGELOG
 
-## [Unreleased]
+## [Unreleased changes]
+- No changes
+
+## [0.4.5] - 2016-12-19
+### Changed
+- Require Symfony's mbstring polyfill instead of the PHP extension
+
+### Fixed
 - #111, #115: Parsing Zip archive dates failed on CentOS
+- Docblocks for Archive class, courtesyy of @Koc 
 
 ## [0.4.4] - 2016-11-03
 ### Added
