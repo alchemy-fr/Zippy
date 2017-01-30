@@ -3,6 +3,10 @@
 ## [Unreleased changes]
 - No changes
 
+## [0.4.6] - 2017-01-30
+### Fixed
+- #123: invalid `@info` docblocks were causing issues with Syfony's annotation parser, courtesy of @jducro
+
 ## [0.4.5] - 2016-12-19
 ### Changed
 - Require Symfony's mbstring polyfill instead of the PHP extension
