@@ -67,6 +67,10 @@ class ZipOutputParser implements ParserInterface
                 $mtime = \DateTime::createFromFormat('H:i Y-m-d', $chunks[2]);
             }
 
+            if ($mtime === false) {
+                $mtime = new \DateTime($chunks[2]);
+            }
+
             $members[] = array(
                 'location'  => $chunks[3],
                 'size'      => $chunks[1],
