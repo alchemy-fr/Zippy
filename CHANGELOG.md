@@ -3,6 +3,10 @@
 ## [Unreleased changes]
 - No changes
 
+## [0.4.7] - 2017-02-23
+### Fixed
+- #125: Type errors when date time cannot be parsed, courtesy of @joachimdoerr
+
 ## [0.4.6] - 2017-01-30
 ### Fixed
 - #123: invalid `@info` docblocks were causing issues with Syfony's annotation parser, courtesy of @jducro
