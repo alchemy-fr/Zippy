@@ -3,7 +3,7 @@
 ## [Unreleased changes]
 - No changes
 
-## [0.4.8] - 2017-02-23
+## [0.4.8] - 2017-03-03
 ### Fixed
 - #125: Fix invalid paths with relative locations, courtesy of @paulredmond
 
