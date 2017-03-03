@@ -3,6 +3,10 @@
 ## [Unreleased changes]
 - No changes
 
+## [0.4.8] - 2017-02-23
+### Fixed
+- #125: Fix invalid paths with relative locations, courtesy of @paulredmond
+
 ## [0.4.7] - 2017-02-23
 ### Fixed
 - #125: Type errors when date time cannot be parsed, courtesy of @joachimdoerr
