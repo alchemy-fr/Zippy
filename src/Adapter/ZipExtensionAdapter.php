@@ -126,7 +126,8 @@ class ZipExtensionAdapter extends AbstractAdapter
                 }
 
                 if ($overwrite == false) {
-                    if (file_exists($member)) {
+                    $fileToCheck = ($to != '' && substr($to, 0, -1) != DIRECTORY_SEPARATOR ? $to.DIRECTORY_SEPARATOR : $to) . $member;
+                    if (file_exists($fileToCheck)) {
                         $resource->getResource()->close();
 
                         throw new RuntimeException('Target file ' . $member . ' already exists.');
