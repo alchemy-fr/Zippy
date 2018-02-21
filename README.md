@@ -20,15 +20,15 @@ composer require alchemy/zippy
 
 Zippy currently supports the following drivers and file formats:
 
- - zip
+- zip
   - .zip
- - PHP zip extension
+- PHP zip extension
   - .zip
- - GNU tar
+- GNU tar
   - .tar
   - .tar.gz
   - .tar.bz2
- - BSD tar
+- BSD tar
   - .tar
   - .tar.gz
   - .tar.bz2
