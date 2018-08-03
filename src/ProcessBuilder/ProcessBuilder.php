@@ -10,10 +10,9 @@
  */
 namespace Alchemy\Zippy\ProcessBuilder;
 
-use Symfony\Component\Process\Exception\InvalidArgumentException;
-use Symfony\Component\Process\Exception\LogicException;
+use \InvalidArgumentException;
+use \LogicException;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
 
 class ProcessBuilder
 {
@@ -22,11 +21,13 @@ class ProcessBuilder
     private $env = array();
     private $input;
     private $timeout = 60;
-    private $options;
+    private $options = array();
     private $inheritEnv = true;
     private $prefix = array();
     private $outputDisabled = false;
     /**
+     * Constructor.
+     *
      * @param string[] $arguments An array of arguments
      */
     public function __construct(array $arguments = array())
@@ -67,7 +68,7 @@ class ProcessBuilder
      */
     public function setPrefix($prefix)
     {
-        $this->prefix = \is_array($prefix) ? $prefix : array($prefix);
+        $this->prefix = is_array($prefix) ? $prefix : array($prefix);
         return $this;
     }
     /**
@@ -144,7 +145,7 @@ class ProcessBuilder
     /**
      * Sets the input of the process.
      *
-     * @param resource|string|int|float|bool|\Traversable|null $input The input content
+     * @param resource|scalar|\Traversable|null $input The input content
      *
      * @return $this
      *
@@ -221,19 +222,22 @@ class ProcessBuilder
      */
     public function getProcess()
     {
-        if (0 === \count($this->prefix) && 0 === \count($this->arguments)) {
+        if (0 === count($this->prefix) && 0 === count($this->arguments)) {
             throw new LogicException('You must add() command arguments before calling getProcess().');
         }
+        $options = $this->options;
         $arguments = array_merge($this->prefix, $this->arguments);
-        $process = new Process($arguments, $this->cwd, $this->env, $this->input, $this->timeout, $this->options);
-        // to preserve the BC with symfony <3.3, we convert the array structure
-        // to a string structure to avoid the prefixing with the exec command
-        $process->setCommandLine($process->getCommandLine());
+        $script = implode(' ', array_map(array(__NAMESPACE__.'\\ProcessUtils', 'escapeArgument'), $arguments));
+        $process = new Process($script, $this->cwd, $this->env, $this->input, $this->timeout, $options);
         if ($this->inheritEnv) {
-            $process->inheritEnvironmentVariables();
+            if (method_exists($process, 'inheritEnvironmentVariables')) {
+                $process->inheritEnvironmentVariables();
+            }
         }
         if ($this->outputDisabled) {
-            $process->disableOutput();
+            if (method_exists($process, 'disableOutput')) {
+                $process->disableOutput();
+            }
         }
         return $process;
     }
