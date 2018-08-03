@@ -12,7 +12,6 @@
 namespace Alchemy\Zippy\ProcessBuilder;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Symfony\Component\Process\ProcessBuilder;
 
 class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
 {
