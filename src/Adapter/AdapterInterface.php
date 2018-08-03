@@ -13,10 +13,9 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Archive\ArchiveInterface;
-use Alchemy\Zippy\Archive\MemberInterface;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 
 Interface AdapterInterface
 {
@@ -38,9 +37,9 @@ Interface AdapterInterface
      * Please note some adapters can not create empty archives.
      * They would throw a `NotSupportedException` in case you ask to create an archive without files
      *
-     * @param string $path The path to the archive
-     * @param string|string[]|\Traversable|null $files A filename, an array of files, or a \Traversable instance
-     * @param bool $recursive Whether to recurse or not in the provided directories
+     * @param string                            $path      The path to the archive
+     * @param string|string[]|\Traversable|null $files     A filename, an array of files, or a \Traversable instance
+     * @param bool                              $recursive Whether to recurse or not in the provided directories
      *
      * @return ArchiveInterface
      *
@@ -71,9 +70,9 @@ Interface AdapterInterface
     /**
      * Adds a file to the archive
      *
-     * @param ResourceInterface $resource The path to the archive
-     * @param string|array|\Traversable $files An array of paths to add, relative to cwd
-     * @param bool $recursive Whether or not to recurse in the provided directories
+     * @param ResourceInterface         $resource  The path to the archive
+     * @param string|array|\Traversable $files     An array of paths to add, relative to cwd
+     * @param bool                      $recursive Whether or not to recurse in the provided directories
      *
      * @return array
      *
@@ -85,10 +84,10 @@ Interface AdapterInterface
     /**
      * Removes a member of the archive
      *
-     * @param ResourceInterface $resource The path to the archive
-     * @param String|Array|\Traversable $files A filename, an array of files, or a \Traversable instance
+     * @param ResourceInterface         $resource The path to the archive
+     * @param string|array|\Traversable $files    A filename, an array of files, or a \Traversable instance
      *
-     * @return Array
+     * @return array
      *
      * @throws RuntimeException In case of failure
      * @throws InvalidArgumentException In case no files could be removed
@@ -101,7 +100,7 @@ Interface AdapterInterface
      * Note that any existing files will be overwritten by the adapter
      *
      * @param ResourceInterface $resource The path to the archive
-     * @param string|null $to The path where to extract the archive
+     * @param string|null       $to       The path where to extract the archive
      *
      * @return \SplFileInfo The extracted archive
      *
@@ -113,10 +112,10 @@ Interface AdapterInterface
     /**
      * Extracts specific members of the archive
      *
-     * @param ResourceInterface $resource The path to the archive
-     * @param string|string[] $members A path or array of paths matching the members to extract from the resource.
-     * @param string|null $to The path where to extract the members
-     * @param bool $overwrite Whether to overwrite existing files in target directory
+     * @param ResourceInterface $resource  The path to the archive
+     * @param string|string[]   $members   A path or array of paths matching the members to extract from the resource.
+     * @param string|null       $to        The path where to extract the members
+     * @param bool              $overwrite Whether to overwrite existing files in target directory
      *
      * @return \SplFileInfo The extracted archive
      *
@@ -128,7 +127,7 @@ Interface AdapterInterface
     /**
      * Returns the adapter name
      *
-     * @return String
+     * @return string
      */
     public static function getName();
 }

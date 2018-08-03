@@ -132,8 +132,16 @@ class Member implements MemberInterface
      */
     public function extract($to = null, $overwrite = false)
     {
-        $this->adapter->extractMembers($this->resource, $this->location, $to, (bool)$overwrite);
+        $this->adapter->extractMembers($this->resource, $this->location, $to, (bool) $overwrite);
 
-        return new \SplFileInfo(sprintf('%s%s', rtrim(null === $to ? getcwd() : $to, '/'), $this->location));
+        return new \SplFileInfo(sprintf('%s/%s', rtrim(null === $to ? getcwd() : $to, '/'), ltrim($this->location, '/')));
+    }
+
+    /**
+     * @inheritdoc
+     * */
+    public function getResource()
+    {
+        return $this->resource;
     }
 }

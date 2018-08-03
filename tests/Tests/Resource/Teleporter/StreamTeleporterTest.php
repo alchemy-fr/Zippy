@@ -18,13 +18,13 @@ class StreamTeleporterTest extends TeleporterTestCase
         $target = 'plop-badge.php';
         $resource = new Resource(fopen(__FILE__, 'rb'), $target);
 
-        if (is_file($target)) {
+        if (is_file($context . '/' . $target)) {
             unlink($context . '/' . $target);
         }
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
@@ -39,13 +39,13 @@ class StreamTeleporterTest extends TeleporterTestCase
         $target = 'plop-badge.php';
         $resource = new Resource(__FILE__, $target);
 
-        if (is_file($target)) {
+        if (is_file($context . '/' . $target)) {
             unlink($context . '/' . $target);
         }
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 

@@ -12,7 +12,7 @@ class MemberTest extends TestCase
     {
         $member = new Member(
             $this->getResource('archive/located/here'),
-             $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface'),
+             $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock(),
             'location',
             1233456,
             new \DateTime("2012-07-08 11:14:15"),
@@ -66,7 +66,7 @@ class MemberTest extends TestCase
 
     public function testExtract()
     {
-        $mockAdapter =  $this->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+        $mockAdapter =  $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
 
         $mockAdapter
             ->expects($this->any())
@@ -86,5 +86,29 @@ class MemberTest extends TestCase
 
         $file = $member->extract('/custom/location');
         $this->assertEquals('/custom/location/member/located/here', $file->getPathname());
+    }
+
+    public function testRelativeExtract()
+    {
+        $mockAdapter =  $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
+
+        $mockAdapter
+            ->expects($this->any())
+            ->method('extractMembers');
+
+        $member = new Member(
+           $this->getResource('archive/located/here'),
+           $mockAdapter,
+           'relative',
+           1233456,
+           new \DateTime("2012-07-08 11:14:15"),
+           true
+        );
+
+        $file = $member->extract();
+        $this->assertEquals(sprintf('%s%s', getcwd(), '/relative'), $file->getPathname());
+
+        $file = $member->extract('/custom/location');
+        $this->assertEquals('/custom/location/relative', $file->getPathname());
     }
 }

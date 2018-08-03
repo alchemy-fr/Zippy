@@ -30,9 +30,19 @@ class ResourceTest extends TestCase
     public function testCanBeProcessedInPlace($expected, $context, $original, $target)
     {
         $resource = new Resource($original, $target);
+        $result = $resource->canBeProcessedInPlace($context);
 
-        $this->assertInternalType('boolean', $resource->canBeProcessedInPlace($context));
-        $this->assertEquals($expected, $resource->canBeProcessedInPlace($context));
+        $this->assertInternalType('boolean', $result);
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testGetContextForProcessInSinglePlace()
+    {
+        $resource = new Resource(fopen(__FILE__, 'rb'), 'file1');
+        $this->assertNull($resource->getContextForProcessInSinglePlace());
+
+        $resource = new Resource('/path/to/file1', 'file1');
+        $this->assertEquals('/path/to', $resource->getContextForProcessInSinglePlace());
     }
 
     public function provideProcessInPlaceData()

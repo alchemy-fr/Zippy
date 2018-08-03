@@ -20,7 +20,7 @@ use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
-use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
@@ -47,7 +47,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     protected function doCreate($path, $files, $recursive)
     {
-        $files = (array)$files;
+        $files = (array) $files;
 
         $builder = $this
             ->inflator
@@ -66,7 +66,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $collection = $this->manager->handle(getcwd(), $files);
         $builder->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
             return $builder->add($resource->getTarget());
         });
 
@@ -135,7 +135,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     protected function doAdd(ResourceInterface $resource, $files, $recursive)
     {
-        $files = (array)$files;
+        $files = (array) $files;
 
         $builder = $this
             ->inflator
@@ -153,7 +153,7 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         $builder->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
             return $builder->add($resource->getTarget());
         });
 
@@ -230,7 +230,7 @@ class ZipAdapter extends AbstractBinaryAdapter
      */
     protected function doRemove(ResourceInterface $resource, $files)
     {
-        $files = (array)$files;
+        $files = (array) $files;
 
         $builder = $this
             ->inflator
@@ -330,7 +330,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
 
-        $members = (array)$members;
+        $members = (array) $members;
 
         $builder = $this
             ->deflator

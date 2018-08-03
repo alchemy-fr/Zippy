@@ -14,8 +14,8 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\FileResource;
 use Alchemy\Zippy\Archive\MemberInterface;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
@@ -53,7 +53,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param ParserInterface $parser An output parser
      * @param ResourceManager $manager A resource manager
      * @param ProcessBuilderFactoryInterface $inflator A process builder factory for the inflator binary
-     * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
+     * @param ProcessBuilderFactoryInterface $deflator A process builder factory for the deflator binary
      */
     public function __construct(
         ParserInterface $parser,
@@ -62,7 +62,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
         ProcessBuilderFactoryInterface $deflator
     ) {
         $this->parser = $parser;
-        $this->manager = $manager;
+        parent::__construct($manager);
         $this->deflator = $deflator;
         $this->inflator = $inflator;
     }
@@ -141,12 +141,12 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Returns a new instance of the invoked adapter
      *
-     * @params String|null $inflatorBinaryName The inflator binary name to use
-     * @params String|null $deflatorBinaryName The deflator binary name to use
+     * @param ExecutableFinder $finder
+     * @param ResourceManager  $manager
+     * @param string|null      $inflatorBinaryName The inflator binary name to use
+     * @param string|null      $deflatorBinaryName The deflator binary name to use
      *
      * @return AbstractBinaryAdapter
-     *
-     * @throws RuntimeException In case object could not be instanciated
      */
     public static function newInstance(
         ExecutableFinder $finder,
@@ -181,7 +181,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
 
     private static function findABinary($wish, array $defaults, ExecutableFinder $finder)
     {
-        $possibles = $wish ? (array)$wish : $defaults;
+        $possibles = $wish ? (array) $wish : $defaults;
 
         $binary = null;
 
@@ -198,20 +198,19 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     /**
      * Adds files to argument list
      *
-     * @param Array $files An array of files
-     * @param ProcessBuilder $builder A Builder instance
+     * @param MemberInterface[]|\SplFileInfo[]|string[] $files   An array of files
+     * @param ProcessBuilder                            $builder A Builder instance
      *
-     * @return Boolean
+     * @return bool
      */
     protected function addBuilderFileArgument(array $files, ProcessBuilder $builder)
     {
         $iterations = 0;
 
-        array_walk($files, function ($file) use ($builder, &$iterations) {
+        array_walk($files, function($file) use ($builder, &$iterations) {
             $builder->add(
                 $file instanceof \SplFileInfo ?
-                    $file->getRealpath() :
-                    ($file instanceof MemberInterface ? $file->getLocation() : $file)
+                    $file->getRealPath() : ($file instanceof MemberInterface ? $file->getLocation() : $file)
             );
 
             $iterations++;

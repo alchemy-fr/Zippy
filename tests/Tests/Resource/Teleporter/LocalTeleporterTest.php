@@ -18,13 +18,13 @@ class LocalTeleporterTest extends TeleporterTestCase
         $target = 'plop-badge.php';
         $resource = new Resource(__FILE__, $target);
 
-        if (is_file($target)) {
+        if (is_file($context . '/' . $target)) {
             unlink($context . '/' . $target);
         }
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
@@ -39,20 +39,19 @@ class LocalTeleporterTest extends TeleporterTestCase
         $target = 'plop-badge.php';
         $resource = new Resource('file://' . __FILE__, $target);
 
-        if (is_file($target)) {
+        if (is_file($context . '/' . $target)) {
             unlink($context . '/' . $target);
         }
 
         $teleporter->teleport($resource, $context);
 
-        $this->assertfileExists($context . '/' . $target);
+        $this->assertFileExists($context . '/' . $target);
         unlink($context . '/' . $target);
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideInvalidSources
-     * @expectedException Alchemy\Zippy\Exception\InvalidArgumentException
+     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testTeleportOnNonExistentFile($source)
     {
@@ -73,7 +72,6 @@ class LocalTeleporterTest extends TeleporterTestCase
     }
 
     /**
-     * @covers Alchemy\Zippy\Resource\Teleporter\LocalTeleporter::teleport
      * @dataProvider provideContexts
      */
     public function testTeleportADir($context)
@@ -86,6 +84,7 @@ class LocalTeleporterTest extends TeleporterTestCase
         if (!is_dir(__DIR__ . '/plop-badge')) {
             mkdir(__DIR__ . '/plop-badge');
         }
+
         if (!is_file(__DIR__ . '/plop-badge/test-file.png')) {
             touch(__DIR__ . '/plop-badge/test-file.png');
         }

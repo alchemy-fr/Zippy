@@ -23,7 +23,7 @@ class Archive implements ArchiveInterface
     /**
      * The path to the archive
      *
-     * @var String
+     * @var string
      */
     protected $path;
 
@@ -37,7 +37,7 @@ class Archive implements ArchiveInterface
     /**
      * An array of archive members
      *
-     * @var Array
+     * @var MemberInterface[]
      */
     protected $members = array();
 
@@ -79,7 +79,7 @@ class Archive implements ArchiveInterface
      *
      * This method implements the IteratorAggregate interface.
      *
-     * @return \ArrayIterator An iterator
+     * @return \ArrayIterator|MemberInterface[] An iterator
      */
     public function getIterator()
     {
@@ -117,12 +117,12 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-     public function extract($toDirectory)
-     {
+    public function extract($toDirectory)
+    {
         $this->adapter->extract($this->resource, $toDirectory);
 
         return $this;
-     }
+    }
 
     /**
      * @inheritdoc

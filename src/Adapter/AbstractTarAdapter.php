@@ -13,10 +13,10 @@ namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Archive\Archive;
-use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Exception\RuntimeException;
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Archive\Member;
+use Alchemy\Zippy\Exception\RuntimeException;
+use Alchemy\Zippy\Exception\InvalidArgumentException;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
@@ -89,7 +89,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return $this->parser->parseInflatorVersion($process->getOutput() ? : '');
+        return $this->parser->parseInflatorVersion($process->getOutput() ?: '');
     }
 
     /**
@@ -124,7 +124,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             $builder->add('-f');
             $builder->add($path);
             $builder->add('-T');
-            $builder->add( $nullFile);
+            $builder->add($nullFile);
 
             $process = $builder->getProcess();
             $process->run();
@@ -141,7 +141,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
             $builder->setWorkingDirectory($collection->getContext());
 
-            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+            $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
                 return $builder->add($resource->getTarget());
             });
 
@@ -200,7 +200,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $members = array();
 
-        foreach ($this->parser->parseFileListing($process->getOutput() ? : '') as $member) {
+        foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
             $members[] = new Member(
                     $resource,
                     $this,
@@ -240,7 +240,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $builder->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
             return $builder->add($resource->getTarget());
         });
 
@@ -342,9 +342,18 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ));
         }
 
-        return new \SplFileInfo($to ? : $resource->getResource());
+        return new \SplFileInfo($to ?: $resource->getResource());
     }
 
+    /**
+     * @param array             $options
+     * @param ResourceInterface $resource
+     * @param array             $members
+     * @param string            $to
+     * @param bool              $overwrite
+     *
+     * @return array
+     */
     protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null, $overwrite = false)
     {
         if (null !== $to && !is_dir($to)) {
@@ -402,28 +411,28 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * Returns an array of option for the listMembers command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getListMembersOptions();
 
     /**
      * Returns an array of option for the extract command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getExtractOptions();
 
     /**
      * Returns an array of option for the extractMembers command
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getExtractMembersOptions();
 
     /**
      * Gets adapter specific additional options
      *
-     * @return Array
+     * @return array
      */
     abstract protected function getLocalOptions();
 }

@@ -12,7 +12,7 @@ class RequestMapperTest extends TestCase
      */
     public function testMap()
     {
-        $locator = $this->getMockBuilder('Alchemy\Zippy\Resource\TargetLocator')
+        $locator = $this->getMockBuilder('\Alchemy\Zippy\Resource\TargetLocator')
             ->disableOriginalConstructor()
             ->getMock();
 

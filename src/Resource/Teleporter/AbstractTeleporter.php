@@ -11,27 +11,34 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Exception\IOException;
+use Alchemy\Zippy\Resource\Resource as ZippyResource;
 
+/**
+ * Class AbstractTeleporter
+ * @package Alchemy\Zippy\Resource\Teleporter
+ *
+ * @deprecated Typehint against TeleporterInterface instead and use GenericTeleporter
+*  with custom reader/writers instead. This class will be removed in v0.5.x
+ */
 abstract class AbstractTeleporter implements TeleporterInterface
 {
     /**
      * Writes the target
      *
-     * @param string $data
-     * @param \Alchemy\Zippy\Resource\Resource $resource
-     * @param string $context
+     * @param string        $data
+     * @param ZippyResource $resource
+     * @param string        $context
      *
      * @return TeleporterInterface
      *
      * @throws IOException
      */
-    protected function writeTarget($data, Resource $resource, $context)
+    protected function writeTarget($data, ZippyResource $resource, $context)
     {
         $target = $this->getTarget($context, $resource);
 
-        if (! file_exists(dirname($target)) && false === mkdir(dirname($target))) {
+        if (!file_exists(dirname($target)) && false === mkdir(dirname($target))) {
             throw new IOException(sprintf('Could not create parent directory %s', dirname($target)));
         }
 
@@ -45,12 +52,12 @@ abstract class AbstractTeleporter implements TeleporterInterface
     /**
      * Returns the relative target of a Resource
      *
-     * @param String   $context
-     * @param Resource $resource
+     * @param string        $context
+     * @param ZippyResource $resource
      *
-     * @return String
+     * @return string
      */
-    protected function getTarget($context, Resource $resource)
+    protected function getTarget($context, ZippyResource $resource)
     {
         return sprintf('%s/%s', rtrim($context, '/'), $resource->getTarget());
     }

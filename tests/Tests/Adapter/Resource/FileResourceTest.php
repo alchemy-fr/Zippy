@@ -12,6 +12,6 @@ class FileResourceTest extends TestCase
         $path = '/path/to/resource';
         $resource = new FileResource($path);
 
-        $this->asserTEquals($path, $resource->getResource());
+        $this->assertEquals($path, $resource->getResource());
     }
 }
