@@ -70,7 +70,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
 
     public function testCreateNoFiles()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
 
         $mockedProcessBuilder
@@ -123,7 +123,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
 
     public function testCreate()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -181,7 +181,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -232,7 +232,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
 
     public function testgetVersion()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -254,7 +254,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -290,7 +290,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -354,7 +354,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))

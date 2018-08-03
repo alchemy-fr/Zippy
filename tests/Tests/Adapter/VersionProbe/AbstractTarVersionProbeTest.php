@@ -56,7 +56,7 @@ abstract class AbstractTarVersionProbeTest extends TestCase
 
     protected function getBuilder($version, $call = true)
     {
-        $mock = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mock = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
 
         $mockBuilder = $mock
             ->expects($call ? $this->once() : $this->never())
