@@ -82,7 +82,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $adapter->setVersionProbe($probe);
     }
 
-    protected function getMockedProcessBuilderFactory($mockedProcessBuilder, $creations = 1)
+    protected function getMockedProcessBuilderFactory($mockedProcess, $creations = 1)
     {
         $mockedProcessBuilderFactory =
             $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface')->getMock();
@@ -90,7 +90,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         $mockedProcessBuilderFactory
             ->expects($this->exactly($creations))
             ->method('create')
-            ->will($this->returnValue($mockedProcessBuilder));
+            ->will($this->returnValue($mockedProcess));
 
         return $mockedProcessBuilderFactory;
     }

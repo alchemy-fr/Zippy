@@ -2,6 +2,8 @@
 
 namespace Alchemy\Zippy\Tests\Adapter\BSDTar;
 
+use Alchemy\Zippy\Adapter\AbstractAdapter;
+use Alchemy\Zippy\Adapter\AbstractTarAdapter;
 use Alchemy\Zippy\Tests\Adapter\AdapterTestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
 
@@ -10,7 +12,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     protected static $tarFile;
 
     /**
-     * @var AbstractBSDTarAdapter
+     * @var AbstractAdapter|AbstractTarAdapter
      */
     protected $adapter;
 
@@ -41,9 +43,9 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
         $classname = static::getAdapterClassName();
 
         $inflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
-                ->disableOriginalConstructor()
-                ->setMethods(array('useBinary'))
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(array('useBinary'))
+            ->getMock();
 
         $outputParser = ParserFactory::create($classname::getName());
 
@@ -90,27 +92,27 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
 
     public function testCreateNoFiles()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('-c'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('-f'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo($this->getExpectedAbsolutePathForTarget(self::$tarFile)))
@@ -118,71 +120,62 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo('-T'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(5))
             ->method('add')
-            ->with($this->equalTo( $nullFile))
+            ->with($this->equalTo($nullFile))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $this->adapter->create(self::$tarFile, array());
     }
 
     public function testCreate()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('-c'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(3))
             ->method('setWorkingDirectory')
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
         $classname = static::getAdapterClassName();
         $outputParser = ParserFactory::create($classname::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
 
-        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
+        $this->adapter = new $classname($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcess),
+            $this->getMockedProcessBuilderFactory($mockedProcess, 0));
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
@@ -205,38 +198,33 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $this->adapter->listMembers($resource);
     }
@@ -244,26 +232,22 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     public function testAddFile()
     {
         $resource = $this->getResource(self::$tarFile);
-        $this->setExpectedException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
+        $this->setExpectedException('Alchemy\Zippy\Exception\NotSupportedException',
+            'Updating a compressed tar archive is not supported.');
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
     }
 
     public function testgetVersion()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--version'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $this->adapter->getInflatorVersion();
     }
@@ -272,32 +256,27 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $dir = $this->adapter->extract($resource);
         $pathinfo = pathinfo(self::$tarFile);
@@ -308,56 +287,51 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('-k'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(5))
             ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(6))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
-
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $this->adapter->extractMembers($resource, array(__FILE__), __DIR__);
     }
@@ -366,42 +340,37 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcess = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ZippyProcess')->setConstructorArgs(array(array()))->getMock();
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--delete'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
-        $mockedProcessBuilder
+        $mockedProcess
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo('path-to-file'))
             ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
         $archiveFileMock = $this->getMockBuilder('\Alchemy\Zippy\Archive\MemberInterface')->getMock();
         $archiveFileMock
@@ -409,11 +378,11 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
             ->method('getLocation')
             ->will($this->returnValue('path-to-file'));
 
-        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcess));
 
         $this->adapter->remove($resource, array(
             __DIR__ . '/../TestCase.php',
-            $archiveFileMock
+            $archiveFileMock,
         ));
     }
 
