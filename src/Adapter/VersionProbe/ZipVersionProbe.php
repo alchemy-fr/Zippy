@@ -68,16 +68,14 @@ class ZipVersionProbe implements VersionProbeInterface
         $processDeflate = $this
             ->deflator
             ->create()
-            ->add('-h')
-            ->getProcess();
+            ->add('-h');
 
         $processDeflate->run();
 
         $processInflate = $this
             ->inflator
             ->create()
-            ->add('-h')
-            ->getProcess();
+            ->add('-h');
 
         $processInflate->run();
 

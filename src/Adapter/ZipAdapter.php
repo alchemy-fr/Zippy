@@ -49,7 +49,7 @@ class ZipAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
@@ -58,19 +58,17 @@ class ZipAdapter extends AbstractBinaryAdapter
         }
 
         if ($recursive) {
-            $builder->add('-r');
+            $process->add('-r');
         }
 
-        $builder->add($path);
+        $process->add($path);
 
         $collection = $this->manager->handle(getcwd(), $files);
-        $builder->setWorkingDirectory($collection->getContext());
+        $process->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
-            return $builder->add($resource->getTarget());
+        $collection->forAll(function($i, ZippyResource $resource) use ($process) {
+            return $process->add($resource->getTarget());
         });
-
-        $process = $builder->getProcess();
 
         try {
             $process->run();
@@ -101,8 +99,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->deflator
             ->create()
             ->add('-l')
-            ->add($resource->getResource())
-            ->getProcess();
+            ->add($resource->getResource());
 
         $process->run();
 
@@ -137,27 +134,25 @@ class ZipAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
         if ($recursive) {
-            $builder->add('-r');
+            $process->add('-r');
         }
 
-        $builder
+        $process
             ->add('-u')
             ->add($resource->getResource());
 
         $collection = $this->manager->handle(getcwd(), $files);
 
-        $builder->setWorkingDirectory($collection->getContext());
+        $process->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
-            return $builder->add($resource->getTarget());
+        $collection->forAll(function($i, ZippyResource $resource) use ($process) {
+            return $process->add($resource->getTarget());
         });
-
-        $process = $builder->getProcess();
 
         try {
             $process->run();
@@ -185,8 +180,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $process = $this
             ->deflator
             ->create()
-            ->add('-h')
-            ->getProcess();
+            ->add('-h');
 
         $process->run();
 
@@ -209,8 +203,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $process = $this
             ->inflator
             ->create()
-            ->add('-h')
-            ->getProcess();
+            ->add('-h');
 
         $process->run();
 
@@ -232,19 +225,17 @@ class ZipAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
-        $builder
+        $process
             ->add('-d')
             ->add($resource->getResource());
 
-        if (!$this->addBuilderFileArgument($files, $builder)) {
+        if (!$this->addBuilderFileArgument($files, $process)) {
             throw new InvalidArgumentException('Invalid files');
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 
@@ -292,21 +283,19 @@ class ZipAdapter extends AbstractBinaryAdapter
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
 
-        $builder = $this
+        $process = $this
             ->deflator
             ->create();
 
-        $builder
+        $process
             ->add('-o')
             ->add($resource->getResource());
 
         if (null !== $to) {
-            $builder
+            $process
                 ->add('-d')
                 ->add($to);
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 
@@ -332,28 +321,26 @@ class ZipAdapter extends AbstractBinaryAdapter
 
         $members = (array) $members;
 
-        $builder = $this
+        $process = $this
             ->deflator
             ->create();
 
         if ((bool) $overwrite) {
-            $builder->add('-o');
+            $process->add('-o');
         }
 
-        $builder
+        $process
             ->add($resource->getResource());
 
         if (null !== $to) {
-            $builder
+            $process
                 ->add('-d')
                 ->add($to);
         }
 
-        if (!$this->addBuilderFileArgument($members, $builder)) {
+        if (!$this->addBuilderFileArgument($members, $process)) {
             throw new InvalidArgumentException('Invalid files');
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 

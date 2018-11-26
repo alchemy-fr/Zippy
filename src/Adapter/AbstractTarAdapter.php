@@ -77,8 +77,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         $process = $this
             ->inflator
             ->create()
-            ->add('--version')
-            ->getProcess();
+            ->add('--version');
 
         $process->run();
 
@@ -104,48 +103,45 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
         if (!$recursive) {
-            $builder->add('--no-recursion');
+            $process->add('--no-recursion');
         }
 
-        $builder->add('-c');
+        $process->add('-c');
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
         if (0 === count($files)) {
             $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
-            $builder->add('-f');
-            $builder->add($path);
-            $builder->add('-T');
-            $builder->add($nullFile);
+            $process->add('-f');
+            $process->add($path);
+            $process->add('-T');
+            $process->add($nullFile);
 
-            $process = $builder->getProcess();
             $process->run();
 
         } else {
 
-            $builder->add(sprintf('--file=%s', $path));
+            $process->add(sprintf('--file=%s', $path));
 
             if (!$recursive) {
-                $builder->add('--no-recursion');
+                $process->add('--no-recursion');
             }
 
             $collection = $this->manager->handle(getcwd(), $files);
 
-            $builder->setWorkingDirectory($collection->getContext());
+            $process->setWorkingDirectory($collection->getContext());
 
-            $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
-                return $builder->add($resource->getTarget());
+            $collection->forAll(function($i, ZippyResource $resource) use ($process) {
+                return $process->add($resource->getTarget());
             });
-
-            $process = $builder->getProcess();
 
             try {
                 $process->run();
@@ -170,24 +166,23 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
     protected function doTarListMembers($options, ResourceInterface $resource)
     {
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
         foreach ($this->getListMembersOptions() as $option) {
-            $builder->add($option);
+            $process->add($option);
         }
 
-        $builder
+        $process
             ->add('--list')
             ->add('-v')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
-        $process = $builder->getProcess();
         $process->run();
 
         if (!$process->isSuccessful()) {
@@ -218,33 +213,31 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
         if (!$recursive) {
-            $builder->add('--no-recursion');
+            $process->add('--no-recursion');
         }
 
-        $builder
+        $process
             ->add('--append')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
         // there will be an issue if the file starts with a dash
         // see --add-file=FILE
         $collection = $this->manager->handle(getcwd(), $files);
 
-        $builder->setWorkingDirectory($collection->getContext());
+        $process->setWorkingDirectory($collection->getContext());
 
-        $collection->forAll(function($i, ZippyResource $resource) use ($builder) {
-            return $builder->add($resource->getTarget());
+        $collection->forAll(function($i, ZippyResource $resource) use ($process) {
+            return $process->add($resource->getTarget());
         });
-
-        $process = $builder->getProcess();
 
         try {
             $process->run();
@@ -270,23 +263,21 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     {
         $files = (array) $files;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
-        $builder
+        $process
             ->add('--delete')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
-        if (!$this->addBuilderFileArgument($files, $builder)) {
+        if (!$this->addBuilderFileArgument($files, $process)) {
             throw new InvalidArgumentException('Invalid files');
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 
@@ -307,30 +298,28 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
         }
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
-        $builder
+        $process
             ->add('--extract')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ($this->getExtractOptions() as $option) {
-            $builder
+            $process
                 ->add($option);
         }
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
         if (null !== $to) {
-            $builder
+            $process
                 ->add('--directory')
                 ->add($to);
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 
@@ -362,38 +351,36 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         $members = (array) $members;
 
-        $builder = $this
+        $process = $this
             ->inflator
             ->create();
 
         if ($overwrite == false) {
-            $builder->add('-k');
+            $process->add('-k');
         }
 
-        $builder
+        $process
             ->add('--extract')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
         foreach ($this->getExtractMembersOptions() as $option) {
-            $builder
+            $process
                 ->add($option);
         }
 
         foreach ((array) $options as $option) {
-            $builder->add((string) $option);
+            $process->add((string) $option);
         }
 
         if (null !== $to) {
-            $builder
+            $process
                 ->add('--directory')
                 ->add($to);
         }
 
-        if (!$this->addBuilderFileArgument($members, $builder)) {
+        if (!$this->addBuilderFileArgument($members, $process)) {
             throw new InvalidArgumentException('Invalid files');
         }
-
-        $process = $builder->getProcess();
 
         $process->run();
 

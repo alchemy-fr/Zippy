@@ -20,6 +20,7 @@ use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\Parser\ParserInterface;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
+use Alchemy\Zippy\ProcessBuilder\ZippyProcess;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
@@ -199,16 +200,16 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * Adds files to argument list
      *
      * @param MemberInterface[]|\SplFileInfo[]|string[] $files   An array of files
-     * @param ProcessBuilder                            $builder A Builder instance
+     * @param ZippyProcess                            $process A ZippyProcess instance
      *
      * @return bool
      */
-    protected function addBuilderFileArgument(array $files, ProcessBuilder $builder)
+    protected function addBuilderFileArgument(array $files, ZippyProcess $process)
     {
         $iterations = 0;
 
-        array_walk($files, function($file) use ($builder, &$iterations) {
-            $builder->add(
+        array_walk($files, function($file) use ($process, &$iterations) {
+            $process->add(
                 $file instanceof \SplFileInfo ?
                     $file->getRealPath() : ($file instanceof MemberInterface ? $file->getLocation() : $file)
             );

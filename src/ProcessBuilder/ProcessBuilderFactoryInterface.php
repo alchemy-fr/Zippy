@@ -12,14 +12,13 @@
 namespace Alchemy\Zippy\ProcessBuilder;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Symfony\Component\Process\ProcessBuilder;
 
 interface ProcessBuilderFactoryInterface
 {
     /**
-     * Returns a new instance of Symfony ProcessBuilder
+     * Returns a new instance of Symfony Process
      *
-     * @return ProcessBuilder
+     * @return ZippyProcess
      *
      * @throws InvalidArgumentException
      */
