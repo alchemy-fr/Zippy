@@ -34,7 +34,7 @@ class ProcessBuilder implements ProcessBuilderInterface
      * ProcessBuilder constructor.
      * @param array $command
      */
-    public function __construct(array $command)
+    public function __construct($command)
     {
         $this->command = $command;
         $this->cwd = null;
