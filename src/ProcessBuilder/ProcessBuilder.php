@@ -11,9 +11,10 @@
 
 namespace Alchemy\Zippy\ProcessBuilder;
 
+use phpDocumentor\Reflection\Types\String_;
 use Symfony\Component\Process\Process;
 
-class ProcessBuilder
+class ProcessBuilder implements ProcessBuilderInterface
 {
     /**
      * The command to run and its arguments listed as separate entries
@@ -55,11 +56,11 @@ class ProcessBuilder
     /**
      * Adds an argument to the command string
      *
-     * @param string $argument
+     * @param String_ $argument
      *
      * @return ProcessBuilder
      */
-    public function add(string $argument)
+    public function add(String_ $argument)
     {
         $this->command = array_merge($this->command, array($argument));
 
@@ -69,11 +70,11 @@ class ProcessBuilder
     /**
      * Sets the working directory
      *
-     * @param string $directory
+     * @param String_ $directory
      *
      * @return ProcessBuilder
      */
-    public function setWorkingDirectory(string $directory)
+    public function setWorkingDirectory(String_ $directory)
     {
         $this->cwd = $directory;
 
