@@ -46,7 +46,7 @@ abstract class AbstractTarVersionProbe implements VersionProbeInterface
             /** @var Process $process */
             $process = $builder
                 ->create()
-                ->add('--version')
+//                ->add('--version')
                 ->getProcess();
 
             $process->run();
