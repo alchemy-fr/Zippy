@@ -11,7 +11,6 @@
 
 namespace Alchemy\Zippy\ProcessBuilder;
 
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Process;
 
 interface ProcessBuilderInterface
@@ -26,7 +25,7 @@ interface ProcessBuilderInterface
     /**
      * Adds an argument to the command string
      *
-     * @param $argument
+     * @param string $argument
      *
      * @return ProcessBuilder
      */
@@ -35,7 +34,7 @@ interface ProcessBuilderInterface
     /**
      * Sets the working directory
      *
-     * @param $directory
+     * @param string $directory
      *
      * @return ProcessBuilder
      */

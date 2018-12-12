@@ -11,7 +11,6 @@
 
 namespace Alchemy\Zippy\ProcessBuilder;
 
-use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Process;
 
 class ProcessBuilder implements ProcessBuilderInterface
@@ -47,7 +46,7 @@ class ProcessBuilder implements ProcessBuilderInterface
      */
     public function getProcess()
     {
-        $process =  new Process($this->command, $this->cwd, null);
+        $process =  new Process($this->command, $this->cwd);
         $process->setTimeout(null);
 
         return $process;
