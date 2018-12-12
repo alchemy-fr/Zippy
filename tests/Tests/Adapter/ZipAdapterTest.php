@@ -70,7 +70,9 @@ class ZipAdapterTest extends AdapterTestCase
      */
     public function testCreateNoFiles()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
@@ -79,7 +81,9 @@ class ZipAdapterTest extends AdapterTestCase
 
     public function testCreate()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -138,7 +142,9 @@ class ZipAdapterTest extends AdapterTestCase
         $resource = $this->getResource(self::$zipFile);
         $archive = $this->adapter->open($resource);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -166,7 +172,9 @@ class ZipAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$zipFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -198,7 +206,9 @@ class ZipAdapterTest extends AdapterTestCase
 
     public function testgetInflatorVersion()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -219,7 +229,9 @@ class ZipAdapterTest extends AdapterTestCase
 
     public function testgetDeflatorVersion()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -242,7 +254,9 @@ class ZipAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$zipFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -292,7 +306,9 @@ class ZipAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$zipFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -322,7 +338,9 @@ class ZipAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$zipFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
