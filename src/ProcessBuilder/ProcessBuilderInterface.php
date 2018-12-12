@@ -26,7 +26,7 @@ interface ProcessBuilderInterface
     /**
      * Adds an argument to the command string
      *
-     * @param string $argument
+     * @param $argument
      *
      * @return ProcessBuilder
      */
@@ -35,7 +35,7 @@ interface ProcessBuilderInterface
     /**
      * Sets the working directory
      *
-     * @param string $directory
+     * @param $directory
      *
      * @return ProcessBuilder
      */
