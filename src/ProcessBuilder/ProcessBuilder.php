@@ -26,7 +26,7 @@ class ProcessBuilder implements ProcessBuilderInterface
     /**
      * The working directory or null to use the working dir of the current PHP process
      *
-     * @var string
+     * @var string|null
      */
     private $cwd;
 
@@ -47,7 +47,7 @@ class ProcessBuilder implements ProcessBuilderInterface
      */
     public function getProcess()
     {
-        $process =  new Process($this->command, $this->cwd);
+        $process =  new Process($this->command, $this->cwd, null);
         $process->setTimeout(null);
 
         return $process;
@@ -58,10 +58,6 @@ class ProcessBuilder implements ProcessBuilderInterface
      */
     public function add($argument)
     {
-        if (!is_string($argument)) {
-            throw new InvalidArgumentException('Argument is not a string');
-        }
-
         $this->command = array_merge($this->command, array($argument));
 
         return $this;

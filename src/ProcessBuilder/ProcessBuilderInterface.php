@@ -29,8 +29,6 @@ interface ProcessBuilderInterface
      * @param string $argument
      *
      * @return ProcessBuilder
-     *
-     * @throws InvalidArgumentException In case $argument is not a string
      */
     public function add($argument);
 
