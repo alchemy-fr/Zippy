@@ -68,7 +68,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     public function testCreateNoFiles()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -116,7 +118,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $outputParser = ParserFactory::create(TarBSDTarAdapter::getName());
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -168,7 +172,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -202,7 +208,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -228,7 +236,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
 
     public function testgetVersion()
     {
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -250,7 +260,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -280,7 +292,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))
@@ -332,7 +346,9 @@ class TarBSDTarAdapterTest extends AdapterTestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockedProcessBuilder = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilder
             ->expects($this->at(0))

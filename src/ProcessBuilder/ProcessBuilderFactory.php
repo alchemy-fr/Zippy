@@ -12,7 +12,6 @@
 namespace Alchemy\Zippy\ProcessBuilder;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Symfony\Component\Process\ProcessBuilder;
 
 class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
 {
@@ -66,6 +65,6 @@ class ProcessBuilderFactory implements ProcessBuilderFactoryInterface
             throw new InvalidArgumentException('No binary set');
         }
 
-        return ProcessBuilder::create(array($this->binary))->setTimeout(null);
+        return ProcessBuilder::create(array($this->binary));
     }
 }
