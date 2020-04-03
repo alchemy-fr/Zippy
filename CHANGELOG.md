@@ -3,7 +3,7 @@
 ## [Unreleased changes]
 - No changes
 
-## [0.4.10] - 2018-02-27
+## [0.4.10] - TBD
 ### Changed
 - Allow Symfony 5.0 components
 - Drop support for PHP5 (it is long gone)
