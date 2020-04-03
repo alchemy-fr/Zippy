@@ -9,10 +9,10 @@ class ResourceTeleporterTest extends TestCase
 {
     /**
      * @covers Alchemy\Zippy\Resource\ResourceTeleporter::__construct
+     * @doesNotPerformAssertions
      */
     public function testConstruct()
     {
-        self::expectNotToPerformAssertions();
         $container = $this->getMockBuilder('\Alchemy\Zippy\Resource\TeleporterContainer')
             ->disableOriginalConstructor()
             ->getMock();

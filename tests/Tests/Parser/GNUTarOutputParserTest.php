@@ -7,9 +7,11 @@ use Alchemy\Zippy\Tests\TestCase;
 
 class GNUTarOutputParserTest extends TestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testNewParser()
     {
-        self::expectNotToPerformAssertions();
         return new GNUTarOutputParser();
     }
 

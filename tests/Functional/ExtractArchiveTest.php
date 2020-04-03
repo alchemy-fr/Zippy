@@ -6,10 +6,11 @@ use Symfony\Component\Finder\Finder;
 
 class ExtractArchiveTest extends FunctionalTestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testOpen()
     {
-        self::expectNotToPerformAssertions();
-
         $adapter = $this->getAdapter();
         $archiveFile = $this->getArchiveFileForAdapter($adapter);
 

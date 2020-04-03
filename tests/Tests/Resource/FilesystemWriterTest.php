@@ -9,9 +9,11 @@ use Alchemy\Zippy\Tests\TestCase;
 
 class FilesystemWriterTest extends TestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testWriteFromReader()
     {
-        self::expectNotToPerformAssertions();
         $resource = new Resource(fopen(__FILE__, 'r'), fopen(__FILE__, 'r'));
         $reader = new StreamReader($resource);
 
