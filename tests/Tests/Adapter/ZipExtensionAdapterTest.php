@@ -4,6 +4,7 @@ namespace Alchemy\Zippy\Tests\Adapter;
 
 use Alchemy\Zippy\Adapter\ZipExtensionAdapter;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
+use Alchemy\Zippy\Exception\RuntimeException;
 
 class ZipExtensionAdapterTest extends AdapterTestCase
 {
@@ -60,12 +61,12 @@ class ZipExtensionAdapterTest extends AdapterTestCase
         unlink($file);
     }
 
-    /**
-     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
-     */
     public function testOpenWithWrongFileName()
     {
-        $file = __DIR__ . '/zip-file.zip';
+        $file = __DIR__ . '/zip-file-non-existing.zip';
+
+        self::expectException(RuntimeException::class);
+
         $this->adapter->open($file);
     }
 
@@ -193,7 +194,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException RuntimeException
      */
     public function testRemoveWithDeleteFailing()
     {
@@ -251,7 +252,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException RuntimeException
      */
     public function testAddFailOnFile()
     {
@@ -280,7 +281,7 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     }
 
     /**
-     * @expectedException \Alchemy\Zippy\Exception\RuntimeException
+     * @expectedException RuntimeException
      */
     public function testAddFailOnDir()
     {

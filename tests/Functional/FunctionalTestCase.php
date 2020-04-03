@@ -6,7 +6,7 @@ use Alchemy\Zippy\Adapter\AdapterInterface;
 use Alchemy\Zippy\Adapter\AdapterContainer;
 use Symfony\Component\Filesystem\Filesystem;
 
-abstract class FunctionalTestCase extends \PHPUnit_Framework_TestCase
+abstract class FunctionalTestCase extends \PHPUnit\Framework\TestCase
 {
     public function tearDown()
     {

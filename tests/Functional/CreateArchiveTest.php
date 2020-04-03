@@ -20,6 +20,7 @@ class CreateArchiveTest extends FunctionalTestCase
 
     public function testCreate()
     {
+        self::expectNotToPerformAssertions();
         $adapter = $this->getAdapter();
         $extension = $this->getArchiveExtensionForAdapter($adapter);
 

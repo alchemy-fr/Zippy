@@ -9,6 +9,7 @@ class BSDTarOutputParserTest extends TestCase
 {
     public function testNewParser()
     {
+        self::expectNotToPerformAssertions();
         return new BSDTarOutputParser();
     }
 

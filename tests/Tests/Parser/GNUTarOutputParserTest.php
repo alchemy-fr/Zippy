@@ -9,6 +9,7 @@ class GNUTarOutputParserTest extends TestCase
 {
     public function testNewParser()
     {
+        self::expectNotToPerformAssertions();
         return new GNUTarOutputParser();
     }
 

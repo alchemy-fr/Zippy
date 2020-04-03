@@ -55,7 +55,7 @@ class Add2ArchiveTest extends FunctionalTestCase
             'Alchemy\Zippy\Adapter\BSDTar\TarGzBSDTarAdapter',
             'Alchemy\Zippy\Adapter\BSDTar\TarBz2BSDTarAdapter',
         ))) {
-            $this->setExpectedException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
+            $this->expectException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
         }
 
         $archive->addMembers(array('somemorefiles/nicephoto.jpg' => __DIR__ . '/samples/morefiles/morephoto.jpg'));

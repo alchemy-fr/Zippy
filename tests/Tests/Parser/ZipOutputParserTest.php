@@ -9,6 +9,7 @@ class ZipOutputParserTest extends TestCase
 {
     public function testNewParser()
     {
+        self::expectNotToPerformAssertions();
         return new ZipOutputParser();
     }
 

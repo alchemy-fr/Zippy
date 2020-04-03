@@ -6,6 +6,8 @@ class ListArchiveTest extends FunctionalTestCase
 {
     public function testOpen()
     {
+        self::expectNotToPerformAssertions();
+
         $adapter = $this->getAdapter();
         $archiveFile = $this->getArchiveFileForAdapter($adapter);
 

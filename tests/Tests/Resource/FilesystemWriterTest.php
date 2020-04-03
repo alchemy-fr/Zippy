@@ -11,11 +11,12 @@ class FilesystemWriterTest extends TestCase
 {
     public function testWriteFromReader()
     {
+        self::expectNotToPerformAssertions();
         $resource = new Resource(fopen(__FILE__, 'r'), fopen(__FILE__, 'r'));
         $reader = new StreamReader($resource);
 
         $streamWriter = new FilesystemWriter();
-        
+
         $streamWriter->writeFromReader($reader, sys_get_temp_dir().'/stream/writer/test.php');
         $streamWriter->writeFromReader($reader, sys_get_temp_dir().'/test.php');
     }
