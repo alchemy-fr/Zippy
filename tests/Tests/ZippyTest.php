@@ -177,12 +177,10 @@ class ZippyTest extends TestCase
         $zippy = new Zippy($this->getContainer());
         $zippy->addStrategy($strategy);
 
-        try {
-            $zippy->getAdapterFor('zippo');
-            $this->fail('Should have raised an exception');
-        } catch (NoAdapterOnPlatformException $e) {
+        self::expectException(NoAdapterOnPlatformException::class);
+        $zippy->getAdapterFor('zippo');
 
-        }
+        $this->fail('Should have raised an exception');
     }
 
     /** @test */
@@ -194,12 +192,10 @@ class ZippyTest extends TestCase
         $zippy = new Zippy($this->getContainer());
         $zippy->addStrategy($strategy);
 
-        try {
-            $zippy->getAdapterFor('zippo');
-            $this->fail('Should have raised an exception');
-        } catch (FormatNotSupportedException $e) {
+        self::expectException(FormatNotSupportedException::class);
+        $zippy->getAdapterFor('zippo');
 
-        }
+        $this->fail('Should have raised an exception');
     }
 
     /** @test */

@@ -4,6 +4,9 @@ namespace Alchemy\Zippy\Functional;
 
 class ListArchiveTest extends FunctionalTestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testOpen()
     {
         $adapter = $this->getAdapter();

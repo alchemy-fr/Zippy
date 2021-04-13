@@ -8,7 +8,7 @@ use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Adapter\VersionProbe\VersionProbeInterface;
 
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     public static function getResourcesPath()
     {

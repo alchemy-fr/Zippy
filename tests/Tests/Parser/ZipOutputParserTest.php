@@ -7,6 +7,9 @@ use Alchemy\Zippy\Tests\TestCase;
 
 class ZipOutputParserTest extends TestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testNewParser()
     {
         return new ZipOutputParser();

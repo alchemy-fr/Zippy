@@ -18,6 +18,9 @@ class CreateArchiveTest extends FunctionalTestCase
         }
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testCreate()
     {
         $adapter = $this->getAdapter();

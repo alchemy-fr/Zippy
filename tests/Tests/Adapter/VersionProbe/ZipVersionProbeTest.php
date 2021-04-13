@@ -13,7 +13,9 @@ class ZipVersionProbeTest extends TestCase
      */
     public function testGetStatusIsOk()
     {
-        $mockedProcessBuilderInflator = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilderInflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilderInflator
             ->expects($this->once())
@@ -50,7 +52,9 @@ zip [-options] [-b path] [-t mmddyyyy] [-n suffixes] [zipfile list] [-xi list]
   -e   encrypt                      -n   don\'t compress these suffixes
   -h2  show more help'));
 
-        $mockedProcessBuilderDeflator = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilderDeflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilderDeflator
             ->expects($this->once())
@@ -100,7 +104,9 @@ Examples (see unzip.txt for more info):
      */
     public function testGetStatusIsNotOk()
     {
-        $mockedProcessBuilderInflator = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilderInflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilderInflator
             ->expects($this->once())
@@ -117,7 +123,9 @@ Examples (see unzip.txt for more info):
             ->method('getOutput')
             ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
 
-        $mockedProcessBuilderDeflator = $this->getMockBuilder('\Symfony\Component\Process\ProcessBuilder')->getMock();
+        $mockedProcessBuilderDeflator = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mockedProcessBuilderDeflator
             ->expects($this->once())

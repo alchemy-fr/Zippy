@@ -18,11 +18,11 @@ use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Parser\ParserFactory;
 use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilder;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory;
 use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\ProcessBuilder;
 
 abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAdapterInterface
 {
