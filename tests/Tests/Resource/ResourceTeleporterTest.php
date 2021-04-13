@@ -9,6 +9,7 @@ class ResourceTeleporterTest extends TestCase
 {
     /**
      * @covers Alchemy\Zippy\Resource\ResourceTeleporter::__construct
+     * @doesNotPerformAssertions
      */
     public function testConstruct()
     {

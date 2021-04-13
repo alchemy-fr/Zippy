@@ -3,6 +3,15 @@
 ## [Unreleased changes]
 - No changes
 
+## [0.4.10] - TBD
+### Changed
+- Allow Symfony 5.0 components
+- Drop support for PHP5 (it is long gone)
+
+## [0.4.9] - 2018-02-27
+### Changed
+- Allow Symfony 4.0 in composer.json
+
 ## [0.4.8] - 2017-03-03
 ### Fixed
 - #125: Fix invalid paths with relative locations, courtesy of @paulredmond

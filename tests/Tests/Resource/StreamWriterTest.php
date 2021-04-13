@@ -9,6 +9,9 @@ use Alchemy\Zippy\Tests\TestCase;
 
 class StreamWriterTest extends TestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testWriteFromReader()
     {
         $resource = new Resource(fopen(__FILE__, 'r'), fopen(__FILE__, 'r'));

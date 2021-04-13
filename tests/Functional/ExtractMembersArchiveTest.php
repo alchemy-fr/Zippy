@@ -6,6 +6,9 @@ use Alchemy\Zippy\Archive\ArchiveInterface;
 
 class ExtractMembersArchiveTest extends FunctionalTestCase
 {
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testOpen()
     {
         $adapter = $this->getAdapter();

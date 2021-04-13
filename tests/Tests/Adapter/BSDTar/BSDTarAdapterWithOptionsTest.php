@@ -250,7 +250,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
     public function testAddFile()
     {
         $resource = $this->getResource(self::$tarFile);
-        $this->setExpectedException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
+        $this->expectException('Alchemy\Zippy\Exception\NotSupportedException', 'Updating a compressed tar archive is not supported.');
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
     }
 
