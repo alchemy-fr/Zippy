@@ -11,35 +11,72 @@
 
 namespace Alchemy\Zippy\Resource\Teleporter;
 
-use Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReaderFactory;
-use Alchemy\Zippy\Resource\ResourceLocator;
-use Alchemy\Zippy\Resource\ResourceReaderFactory;
-use Alchemy\Zippy\Resource\Writer\FilesystemWriter;
+use Alchemy\Zippy\Resource\Resource;
+use Alchemy\Zippy\Exception\RuntimeException;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
+
+
+/*
+use Guzzle\Http\Client;
+use Guzzle\Plugin\Backoff\BackoffPlugin;
+use Guzzle\Common\Event;
+*/
 
 /**
  * Guzzle Teleporter implementation for HTTP resources
- *
- * @deprecated Use \Alchemy\Zippy\Resource\GenericTeleporter instead. This class will be removed in v0.5.x
  */
-class GuzzleTeleporter extends GenericTeleporter
+class GuzzleTeleporter extends AbstractTeleporter
 {
+    private $client;
+
     /**
-     * @param ResourceReaderFactory $readerFactory
-     * @param ResourceLocator $resourceLocator
+     * Constructor
+     *
+     * @param Client $client
      */
-    public function __construct(ResourceReaderFactory $readerFactory = null, ResourceLocator $resourceLocator = null)
+    public function __construct(Client $client)
     {
-        parent::__construct($readerFactory ?: new GuzzleReaderFactory(), new FilesystemWriter(), $resourceLocator);
+        $this->client = $client;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function teleport(Resource $resource, $context)
+    {
+
+        $target = $this->getTarget($context, $resource);
+        $stream = fopen($target, 'w');
+        $response = $this->client->request('GET', $resource->getOriginal(),['sink' => $stream]);
+        fclose($stream);
+
+        if ($response->getStatusCode() != '200') {
+            throw new RuntimeException(sprintf('Unable to fetch %s', $resource->getOriginal()));
+        }
+
+        return $this;
     }
 
     /**
      * Creates the GuzzleTeleporter
      *
-     * @deprecated This method will be removed in v0.5.x
      * @return GuzzleTeleporter
      */
     public static function create()
     {
-        return new static();
+        $client = new Client();
+
+/*** old working way, to be update if needeed
+     $client->getEventDispatcher()->addListener('request.error', function (Event $event) {
+        // override guzzle default behavior of throwing exceptions
+        // when 4xx & 5xx responses are encountered
+        $event->stopPropagation();
+      }, -254);
+
+     $client->addSubscriber(BackoffPlugin::getExponentialBackoff(5, array(500, 502, 503, 408)));
+*/
+
+        return new static($client);
     }
 }
