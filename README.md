@@ -100,10 +100,6 @@ $archive = $zippy->create('archive.zip', array(
 Remote `http`/`https` resources are downloaded transparently using the
 [Symfony HttpClient](https://symfony.com/doc/current/http_client.html) component.
 
-## Documentation
-
-Documentation hosted at [read the docs](https://zippy.readthedocs.org/) !
-
 ## License
 
 This project is licensed under the [MIT license](http://opensource.org/licenses/MIT).
