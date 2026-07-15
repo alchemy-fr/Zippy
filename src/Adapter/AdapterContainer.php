@@ -162,7 +162,7 @@ class AdapterContainer implements \ArrayAccess
      * @return bool true on success or false on failure.
      * <p>The return value will be casted to boolean if non-boolean was returned.</p>
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->items[$offset]);
     }
@@ -176,7 +176,7 @@ class AdapterContainer implements \ArrayAccess
      * </p>
      * @return mixed Can return all value types.
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (array_key_exists($offset, $this->items) && is_callable($this->items[$offset])) {
             $this->items[$offset] = call_user_func($this->items[$offset], $this);
@@ -201,7 +201,7 @@ class AdapterContainer implements \ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->items[$offset] = $value;
     }
@@ -215,7 +215,7 @@ class AdapterContainer implements \ArrayAccess
      * </p>
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->items[$offset]);
     }

@@ -8,7 +8,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 abstract class FunctionalTestCase extends \PHPUnit\Framework\TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         $filesystem = new Filesystem();
         $filesystem->remove(__DIR__ . '/samples/tmp');

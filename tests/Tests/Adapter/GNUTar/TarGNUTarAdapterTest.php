@@ -15,7 +15,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), TarGNUTarAdapter::getName());
 
@@ -24,14 +24,14 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }
@@ -73,37 +73,9 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->getMock();
 
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-c'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('-f'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo($this->getExpectedAbsolutePathForTarget(self::$tarFile)))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('-T'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(4))
-            ->method('add')
-            ->with($this->equalTo( $nullFile))
-            ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -113,6 +85,14 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array());
+
+        $this->assertEquals(array(
+            '-c',
+            '-f',
+            $this->getExpectedAbsolutePathForTarget(self::$tarFile),
+            '-T',
+            $nullFile,
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testCreate()
@@ -121,27 +101,10 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-c'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
             ->method('setWorkingDirectory')
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
@@ -155,6 +118,12 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
+
+        $this->assertEquals(array(
+            '-c',
+            sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile)),
+            'lalalalala',
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testOpen()
@@ -173,29 +142,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--utc'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('--list'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo('-v'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -205,6 +152,13 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->listMembers($resource);
+
+        $this->assertEquals(array(
+            '--utc',
+            '--list',
+            '-v',
+            sprintf('--file=%s', $resource->getResource()),
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testAddFile()
@@ -215,17 +169,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--append'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -235,6 +179,11 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
+
+        $this->assertEquals(array(
+            '--append',
+            sprintf('--file=%s', $resource->getResource()),
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testgetVersion()
@@ -243,11 +192,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--version'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -257,6 +202,8 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->getInflatorVersion();
+
+        $this->assertEquals(array('--version'), $addedArguments->getArrayCopy());
     }
 
     public function testExtract()
@@ -267,23 +214,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--extract'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo('--overwrite'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -293,6 +224,13 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $dir = $this->adapter->extract($resource);
+
+        $this->assertEquals(array(
+            '--extract',
+            sprintf('--file=%s', $resource->getResource()),
+            '--overwrite',
+        ), $addedArguments->getArrayCopy());
+
         $pathinfo = pathinfo(self::$tarFile);
         $this->assertEquals($pathinfo['dirname'], $dir->getPath());
     }
@@ -305,47 +243,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-k'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('--extract'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo('--file=' . $resource->getResource()))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('--overwrite'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(4))
-            ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(5))
-            ->method('add')
-            ->with($this->equalTo(__DIR__))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(6))
-            ->method('add')
-            ->with($this->equalTo(__FILE__))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -355,6 +253,15 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->extractMembers($resource, array(__FILE__), __DIR__);
+
+        $this->assertEquals(array(
+            '-k',
+            '--extract',
+            '--file=' . $resource->getResource(),
+            '--directory',
+            __DIR__,
+            __FILE__,
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testRemoveMembers()
@@ -365,29 +272,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--delete'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('--file=' . $resource->getResource()))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('path-to-file'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -407,6 +292,13 @@ class TarGNUTarAdapterTest extends AdapterTestCase
             __DIR__ . '/../TestCase.php',
             $archiveFileMock
         ));
+
+        $this->assertEquals(array(
+            '--delete',
+            '--file=' . $resource->getResource(),
+            __DIR__ . '/../TestCase.php',
+            'path-to-file',
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testGetName()

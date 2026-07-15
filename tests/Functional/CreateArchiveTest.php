@@ -8,7 +8,7 @@ class CreateArchiveTest extends FunctionalTestCase
 {
     private static $file;
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
 

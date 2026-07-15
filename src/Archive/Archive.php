@@ -69,7 +69,7 @@ class Archive implements ArchiveInterface
     /**
      * @inheritdoc
      */
-    public function count()
+    public function count(): int
     {
         return count($this->getMembers());
     }
@@ -81,7 +81,7 @@ class Archive implements ArchiveInterface
      *
      * @return \ArrayIterator|MemberInterface[] An iterator
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->getMembers());
     }

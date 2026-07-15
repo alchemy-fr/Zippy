@@ -51,10 +51,11 @@ class LocalTeleporterTest extends TeleporterTestCase
 
     /**
      * @dataProvider provideInvalidSources
-     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testTeleportOnNonExistentFile($source)
     {
+        $this->expectException(\Alchemy\Zippy\Exception\InvalidArgumentException::class);
+
         $teleporter = LocalTeleporter::create();
 
         $target = 'plop-badge.php';
