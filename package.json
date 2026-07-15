@@ -1,5 +1,5 @@
 {
-  "dependencies": {
+  "devDependencies": {
     "connect": "^3.7.0",
     "serve-static": "^2.2.1"
   }
