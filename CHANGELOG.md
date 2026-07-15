@@ -7,6 +7,7 @@
   applied when extracting with `$overwrite = true`
 
 ### Changed
+- Migrate continuous integration from Travis CI to GitHub Actions
 - Require Symfony `^6.0 || ^7.0` components (`filesystem`, `process`, `http-client`)
 - Bump minimum PHP version to 8.1
 - Replace Guzzle with the Symfony HttpClient component to download remote HTTP(S) resources

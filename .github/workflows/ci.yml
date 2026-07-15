@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php }} (${{ matrix.dependencies }} deps)
+    runs-on: ubuntu-latest
+    # PHP 8.5 is still a nightly build: run it but don't let it fail the workflow.
+    continue-on-error: ${{ matrix.experimental || false }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4']
+        dependencies: ['highest']
+        include:
+          # Also test the lowest allowed dependency set on the minimum PHP version.
+          - php: '8.1'
+            dependencies: 'lowest'
+          # PHP 8.5 is not released yet; allowed to fail (see continue-on-error).
+          - php: '8.5'
+            dependencies: 'highest'
+            experimental: true
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: zip
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install archive tools
+        run: sudo apt-get update && sudo apt-get install -y libarchive-tools zip unzip tar
+
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      - name: Run test suite
+        run: make test
