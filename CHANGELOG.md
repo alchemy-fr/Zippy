@@ -12,10 +12,13 @@
 - Bump minimum PHP version to 8.1
 - Replace Guzzle with the Symfony HttpClient component to download remote HTTP(S) resources
 - Modernize the PHPUnit configuration (PHPUnit `^9.5`, `<coverage>` schema)
-- Replace the abandoned Sami API-doc generator with [Doctum](https://doctum.long-term.support)
-  (`make apidoc`); the generated API dump is no longer committed to the repository
+- Run the test suite with `./tests/test.sh` instead of `make test`
 
 ### Removed
+- Removed the bundled documentation folder (`docs/`), including the Sphinx sources and the
+  committed, generated (Sami) API reference
+- Removed the `Makefile` and the Doctum API-documentation tooling (`doctum.php`); the test
+  suite is now run with `./tests/test.sh`
 - **BC break:** Removed Guzzle support. The following classes have been removed:
   - `Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter`
   - `Alchemy\Zippy\Resource\Teleporter\LegacyGuzzleTeleporter`

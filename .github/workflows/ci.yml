@@ -52,4 +52,4 @@ jobs:
           dependency-versions: ${{ matrix.dependencies }}
 
       - name: Run test suite
-        run: make test
+        run: ./tests/test.sh

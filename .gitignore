@@ -1,10 +1,5 @@
 /tests/phpunit_report
-/nbproject/
 /vendor/
-/docs/build
-/build
-doctum.phar
-composer.phar
 composer.lock
 /tests/node_server.pid
 node_modules/

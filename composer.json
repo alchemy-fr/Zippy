@@ -12,7 +12,7 @@
         }
     ],
     "scripts": {
-        "test": "make test"
+        "test": "./tests/test.sh"
     },
     "require": {
         "php": ">=8.1",
