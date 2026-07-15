@@ -6,6 +6,8 @@
 [![Scrutinizer](https://img.shields.io/scrutinizer/g/alchemy-fr/Zippy.svg?style=flat-square)](https://scrutinizer-ci.com/g/alchemy-fr/Zippy/)
 [![Packagist](https://img.shields.io/packagist/dt/alchemy/zippy.svg?style=flat-square)](https://packagist.org/packages/alchemy/zippy/stats)
 
+![Zippy](./logo.png)
+
 A PHP library to read, create, and extract archives in various formats via command line utilities or PHP extensions
 
 ## Installation
