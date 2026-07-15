@@ -24,7 +24,7 @@ class HttpClientReaderFactory implements ResourceReaderFactory
      */
     private $client;
 
-    public function __construct(HttpClientInterface $client = null)
+    public function __construct(?HttpClientInterface $client = null)
     {
         $this->client = $client ?: HttpClient::create();
     }

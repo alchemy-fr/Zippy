@@ -72,7 +72,14 @@ class ZipExtensionAdapterTest extends AdapterTestCase
     public function testOpen()
     {
         $file = __DIR__ . '/zip-file.zip';
-        touch($file);
+
+        // Build a real (non-empty) archive: opening a 0-byte file as a ZipArchive
+        // is deprecated since PHP 8.
+        $zip = new \ZipArchive();
+        $zip->open($file, \ZipArchive::CREATE);
+        $zip->addFromString('test.txt', 'test');
+        $zip->close();
+
         $archive = $this->adapter->open($file);
         $this->assertInstanceOf('Alchemy\Zippy\Archive\Archive', $archive);
         unlink($file);

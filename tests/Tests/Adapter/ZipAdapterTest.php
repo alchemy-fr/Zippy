@@ -84,27 +84,10 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-r'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo($this->getExpectedAbsolutePathForTarget(self::$zipFile)))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
             ->method('setWorkingDirectory')
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('lalala'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
@@ -123,6 +106,12 @@ class ZipAdapterTest extends AdapterTestCase
         $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$zipFile, array(__FILE__));
+
+        $this->assertEquals(array(
+            '-r',
+            $this->getExpectedAbsolutePathForTarget(self::$zipFile),
+            'lalala',
+        ), $addedArguments->getArrayCopy());
 
         return self::$zipFile;
     }
@@ -145,17 +134,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-l'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo($resource->getResource()))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -165,6 +144,8 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setDeflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->listMembers($resource);
+
+        $this->assertEquals(array('-l', $resource->getResource()), $addedArguments->getArrayCopy());
     }
 
     public function testAddFile()
@@ -175,23 +156,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-r'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('-u'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo($resource->getResource()))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -201,6 +166,8 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
+
+        $this->assertEquals(array('-r', '-u', $resource->getResource()), $addedArguments->getArrayCopy());
     }
 
     public function testgetInflatorVersion()
@@ -209,11 +176,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-h'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -224,6 +187,8 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->getInflatorVersion();
+
+        $this->assertEquals(array('-h'), $addedArguments->getArrayCopy());
     }
 
     public function testgetDeflatorVersion()
@@ -232,11 +197,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-h'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -247,6 +208,8 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setDeflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->getDeflatorVersion();
+
+        $this->assertEquals(array('-h'), $addedArguments->getArrayCopy());
     }
 
     public function testRemoveMembers()
@@ -257,29 +220,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-d'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo($resource->getResource()))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo('path-to-file'))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -299,6 +240,13 @@ class ZipAdapterTest extends AdapterTestCase
             __DIR__ . '/../TestCase.php',
             $archiveFileMock
         ));
+
+        $this->assertEquals(array(
+            '-d',
+            $resource->getResource(),
+            __DIR__ . '/../TestCase.php',
+            'path-to-file',
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testExtract()
@@ -309,17 +257,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('-o'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo($resource->getResource()))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -329,6 +267,9 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setDeflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $dir = $this->adapter->extract($resource);
+
+        $this->assertEquals(array('-o', $resource->getResource()), $addedArguments->getArrayCopy());
+
         $pathinfo = pathinfo(self::$zipFile);
         $this->assertEquals($pathinfo['dirname'], $dir->getPath());
     }
@@ -341,29 +282,7 @@ class ZipAdapterTest extends AdapterTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockedProcessBuilder
-            ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo($resource->getResource()))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(1))
-            ->method('add')
-            ->with($this->equalTo('-d'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(2))
-            ->method('add')
-            ->with($this->equalTo(__DIR__))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(3))
-            ->method('add')
-            ->with($this->equalTo(__FILE__))
-            ->will($this->returnSelf());
+        $addedArguments = $this->recordAddedArguments($mockedProcessBuilder);
 
         $mockedProcessBuilder
             ->expects($this->once())
@@ -373,6 +292,13 @@ class ZipAdapterTest extends AdapterTestCase
         $this->adapter->setDeflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->extractMembers($resource, array(__FILE__), __DIR__);
+
+        $this->assertEquals(array(
+            $resource->getResource(),
+            '-d',
+            __DIR__,
+            __FILE__,
+        ), $addedArguments->getArrayCopy());
     }
 
     public function testGetName()
