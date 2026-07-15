@@ -52,16 +52,14 @@ class AbstractFileStrategyTest extends TestCase
         $adapterMock = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
         $container = $this->getMockBuilder('\Alchemy\Zippy\Adapter\AdapterContainer')->getMock();
         $container
-            ->expects($this->at(0))
             ->method('offsetGet')
-            ->with($this->equalTo('Alchemy\\Zippy\\Adapter\\ZipAdapter'))
-            ->will($this->returnValue($adapterMock));
+            ->will($this->returnCallback(function ($serviceName) use ($adapterMock) {
+                if ('Alchemy\\Zippy\\Adapter\\ZipAdapter' === $serviceName) {
+                    return $adapterMock;
+                }
 
-        $container
-            ->expects($this->at(1))
-            ->method('offsetGet')
-            ->with($this->equalTo('Alchemy\\Zippy\\Adapter\\ZipExtensionAdapter'))
-            ->will($this->throwException(new RuntimeException()));
+                throw new RuntimeException();
+            }));
 
         $stub = $this->getMockForAbstractClass('Alchemy\Zippy\FileStrategy\AbstractFileStrategy', array($container));
         $stub->expects($this->any())
