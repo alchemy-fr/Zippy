@@ -13,8 +13,19 @@ test: node_modules
 node_modules:
 	npm install connect serve-static
 
+# Pin Doctum to a specific, immutable release so `make apidoc` is reproducible and
+# not exposed to a moving "latest" artifact. When bumping DOCTUM_VERSION, update
+# DOCTUM_SHA256 with the checksum published for that exact release
+# (https://github.com/code-lts/doctum/releases). Capture it once from a trusted
+# download with `sha256sum doctum.phar`, or pass it ad hoc:
+#   make apidoc DOCTUM_SHA256=<sha256>
+DOCTUM_VERSION ?= 5.6.0
+DOCTUM_SHA256  ?= bd9fee08e7672ffdafae294cb064c71b3f6582992a5f87ac9ac9b2bcd44a5fce
+
 doctum.phar:
-	curl -L -o doctum.phar https://doctum.long-term.support/releases/latest/doctum.phar
+	@test -n "$(DOCTUM_SHA256)" || { echo "ERROR: DOCTUM_SHA256 is not pinned. Set it to the sha256 of Doctum $(DOCTUM_VERSION) in the Makefile (or pass DOCTUM_SHA256=...)." >&2; exit 1; }
+	curl -fSL -o doctum.phar "https://github.com/code-lts/doctum/releases/download/v$(DOCTUM_VERSION)/doctum.phar"
+	echo "$(DOCTUM_SHA256)  doctum.phar" | sha256sum -c - || { rm -f doctum.phar; exit 1; }
 
 apidoc: doctum.phar
 	php doctum.phar update doctum.php

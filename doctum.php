@@ -6,8 +6,10 @@
  *
  * Regenerate the API documentation with:
  *
- *     curl -O https://doctum.long-term.support/releases/latest/doctum.phar
- *     php doctum.phar update doctum.php
+ *     make apidoc
+ *
+ * `make apidoc` fetches a pinned Doctum release and verifies its checksum before
+ * running (see DOCTUM_VERSION / DOCTUM_SHA256 in the Makefile).
  *
  * The output lands in `build/api` (git-ignored) and is NOT committed to the
  * repository. Publish it from your documentation pipeline instead.
