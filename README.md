@@ -16,6 +16,11 @@ The only supported installation method is via [Composer](https://getcomposer.org
 composer require alchemy/zippy
 ```
 
+## Requirements
+
+- PHP >= 8.1
+- [Symfony](https://symfony.com) components (`filesystem`, `process`, `http-client`) `^6.0 || ^7.0`
+
 ## Adapters
 
 Zippy currently supports the following drivers and file formats:
@@ -91,6 +96,9 @@ $archive = $zippy->create('archive.zip', array(
     'directory/image.jpg' => 'image.jpg',        // will create a image.jpg in 'directory' folder
 ));
 ```
+
+Remote `http`/`https` resources are downloaded transparently using the
+[Symfony HttpClient](https://symfony.com/doc/current/http_client.html) component.
 
 ## Documentation
 

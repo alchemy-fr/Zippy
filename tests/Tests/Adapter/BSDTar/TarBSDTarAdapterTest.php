@@ -15,7 +15,7 @@ class TarBSDTarAdapterTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), TarBSDTarAdapter::getName());
 
@@ -24,14 +24,14 @@ class TarBSDTarAdapterTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }

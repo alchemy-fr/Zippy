@@ -14,7 +14,7 @@ class ZipAdapterTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$zipFile = sprintf('%s/%s.zip', self::getResourcesPath(), ZipAdapter::getName());
 
@@ -23,14 +23,14 @@ class ZipAdapterTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$zipFile)) {
             unlink(self::$zipFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }
@@ -65,11 +65,10 @@ class ZipAdapterTest extends AdapterTestCase
         return $adapter;
     }
 
-    /**
-     * @expectedException \Alchemy\Zippy\Exception\NotSupportedException
-     */
     public function testCreateNoFiles()
     {
+        $this->expectException(\Alchemy\Zippy\Exception\NotSupportedException::class);
+
         $mockedProcessBuilder = $this->getMockBuilder('\Alchemy\Zippy\ProcessBuilder\ProcessBuilder')
             ->disableOriginalConstructor()
             ->getMock();

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         backupGlobals="false"
          backupStaticAttributes="false"
          colors="true"
          convertErrorsToExceptions="true"
@@ -7,7 +9,6 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         verbose="false"
          bootstrap="vendor/autoload.php"
 >
     <php>
@@ -19,11 +20,11 @@
             <directory>tests/Tests</directory>
         </testsuite>
     </testsuites>
-    <filter>
-      <whitelist>
+
+    <coverage>
+      <include>
         <directory>src</directory>
-      </whitelist>
-    </filter>
+      </include>
+    </coverage>
 
 </phpunit>
-

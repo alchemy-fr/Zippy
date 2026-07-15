@@ -19,10 +19,11 @@ class TeleporterContainerTest extends TestCase
     }
     /**
      * @covers \Alchemy\Zippy\Resource\TeleporterContainer::fromResource
-     * @expectedException \Alchemy\Zippy\Exception\InvalidArgumentException
      */
     public function testFromResourceThatFails()
     {
+        $this->expectException(\Alchemy\Zippy\Exception\InvalidArgumentException::class);
+
         $container = TeleporterContainer::load();
         $container->fromResource($this->createResource(array()));
     }
@@ -59,7 +60,7 @@ class TeleporterContainerTest extends TestCase
 
         $this->assertInstanceOf('Alchemy\Zippy\Resource\TeleporterContainer', $container);
 
-        $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\GenericTeleporter', $container['guzzle-teleporter']);
+        $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\GenericTeleporter', $container['http-teleporter']);
         $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\StreamTeleporter', $container['stream-teleporter']);
         $this->assertInstanceOf('Alchemy\Zippy\Resource\Teleporter\LocalTeleporter', $container['local-teleporter']);
     }

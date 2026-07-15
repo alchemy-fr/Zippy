@@ -47,7 +47,7 @@ class ResourceCollectionTest extends TestCase
             $this->getInPlaceResource($third),
         ), false);
 
-        $this->assertInternalType('boolean', $collection->canBeProcessedInPlace());
+        $this->assertIsBool($collection->canBeProcessedInPlace());
         $this->assertEquals($expected, $collection->canBeProcessedInPlace());
     }
 

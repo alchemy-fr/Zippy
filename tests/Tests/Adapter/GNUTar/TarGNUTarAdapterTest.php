@@ -15,7 +15,7 @@ class TarGNUTarAdapterTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), TarGNUTarAdapter::getName());
 
@@ -24,14 +24,14 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }
@@ -326,23 +326,17 @@ class TarGNUTarAdapterTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(5))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(6))
+            ->expects($this->at(5))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());

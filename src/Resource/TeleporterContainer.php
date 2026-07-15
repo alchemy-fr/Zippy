@@ -12,8 +12,7 @@
 namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReaderFactory;
-use Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReaderFactory;
+use Alchemy\Zippy\Resource\Reader\Http\HttpClientReaderFactory;
 use Alchemy\Zippy\Resource\Resource as ZippyResource;
 use Alchemy\Zippy\Resource\Teleporter\GenericTeleporter;
 use Alchemy\Zippy\Resource\Teleporter\LocalTeleporter;
@@ -55,8 +54,8 @@ class TeleporterContainer implements \ArrayAccess, \Countable
 
                 if (!isset($data['scheme']) || 'file' === $data['scheme']) {
                     $teleporter = 'local-teleporter';
-                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this->factories['guzzle-teleporter'])) {
-                    $teleporter = 'guzzle-teleporter';
+                } elseif (in_array($data['scheme'], array('http', 'https')) && isset($this->factories['http-teleporter'])) {
+                    $teleporter = 'http-teleporter';
                 } else {
                     $teleporter = 'stream-teleporter';
                 }
@@ -95,19 +94,10 @@ class TeleporterContainer implements \ArrayAccess, \Countable
             return new LocalTeleporter(new Filesystem());
         };
 
-        if (class_exists('GuzzleHttp\Client')) {
-            $container->factories['guzzle-teleporter'] = function () {
+        if (class_exists('Symfony\Component\HttpClient\HttpClient')) {
+            $container->factories['http-teleporter'] = function () {
                 return new GenericTeleporter(
-                    new GuzzleReaderFactory(),
-                    new FilesystemWriter(),
-                    new ResourceLocator()
-                );
-            };
-        }
-        elseif (class_exists('Guzzle\Http\Client')) {
-            $container->factories['guzzle-teleporter'] = function () {
-                return new GenericTeleporter(
-                    new LegacyGuzzleReaderFactory(),
+                    new HttpClientReaderFactory(),
                     new FilesystemWriter(),
                     new ResourceLocator()
                 );

@@ -374,9 +374,13 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
             ->add('--extract')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
-        foreach ($this->getExtractMembersOptions() as $option) {
-            $builder
-                ->add($option);
+        // The overwrite-related options (e.g. GNU tar's `--overwrite`) are mutually
+        // exclusive with `-k` (`--keep-old-files`); only apply them when overwriting.
+        if ($overwrite) {
+            foreach ($this->getExtractMembersOptions() as $option) {
+                $builder
+                    ->add($option);
+            }
         }
 
         foreach ((array) $options as $option) {

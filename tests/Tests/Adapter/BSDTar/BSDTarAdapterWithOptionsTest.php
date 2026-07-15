@@ -14,7 +14,7 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $classname = static::getAdapterClassName();
         self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), $classname::getName());
@@ -24,14 +24,14 @@ abstract class BSDTarAdapterWithOptionsTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }

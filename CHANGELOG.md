@@ -1,7 +1,29 @@
 # CHANGELOG
 
 ## [Unreleased changes]
-- No changes
+### Fixed
+- GNU tar member extraction no longer passes `-k` (`--keep-old-files`) and `--overwrite`
+  together (recent GNU tar rejects the combination); the overwrite options are now only
+  applied when extracting with `$overwrite = true`
+
+### Changed
+- Require Symfony `^6.0 || ^7.0` components (`filesystem`, `process`, `http-client`)
+- Bump minimum PHP version to 8.1
+- Replace Guzzle with the Symfony HttpClient component to download remote HTTP(S) resources
+- Modernize the PHPUnit configuration (PHPUnit `^9.5`, `<coverage>` schema)
+- Replace the abandoned Sami API-doc generator with [Doctum](https://doctum.long-term.support)
+  (`make apidoc`); the generated API dump is no longer committed to the repository
+
+### Removed
+- **BC break:** Removed Guzzle support. The following classes have been removed:
+  - `Alchemy\Zippy\Resource\Teleporter\GuzzleTeleporter`
+  - `Alchemy\Zippy\Resource\Teleporter\LegacyGuzzleTeleporter`
+  - `Alchemy\Zippy\Resource\Reader\Guzzle\GuzzleReader` and `GuzzleReaderFactory`
+  - `Alchemy\Zippy\Resource\Reader\Guzzle\LegacyGuzzleReader` and `LegacyGuzzleReaderFactory`
+
+  Remote resources are now handled by `Alchemy\Zippy\Resource\Reader\Http\HttpClientReader`
+  (registered as the `http-teleporter` in `TeleporterContainer`). No user-facing code change
+  is required: `$zippy->create()` still accepts `http`/`https` URLs transparently.
 
 ## [0.4.10] - TBD
 ### Changed

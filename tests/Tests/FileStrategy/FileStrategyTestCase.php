@@ -19,7 +19,7 @@ abstract class FileStrategyTestCase extends TestCase
                 ->method('offsetGet')
                 ->will($this->returnCallback(function ($offset) use ($that) {
                     if (array_key_exists('Alchemy\Zippy\Adapter\AdapterInterface', class_implements($offset))) {
-                        return $that->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
+                        return $that->getMockBuilder('Alchemy\Zippy\Adapter\AdapterInterface')->getMock();
                     }
 
                     return null;
@@ -28,7 +28,7 @@ abstract class FileStrategyTestCase extends TestCase
         $extension = $this->getStrategy($container)->getFileExtension();
 
         $this->assertNotEquals('', trim($extension));
-        $this->assertInternalType('string', $extension);
+        $this->assertIsString($extension);
     }
 
     /** @test */
@@ -49,7 +49,7 @@ abstract class FileStrategyTestCase extends TestCase
 
         $adapters = $this->getStrategy($container)->getAdapters();
 
-        $this->assertInternalType('array', $adapters);
+        $this->assertIsArray($adapters);
 
         foreach ($adapters as $adapter) {
             $this->assertInstanceOf('Alchemy\\Zippy\\Adapter\\AdapterInterface', $adapter);
@@ -67,7 +67,7 @@ abstract class FileStrategyTestCase extends TestCase
 
         $adapters = $this->getStrategy($container)->getAdapters();
 
-        $this->assertInternalType('array', $adapters);
+        $this->assertIsArray($adapters);
 
         foreach ($adapters as $adapter) {
             $this->assertInstanceOf('Alchemy\\Zippy\\Adapter\\AdapterInterface', $adapter);

@@ -14,7 +14,7 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
      */
     protected $adapter;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $classname = static::getAdapterClassName();
         self::$tarFile = sprintf('%s/%s.tar', self::getResourcesPath(), $classname::getName());
@@ -24,14 +24,14 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         if (file_exists(self::$tarFile)) {
             unlink(self::$tarFile);
         }
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->adapter = $this->provideSupportedAdapter();
     }
@@ -325,29 +325,23 @@ abstract class GNUTarAdapterWithOptionsTest extends AdapterTestCase
         $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo('--overwrite'))
+            ->with($this->equalTo($this->getOptions()))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
-            ->with($this->equalTo($this->getOptions()))
+            ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
             ->expects($this->at(5))
             ->method('add')
-            ->with($this->equalTo('--directory'))
-            ->will($this->returnSelf());
-
-        $mockedProcessBuilder
-            ->expects($this->at(6))
-            ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
         $mockedProcessBuilder
-            ->expects($this->at(7))
+            ->expects($this->at(6))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());

@@ -3,10 +3,10 @@ language: php
 sudo: required
 
 php:
-  - 7.1
-  - 7.2
-  - 7.3
-  - 7.4
+  - 8.1
+  - 8.2
+  - 8.3
+  - 8.4
 
 env:
   PREFER_LOWEST=""
@@ -14,7 +14,7 @@ env:
 matrix:
   fast_finish: true
   include:
-    - php: 7.1
+    - php: 8.1
       env: PREFER_LOWEST="--prefer-lowest"
 
 before_script:
